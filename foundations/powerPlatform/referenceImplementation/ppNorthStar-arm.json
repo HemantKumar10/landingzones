@@ -441,7 +441,7 @@
         },
         "location": {
             "type": "string",
-"defaultValue":"",
+//"defaultValue":"",
            // "defaultValue": "[deployment().location]",
             "metadata": {
                 "description": "Provide the Azure location for the deployments"
