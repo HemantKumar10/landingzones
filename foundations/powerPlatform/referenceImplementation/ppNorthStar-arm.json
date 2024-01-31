@@ -1,4 +1,4 @@
-/*
+/* 
     Power Platform Landing Zones ARM template.
     This template will in concert with the portal extension provision and bootstrap 1) Azure infrastructure as prerequisite for monitoring, logging, and security,
     and the initial Admin environments for Power Platform, to construct and operationalize landing zones for citizen - and professional developers.
