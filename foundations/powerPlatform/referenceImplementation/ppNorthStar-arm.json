@@ -630,7 +630,7 @@
             "northStarTemplateUri": "[uri(deployment().properties.templateLink.uri, 'auxiliary/powerPlatform/ppDeploymentScript.json')]"
         },
         "deploymentNamePrefix": "[concat(replace(tenant().displayName, ' ', ''), '-')]",
-        "deploymentNameSuffix": "[concat('-', deployment().location, guid(parameters('ppAdminEnvNaming')))]",
+        "deploymentNameSuffix": "[concat('-', parameters('location'), guid(parameters('ppAdminEnvNaming')))]",
         "deploymentNames": {
             "ppRegistrationDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'PPLZ-RP-Billing', variables('deploymentNameSuffix')), 64)]",
             "logAnalyticsDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'PPLZ-Azure-Monitoring', variables('deploymentNameSuffix')), 64)]",
