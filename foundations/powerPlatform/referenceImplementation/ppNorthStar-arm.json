@@ -1,4 +1,4 @@
-/* 
+/*
     Power Platform Landing Zones ARM template.
     This template will in concert with the portal extension provision and bootstrap 1) Azure infrastructure as prerequisite for monitoring, logging, and security,
     and the initial Admin environments for Power Platform, to construct and operationalize landing zones for citizen - and professional developers.
@@ -440,7 +440,8 @@
             }
         },
         "location": {
-            "type": "String",
+            "type": "string",
+            "name": "[deployment().location]",
             "metadata": {
                 "description": "Provide the Azure location for the deployments"
             }
@@ -630,7 +631,7 @@
             "northStarTemplateUri": "[uri(deployment().properties.templateLink.uri, 'auxiliary/powerPlatform/ppDeploymentScript.json')]"
         },
         "deploymentNamePrefix": "[concat(replace(tenant().displayName, ' ', ''), '-')]",
-        "deploymentNameSuffix": "[concat('-', parameters('location'), guid(parameters('ppAdminEnvNaming')))]",
+        "deploymentNameSuffix": "[concat('-', deployment().location, guid(parameters('ppAdminEnvNaming')))]",
         "deploymentNames": {
             "ppRegistrationDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'PPLZ-RP-Billing', variables('deploymentNameSuffix')), 64)]",
             "logAnalyticsDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'PPLZ-Azure-Monitoring', variables('deploymentNameSuffix')), 64)]",
@@ -662,7 +663,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "[variables('deploymentNames').northStarDeploymentName]",
-            "location": "[parameters('location')]",
+            "location": "[deployment().location]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -835,7 +836,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "[variables('deploymentNames').dataLakeDeploymentName]",
-            "location": "[parameters('location')]",
+            "location": "[deployment().location]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -861,7 +862,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "[variables('deploymentNames').ppRegistrationDeploymentName]",
-            "location": "[parameters('location')]",
+            "location": "[deployment().location]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -887,7 +888,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "[variables('deploymentNames').logAnalyticsDeploymentName]",
-            "location": "[parameters('location')]",
+            "location": "[deployment().location]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -902,7 +903,7 @@
                         "value": "[variables('resourceNames').logAnalyticsWorkspace]"
                     },
                     "workspaceRegion": {
-                        "value": "[parameters('location')]"
+                        "value": "[deployment().location]"
                     },
                     "ppEnableAppInsights": {
                         "value": "[parameters('ppEnableAppInsights')]"
@@ -911,7 +912,7 @@
                         "value": "[variables('resourceNames').automationAccount]"
                     },
                     "automationRegion": {
-                        "value": "[parameters('location')]"
+                        "value": "[deployment().location]"
                     },
                     "retentionInDays": {
                         "value": "[parameters('ppRetentionInDays')]"
@@ -924,7 +925,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "[variables('deploymentNames').securityDeploymentName]",
-            "location": "[parameters('location')]",
+            "location": "[deployment().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').logAnalyticsDeploymentName)]"
             ],
@@ -942,7 +943,7 @@
                         "value": "[variables('resourceNames').logAnalyticsWorkspace]"
                     },
                     "workspaceRegion": {
-                        "value": "[parameters('location')]"
+                        "value": "[deployment().location]"
                     },
                     "enableSecuritySolution": {
                         "value": "[parameters('ppEnableAzureSecurity')]"
@@ -958,7 +959,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "[variables('deploymentNames').aadDiagnosticsDeploymentName]",
-            "location": "[parameters('location')]",
+            "location": "[deployment().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').logAnalyticsDeploymentName)]"
             ],
