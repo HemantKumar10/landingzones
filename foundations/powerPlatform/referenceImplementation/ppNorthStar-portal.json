@@ -4596,7 +4596,7 @@
                             "name": "ppIndustryAlm",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create Development, Test, and Production environments for each landing zone",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "toolTip": "If 'Yes' is selected, the setup will enable it",
                             "constraints": {
                                 "allowedValues": [
