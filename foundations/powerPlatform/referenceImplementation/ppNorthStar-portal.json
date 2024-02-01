@@ -1086,7 +1086,8 @@
                                     "count": {
                                         "min": 1,
                                         "max": 10
-                                    }
+                                    } 
+                                                                      
                                 },
                                 "columns": [
                                     {
@@ -1864,7 +1865,15 @@
                                         }
                                     }
                                 ]
-                            }
+                            },
+                            "defaultValue":[{
+                                "ppEnvName": "LLDEV",
+                                "ppEnvDescription": "LLDEV",
+                                "ppRegion": "europe",
+                                "ppLanguage": "1033",
+                                "ppCurrency": "gbp",
+                                "ppRbac": ""
+                              }]
                         },
                         {
                             "name": "ppCitizenCount",
