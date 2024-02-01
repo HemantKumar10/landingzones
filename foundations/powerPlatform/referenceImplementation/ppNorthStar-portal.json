@@ -1865,15 +1865,7 @@
                                         }
                                     }
                                 ]
-                            },
-                            "defaultValue":[{
-                                "ppEnvName": "LLDEV",
-                                "ppEnvDescription": "LLDEV",
-                                "ppRegion": "europe",
-                                "ppLanguage": "1033",
-                                "ppCurrency": "gbp",
-                                "ppRbac": ""
-                              }]
+                            }
                         },
                         {
                             "name": "ppCitizenCount",
