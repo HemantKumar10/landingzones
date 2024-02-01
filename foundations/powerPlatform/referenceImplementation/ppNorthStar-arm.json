@@ -441,6 +441,7 @@
         },
         "location": {
             "type": "string",
+                    "defaulValue": "",
           //  "name": "[deployment().location]",
             "metadata": {
                 "description": "Provide the Azure location for the deployments"
@@ -797,9 +798,9 @@
                     "ppIndustryBilling": {
                         "value": "[if(empty(parameters('ppIndustryBilling')), variables('emptyString'), parameters('ppIndustryBilling'))]"
                     },
-                   /*/ "location": {
+                    "location": {
                         "value": "[parameters('location')]"
-                    },*/
+                    },
                     "rgName": {
                         "value": "[concat(variables('resourceNamePrefix'), '-setup-', parameters('location'))]"
                     },
