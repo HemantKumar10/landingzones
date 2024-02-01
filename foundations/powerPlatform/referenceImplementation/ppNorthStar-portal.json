@@ -183,7 +183,7 @@
                             "multiSelect": false,
                             "multiLine": true,
                             "label": "Assign recommended Data-loss prevention policies to the tenant by selecting the preferred starting baseline.",
-                            "defaultValue": "None",
+                            "defaultValue": "High",
                             "toolTip": "By select a tenant DLP policy, all existing and new Environments will be governed regarding what connectors can be used, and used together.",
                             "constraints": {
                                 "allowedValues": [
@@ -235,7 +235,7 @@
                             "name": "ppTenantIsolationSetting",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Enable tenant isolation",
-                            "defaultValue": "Do not enable tenant isolation",
+                            "defaultValue": "Block both inbound and outbound",
                             "toolTip": "Select the preferred tenant isolation method by selecting either inbound, outbound, or both.",
                             "constraints": {
                                 "allowedValues": [
@@ -456,7 +456,7 @@
                             "name": "ppAdminEnvEnablement",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create dedicated Admin environments",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "multiSelect": true,
                             "toolTip": "If 'Yes' is selected, the setup will configure this option.",
                             "constraints": {
@@ -662,7 +662,7 @@
                             "name": "ppEnableAzureMonitor",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Enable recommended observability and security integration using Azure services",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "toolTip": "",
                             "constraints": {
                                 "allowedValues": [
@@ -836,7 +836,7 @@
                             "name": "ppEnableTenantAnalytics",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Enable Tenant level analytics for Power Platform",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "toolTip": "",
                             "constraints": {
                                 "allowedValues": [
@@ -934,8 +934,8 @@
                             "name": "ppDefaultRenameText",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Provide a new name for the default environment",
-                            "placeholder": "Personal",
-                            "defaultValue": "Personal",
+                            "placeholder": "Default",
+                            "defaultValue": "DefaultDoNotUse",
                             "toolTip": "Use only allowed characters",
                             "constraints": {
                                 "required": true,
@@ -1042,7 +1042,7 @@
                             "name": "ppCitizen",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create Environments for citizen developer scenarios",
-                            "defaultValue": "Yes",
+                            "defaultValue": "Yes, and let me configure each Environment",
                             "multiSelect": true,
                             "toolTip": "If 'Yes' is selected, the setup will create new environments for citizen developer scenarios",
                             "constraints": {
@@ -2707,7 +2707,7 @@
                             "name": "ppCitizenBilling",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create Billing Policy and Use Azure Subscription for pay-as-you-go for the citizen developer Environments",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "toolTip": "If 'Yes' is selected, the setup will enable it",
                             "constraints": {
                                 "allowedValues": [
@@ -2746,7 +2746,7 @@
                             "name": "ppPro",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create Environments for professional developer scenarios",
-                            "defaultValue": "Yes",
+                            "defaultValue": "No",
                             "multiSelect": true,
                             "toolTip": "If 'Yes' is selected, the setup will create new environments for professional developer scenarios",
                             "constraints": {
@@ -4379,7 +4379,7 @@
                             "name": "ppProAlm",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create Development, Test, and Production environments for each landing zone",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "toolTip": "If 'Yes' is selected, the setup will enable it, and adhere to best practices and create dedicated environments for sustainable application life-cycle management",
                             "constraints": {
                                 "allowedValues": [
@@ -4438,7 +4438,7 @@
                             "name": "ppIndustry",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create Environments for Industry Clouds",
-                            "defaultValue": "Yes",
+                            "defaultValue": "No",
                             "multiSelect": false,
                             "toolTip": "If 'Yes' is selected, the setup will create new environments for Industry scenarios (requires Dataverse)",
                             "constraints": {
