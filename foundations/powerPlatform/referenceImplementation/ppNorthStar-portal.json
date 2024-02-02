@@ -1096,8 +1096,7 @@
                                         "width": "1fr",
                                         "element": {
                                             "type": "Microsoft.Common.TextBox",
-                                            "placeholder": "",
-                                            "defaultValue":["Test","test2"],
+                                            "placeholder": "",                                         
                                             "constraints": {
                                                 "required": true,
                                                 "validations": [
