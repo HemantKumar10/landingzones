@@ -1865,7 +1865,8 @@
                                         }
                                     }
                                 ]
-                            }
+                            },
+                            "defaultValue":[{"Environment Name":"Test"},{"Environment Name":"Test"}]
                         },
                         {
                             "name": "ppCitizenCount",
