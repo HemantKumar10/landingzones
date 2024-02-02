@@ -1079,6 +1079,7 @@
                             "type": "Microsoft.Common.EditableGrid",
                             "ariaLabel": "Create and Configure Citizen Environment",
                             "label": "Citizen Environment configuration",
+                            "defaultValue":[{"ppEnvName":"Test","ppEnvDescription":"Test"}],
                             "visible": "[equals(steps('landingZones').ppCitizen, 'custom')]",
                             "constraints": {
                                 "width": "Full",
@@ -1865,8 +1866,8 @@
                                         }
                                     }
                                 ]
-                            },
-                            "defaultValue":[{"Environment Name":"Test"},{"Environment Name":"Test"}]
+                            }
+                           
                         },
                         {
                             "name": "ppCitizenCount",
