@@ -1078,8 +1078,7 @@
                             "name": "ppCitizenConfiguration",
                             "type": "Microsoft.Common.EditableGrid",
                             "ariaLabel": "Create and Configure Citizen Environment",
-                            "label": "Citizen Environment configuration",
-                            "defaultValue":[{"ppEnvName":"Test","ppEnvDescription":"Test"}],
+                            "label": "Citizen Environment configuration",                            
                             "visible": "[equals(steps('landingZones').ppCitizen, 'custom')]",
                             "constraints": {
                                 "width": "Full",
@@ -1098,6 +1097,7 @@
                                         "element": {
                                             "type": "Microsoft.Common.TextBox",
                                             "placeholder": "",
+                                            "defaultValue":["Test","test2"],
                                             "constraints": {
                                                 "required": true,
                                                 "validations": [
