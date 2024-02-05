@@ -191,8 +191,8 @@
                                         "label": "High",
                                         "description": "A highly restrictive tenant DLP policy that only allows certain Microsoft connectors in the business group. All other connectors are categorized as non-business.",
                                         "value": "high"
-                                    },
-                                    {
+                                    }
+                                 /* //  ,{
                                         "label": "Medium",
                                         "description": "A medium restrictive tenant DLP policy that allows common Microsoft connectors in the business group. All other connectors are categorized as non-business.",
                                         "value": "medium"
@@ -206,7 +206,7 @@
                                         "label": "None",
                                         "description": "Do not assign tenant DLP policy.",
                                         "value": "none"
-                                    }
+                                    } */
                                 ],
                                 "required": true
                             },
