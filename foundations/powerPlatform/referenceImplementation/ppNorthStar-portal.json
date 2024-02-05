@@ -185,7 +185,7 @@
                             "label": "Assign recommended Data-loss prevention policies to the tenant by selecting the preferred starting baseline.",
                             "defaultValue": "High",
                             "toolTip": "By select a tenant DLP policy, all existing and new Environments will be governed regarding what connectors can be used, and used together.",
-                              "constraints": {
+                            "constraints": {
                                 "allowedValues": [
                                     {
                                         "label": "High",
@@ -2752,7 +2752,7 @@
                                     }
                                 ]
                             },
-                            "visible": true
+                            "visible": false
                         },
                         {
                             "name": "ppProConfiguration",
@@ -4332,7 +4332,7 @@
 						{
                             "name": "ppProManagedText",
                             "type": "Microsoft.Common.TextBlock",
-                            "visible": true,
+                            "visible": false,
                             "options": {
                                 "text": "Enabling Managed Environment in this step will opt-in to weekly digest, and allow you to continue the configuration in Power Platform Admin Center for sharing restrictions, DLPs and more post deployment.",
                                 "link": {
@@ -4468,7 +4468,7 @@
                                     }
                                 ]
                             },
-                            "visible": "[not(equals(steps('landingZones').ppIndustry, 'no'))]"
+                            "visible":false 
                         },
                         {
                             "name": "ppIndustryNaming",
@@ -4482,7 +4482,7 @@
                                 "regex": "^[a-z0-9A-Z]{1,30}$",
                                 "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
                             },
-                            "visible": "[not(equals(steps('landingZones').ppIndustry, 'no'))]"
+                          "visible": false
                         },
                         {
                             "name": "ppIndustryRegion",
@@ -4549,7 +4549,7 @@
 						{
                             "name": "ppIndustryManagedText",
                             "type": "Microsoft.Common.TextBlock",
-                            "visible": true,
+                            "visible": false,
                             "options": {
                                 "text": "Enabling Managed Environment in this step will opt-in to weekly digest, and allow you to continue the configuration in Power Platform Admin Center for sharing restrictions, DLPs and more post deployment.",
                                 "link": {
@@ -4577,7 +4577,7 @@
                                 ],
                                 "required": true
                             },
-                            "visible": "[not(equals(steps('landingZones').ppIndustry, 'no'))]"
+                            "visible": false
                         },
                         {
                             "name": "ppIndustryAlm",
