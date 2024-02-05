@@ -1,5 +1,5 @@
 {
-    "displayName": "Tenant (High) North Star DLP",
+    "displayName": "ANS Default DLP Policy",
     "defaultConnectorsClassification": "Blocked",
     "connectorGroups": [
         {
