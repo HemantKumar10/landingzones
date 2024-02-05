@@ -1900,12 +1900,16 @@
                             "type": "Microsoft.Common.DropDown",
                             "label": "Select region for the new Environments for citizen developers",
                             "placeholder": "",
-                            "defaultValue": "",
+                            "defaultValue": "unitedkingdom",
                             "toolTip": "",
                             "filter": true,
                             "visible": "[equals(steps('landingZones').ppCitizen, 'yes')]",
                             "constraints": {
                                 "allowedValues": [
+                                    {
+                                        "label": "United Kingdom",
+                                        "value": "unitedkingdom"
+                                    },
                                     {
                                         "label": "Europe",
                                         "value": "europe"
