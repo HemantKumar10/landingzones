@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Power Platform Landing Zones",
+            "title": "ANS Power Platform Landing Zones",
             "steps": [
                 {
                     "name": "powerp",
@@ -920,7 +920,7 @@
                             "type": "Microsoft.Common.TextBox",
                             "label": "Provide a new name for the default environment",
                             "placeholder": "Default",
-                            "defaultValue": "DefaultDoNotUse",
+                            "defaultValue": "PersonalProductivity",
                             "toolTip": "Use only allowed characters",
                             "constraints": {
                                 "required": true,
