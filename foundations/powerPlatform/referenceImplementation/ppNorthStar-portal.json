@@ -4360,7 +4360,7 @@
                                 ],
                                 "required": true
                             },
-                            "visible": "[not(equals(steps('landingZones').ppPro, 'no'))]"
+                            "visible": false
                         },
                         {
                             "name": "ppProAlm",
@@ -4380,7 +4380,7 @@
                                     }
                                 ]
                             },
-                            "visible": "[not(equals(steps('landingZones').ppPro, 'no'))]"
+                            "visible": false
                         },
                         {
                             "name": "ppProBilling",
@@ -4400,7 +4400,7 @@
                                     }
                                 ]
                             },
-                            "visible": "[not(equals(steps('landingZones').ppPro, 'no'))]"
+                            "visible": false
                         },
                         {
                             "name": "industrySection",
