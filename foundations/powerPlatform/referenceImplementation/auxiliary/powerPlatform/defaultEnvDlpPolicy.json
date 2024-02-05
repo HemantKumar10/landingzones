@@ -1,5 +1,5 @@
 {
-    "displayName": "ANS Default DLP Policy",
+    "displayName": "ANS Environments DLP Policy",
     "defaultConnectorsClassification": "General",
     "connectorGroups": [
       {
