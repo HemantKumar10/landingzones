@@ -4622,7 +4622,76 @@
                                 ]
                             },
                             "visible": "[equals(steps('landingZones').ppIndustry, 'yes')]"
+                        },
+                        {
+                            "name": "D365Section",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Dynamics 365 Applications",
+                            "elements": [],
+                            "visible": true
+                        },
+                        {
+                            "name": "d365AppsText",
+                            "type": "Microsoft.Common.TextBlock",
+                            "visible": true,
+                            "options": {
+                                "text": "The section for Dynamics 365 Apps are intended to select and install the D365 applications.",
+                                "link": {
+                                    "label": "Microsoft Dynamics 365",
+                                    "uri": "https://www.microsoft.com/en-us/dynamics-365"
+                                }
+                            }
+                        },
+                        {
+                            "name": "ppD365Apps",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Install D365 Apps",
+                            "defaultValue": "No",
+                            "multiSelect": false,
+                            "toolTip": "If 'Yes' is selected, the setup will install the selected D365 Apps",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Yes",
+                                        "value": "yes"
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": "no"
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "ppSelectD365Apps",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Select Microsoft Dynamics 365 Applications",
+                            "defaultValue": "None",
+                            "multiselect": true,
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Dynamics 365 for Sales",
+                                        "value": "D365_Sales"
+                                    },
+                                    {
+                                        "label": "Dynamics 365 for Field Service",
+                                        "value": "D365_FieldService"
+                                    },
+                                    {
+                                        "label": "Dynamics 365 for Customer Service",
+                                        "value": "D365_CustomerService"
+                                    },
+                                    {
+                                        "label": "Dynamics 365 for PSA",
+                                        "value": "D365_PSA"
+                                    }
+                                ]
+                            },
+                            "visible": "[not(equals(steps('landingZones').ppD365Apps, 'no'))]"
                         }
+
                     ]
                 }
             ]
