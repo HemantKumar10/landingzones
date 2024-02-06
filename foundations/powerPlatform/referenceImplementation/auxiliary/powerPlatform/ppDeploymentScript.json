@@ -299,22 +299,10 @@
         "ppSelectD365Apps": {
             "type": "string",       
             "allowedValues": [
-                {
-                    "label": "Dynamics 365 for Sales",
-                    "value": "D365_Sales"
-                },
-                {
-                    "label": "Dynamics 365 for Field Service",
-                    "value": "D365_FieldService"
-                },
-                {
-                    "label": "Dynamics 365 for Customer Service",
-                    "value": "D365_CustomerService"
-                },
-                {
-                    "label": "Dynamics 365 for PSA",
-                    "value": "D365_PSA"
-                }
+                "D365_Sales",
+                "D365_FieldService",
+                "D365_CustomerService",
+                "D365_PSA"                
             ],
             "defaultValue": "D365_Sales",
             "metadata": {
