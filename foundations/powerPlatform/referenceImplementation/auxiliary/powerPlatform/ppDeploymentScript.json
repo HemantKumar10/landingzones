@@ -296,6 +296,31 @@
                 "description": "AZURE-only, to provide subscriptionId for the subscription billing."
             }
         },
+        "ppSelectD365Apps": {
+            "type": "string",       
+            "allowedValues": [
+                {
+                    "label": "Dynamics 365 for Sales",
+                    "value": "D365_Sales"
+                },
+                {
+                    "label": "Dynamics 365 for Field Service",
+                    "value": "D365_FieldService"
+                },
+                {
+                    "label": "Dynamics 365 for Customer Service",
+                    "value": "D365_CustomerService"
+                },
+                {
+                    "label": "Dynamics 365 for PSA",
+                    "value": "D365_PSA"
+                }
+            ],
+            "defaultValue": "none",
+            "metadata": {
+                "description": "Select Microsoft Dynamics 365 Applications."
+            }
+        },
         "ppPro": {
             "type": "string",
             "allowedValues": [
@@ -616,6 +641,7 @@
                                                     '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',
                                                     '-PPCitizenBilling', ' ', parameters('ppCitizenBilling'), ' ',
                                                     '-PPCitizenAlm', ' ', parameters('ppCitizenAlm'), ' ',
+                                                    '-PPSelectD365Apps', ' ', parameters('ppSelectD365Apps'), ' ',
                                                     '-PPPro', ' ', parameters('ppPro'), ' ',
                                                     '-PPProConfiguration', ' ', parameters('ppProConfiguration'), ' ',
                                                     '-PPProCount', ' ', parameters('ppProCount'), ' ',
