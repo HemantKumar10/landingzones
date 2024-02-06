@@ -316,7 +316,7 @@
                     "value": "D365_PSA"
                 }
             ],
-            "defaultValue": "none",
+            "defaultValue": "",
             "metadata": {
                 "description": "Select Microsoft Dynamics 365 Applications."
             }
