@@ -4667,7 +4667,7 @@
                             "name": "ppSelectD365Apps",
                             "type": "Microsoft.Common.DropDown",
                             "label": "Select Microsoft Dynamics 365 Applications",
-                            "defaultValue": "",
+                            "defaultValue": "Dynamics 365 for Sales",
                             "multiselect": true,
                             "constraints": {
                                 "allowedValues": [
