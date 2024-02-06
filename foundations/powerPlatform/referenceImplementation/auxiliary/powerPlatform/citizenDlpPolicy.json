@@ -1,6 +1,5 @@
-{
-   // "displayName": "Citizen dev North Star DLP (Citizen landing zones)",
-displayName": "ANS Environments DLP Policy",
+{ 
+"displayName": "ANS Environments DLP Policy",
     "defaultConnectorsClassification": "Blocked",
     "connectorGroups": [
       {
