@@ -4667,7 +4667,7 @@
                             "name": "ppSelectD365Apps",
                             "type": "Microsoft.Common.DropDown",
                             "label": "Select Microsoft Dynamics 365 Applications",
-                            "defaultValue": "None",
+                            "defaultValue": "",
                             "multiselect": true,
                             "constraints": {
                                 "allowedValues": [
@@ -4737,6 +4737,7 @@
                 "ppCitizenManagedEnv": "[steps('landingZones').ppCitizenManagedEnv]",
                 "ppCitizenAlm": "[steps('landingZones').ppCitizenAlm]",
                 "ppCitizenBilling": "[steps('landingZones').ppCitizenBilling]",
+                "ppSelectD365Apps":"[steps('landingZones').ppSelectD365Apps]",
                 "ppPro": "[steps('landingZones').ppPro]",
                 "ppProConfiguration": "[replace(replace(replace(replace(replace(string(steps('landingZones').ppProConfiguration), '{', ''), '}', ''), '\"', ''), '[', ''), ']', '')]",
                 "ppProCount": "[steps('landingZones').ppProCount]",
