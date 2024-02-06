@@ -402,7 +402,9 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 SecurityGroupId    = $environment.envRbac
                 Templates          = $environment.envTemplates
             }
-            $null = New-PowerOpsEnvironment @envCreationHt
+         //   $null = New-PowerOpsEnvironment @envCreationHt
+            Write-Host "CreateEnvironmentWithoutCDSDatabase: $($environment.envName)"
+            $environment = New-AdminPowerAppEnvironment -DisplayName $environment.envName -Location $environment.envRegion -EnvironmentSku Production -Templates [$environment.envTemplates]
             Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
             if (-not [string]::IsNullOrEmpty($environment.envRbac) -and $environment.envDataverse -eq $false) {
                 Write-Output "Assigning RBAC for principalId $($environment.envRbac) in citizen environment $($environment.envName)"
@@ -417,6 +419,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
         New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'citizenDlpPolicy'
     }
 }
+
 #endregion create landing zones for citizen devs
 
 #region create landing zones for pro devs
