@@ -400,7 +400,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 LanguageName       = $environment.envLanguage
                 Currency           = $environment.envCurrency
                 SecurityGroupId    = $environment.envRbac
-              //  Templates          = $environment.envTemplates
+           
             }
             $null = New-PowerOpsEnvironment @envCreationHt
            // Write-Host "CreateEnvironmentWithoutCDSDatabase: $($environment.envName)"
