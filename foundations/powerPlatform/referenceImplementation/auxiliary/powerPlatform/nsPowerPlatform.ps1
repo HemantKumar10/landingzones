@@ -122,6 +122,7 @@ function New-EnvironmentCreationObject {
                         envCurrency    = $envCurrency
                         envDescription = $envDescription
                         envRbac        = ''
+                        envTemplates   = 'D365_Sales'
                     }
                 }
             }
@@ -134,6 +135,7 @@ function New-EnvironmentCreationObject {
                     envCurrency    = $envCurrency
                     envDescription = $envDescription
                     envRbac        = ''
+                    envTemplates   = 'D365_Sales'
                 }
             }
         }
