@@ -382,8 +382,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 envCurrency    = $PPCitizenCurrency
                 envDescription = $PPCitizenDescription
                 EnvALM         = $PPCitizenAlm -eq 'Yes'
-                EnvDataverse   = $PPCitizen -eq 'Yes'
-                envTemplates   = $PPSelectD365Apps
+                EnvDataverse   = $PPCitizen -eq 'Yes'            
             }
             $environmentsToCreate = New-EnvironmentCreationObject @envHt
         }
