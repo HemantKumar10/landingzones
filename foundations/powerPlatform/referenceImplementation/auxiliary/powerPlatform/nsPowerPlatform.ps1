@@ -444,7 +444,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
         }
     }
     foreach ($environment in $environmentsToCreate) {
-        Write-Output "Created citizen environment section"
+        
         try {
             $envCreationHt = @{
                 Name               = $environment.envName
@@ -456,7 +456,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Currency           = $environment.envCurrency
                 SecurityGroupId    = $environment.envRbac                                 
             }
-           // $null = New-PowerOpsEnvironment @envCreationHt 
+            $null = New-PowerOpsEnvironment @envCreationHt 
 
           /* $environment = @{
             location = $LocationName
@@ -476,7 +476,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
 
         //   $environmentsToCreateed = New-AdminPowerAppEnvironments -DisplayName $environment.envName -LocationName $environment.envRegion -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName PPPO -LanguageName 1033 -ProvisionDatabase
           // $environmentsToCreateed = New-AdminPowerAppEnvironment -DisplayName $environment.envName -LocationName $environment.envRegion -EnvironmentSku 'Sandbox' -ProvisionDatabase true -CurrencyName $environment.envCurrency -LanguageName $environment.envLanguage 
-           // Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
+           Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
           //  Write-Output "D365 for Sales: $environmentsToCreateed"
             Write-Output "D365 for Sales: $ppD365SalesApp"
             Write-Output "D365 for Customer Service: $ppD365CustomerServiceApp"
