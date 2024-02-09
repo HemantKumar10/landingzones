@@ -455,37 +455,15 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 LanguageName       = $environment.envLanguage
                 Currency           = $environment.envCurrency
                 SecurityGroupId    = $environment.envRbac                                 
-            }
-            $null = New-PowerOpsEnvironment @envCreationHt 
-
-          /* $environment = @{
-            location = $LocationName
-            properties = @{
-                displayName = $DisplayName
-                environmentSku = $EnvironmentSku
-            }
-        }*/
-        /**/
-       
-    
-      //  $ApiVersion = "2018-01-01"
-       // $postEnvironmentUri = "https://{bapEndpoint}/providers/Microsoft.BusinessAppPlatform/environments`?api-version={apiVersion}&id=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments";
-       // $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environment  -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
-       // $environmentt = New-AdminPowerAppEnvironment -DisplayName "test" -Location "uksouth" -EnvironmentSku "Sandbox"
-        /**/
-
-        //   $environmentsToCreateed = New-AdminPowerAppEnvironments -DisplayName $environment.envName -LocationName $environment.envRegion -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName PPPO -LanguageName 1033 -ProvisionDatabase
-          // $environmentsToCreateed = New-AdminPowerAppEnvironment -DisplayName $environment.envName -LocationName $environment.envRegion -EnvironmentSku 'Sandbox' -ProvisionDatabase true -CurrencyName $environment.envCurrency -LanguageName $environment.envLanguage 
-           Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
-          //  Write-Output "D365 for Sales: $environmentsToCreateed"
+            }   
+      
+      
+        $environmentt = New-AdminPowerAppEnvironment -DisplayName "test" -Location "uksouth" -EnvironmentSku "Sandbox" -Templates "D365_Sales"        
+         Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
             Write-Output "D365 for Sales: $ppD365SalesApp"
             Write-Output "D365 for Customer Service: $ppD365CustomerServiceApp"
             Write-Output "D365 for Field Service: $ppD365FieldServiceApp"        
-            
-            /*if (-not [string]::IsNullOrEmpty($environment.envRbac) -and $environment.envDataverse -eq $false) {
-                Write-Output "Assigning RBAC for principalId $($environment.envRbac) in citizen environment $($environment.envName)"
-                $null = New-PowerOpsRoleAssignment -PrincipalId $environment.envRbac -RoleDefinition EnvironmentAdmin -EnvironmentName $environment.envName
-            }*/
+           
         }
         catch {
             Write-Output "Failed to create environment citizen.'`r`n$_'"
