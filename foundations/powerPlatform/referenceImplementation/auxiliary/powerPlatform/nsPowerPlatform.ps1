@@ -465,11 +465,12 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
         }*/
         /**/
-
+        Write-Output "Created citizen environment section"
+    
       //  $ApiVersion = "2018-01-01"
        // $postEnvironmentUri = "https://{bapEndpoint}/providers/Microsoft.BusinessAppPlatform/environments`?api-version={apiVersion}&id=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments";
        // $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environment  -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
-        $environment = New-AdminPowerAppEnvironment -DisplayName "test" -Location "uksouth" -EnvironmentSku "Sandbox"
+        $environmentt = New-AdminPowerAppEnvironment -DisplayName "test" -Location "uksouth" -EnvironmentSku "Sandbox"
         /**/
 
         //   $environmentsToCreateed = New-AdminPowerAppEnvironments -DisplayName $environment.envName -LocationName $environment.envRegion -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName PPPO -LanguageName 1033 -ProvisionDatabase
@@ -486,6 +487,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
         }
         catch {
+            Write-Host $_
+            Write-Host $_.ScriptStackTrace
             Write-Warning "Failed to create citizen environment $($environment.envName)"
         }
     }
