@@ -456,7 +456,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 SecurityGroupId    = $environment.envRbac                                 
             }
            // $null = New-PowerOpsEnvironment @envCreationHt 
-           $environmentsToCreateed = New-AdminPowerAppEnvironment -DisplayName $environment.envName -LocationName $environment.envRegion -EnvironmentSku 'Trial' -ProvisionDatabase true -CurrencyName $environment.envCurrency -LanguageName $environment.envLanguage 
+           New-AdminPowerAppEnvironments -DisplayName $environment.envName -LocationName $environment.envRegion -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName PPPO -LanguageName 1033 -ProvisionDatabase
+          // $environmentsToCreateed = New-AdminPowerAppEnvironment -DisplayName $environment.envName -LocationName $environment.envRegion -EnvironmentSku 'Sandbox' -ProvisionDatabase true -CurrencyName $environment.envCurrency -LanguageName $environment.envLanguage 
             Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
             Write-Output "D365 for Sales: $environmentsToCreateed"
             Write-Output "D365 for Sales: $ppD365SalesApp"
@@ -525,7 +526,7 @@ function New-AdminPowerAppEnvironment
         [Parameter(Mandatory = $true, ParameterSetName = "Name", ValueFromPipelineByPropertyName = $true)]
         [string]$LocationName,
 
-        [ValidateSet("Trial", "Production")]
+        [ValidateSet("Trial", "Production", "Sandbox")]
         [Parameter(Mandatory = $true, ParameterSetName = "Name")]
         [string]$EnvironmentSku,
 
@@ -658,22 +659,6 @@ function New-AdminPowerAppEnvironment
             }
         }
     }
-}
-#internal, helper function
-function CreateHttpResponse
-{
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [object]$ResponseObject
-    )
-
-    return New-Object -TypeName PSObject `
-        | Add-Member -PassThru -MemberType NoteProperty -Name Code -Value $ResponseObject.StatusCode `
-        | Add-Member -PassThru -MemberType NoteProperty -Name Description -Value $ResponseObject.StatusDescription `
-        | Add-Member -PassThru -MemberType NoteProperty -Name Error -Value $ResponseObject.error `
-        | Add-Member -PassThru -MemberType NoteProperty -Name Errors -Value $ResponseObject.errors `
-        | Add-Member -PassThru -MemberType NoteProperty -Name Internal -value $ResponseObject;
 }
 
 $DeploymentScriptOutputs['Deployment'] = 'Successful'
