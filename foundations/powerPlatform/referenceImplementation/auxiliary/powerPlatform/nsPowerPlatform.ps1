@@ -454,28 +454,20 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Description        = $environment.envDescription
                 LanguageName       = $environment.envLanguage
                 Currency           = $environment.envCurrency
-                SecurityGroupId    = $environment.envRbac                                 
+                SecurityGroupId    = $environment.envRbac  
+                Templates          = 'D365_Sales'                             
             }   
-       $environmentt = @{
-            location = 'uksouth'
-            properties = @{
-                displayName = 'PPFromAPI'
-                environmentSku = 'Sandbox'
-            }
-        } 
-
-        Install-Module -Name Microsoft.PowerApps.Administration.PowerShell -Scope CurrentUser
-        Install-Module -Name Microsoft.PowerApps.PowerShell -AllowClobber -Scope CurrentUser
-        Import-Module (Join-Path (Split-Path $script:MyInvocation.MyCommand.Path) "Microsoft.PowerApps.RestClientModule.psm1") -NoClobber #-Force
-          
-      
-       $ApiVersion = "2018-01-01"
-       $postEnvironmentUri = "https://{bapEndpoint}/providers/Microsoft.BusinessAppPlatform/environments`?api-version={apiVersion}&id=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments";
-       $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environmentt  -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)   
-         Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
+            $null = New-PowerOpsEnvironment @envCreationHt 
+            Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
+            
             Write-Output "D365 for Sales: $ppD365SalesApp"
             Write-Output "D365 for Customer Service: $ppD365CustomerServiceApp"
             Write-Output "D365 for Field Service: $ppD365FieldServiceApp"        
+            
+            if (-not [string]::IsNullOrEmpty($environment.envRbac) -and $environment.envDataverse -eq $false) {
+                Write-Output "Assigning RBAC for principalId $($environment.envRbac) in citizen environment $($environment.envName)"
+                $null = New-PowerOpsRoleAssignment -PrincipalId $environment.envRbac -RoleDefinition EnvironmentAdmin -EnvironmentName $environment.envName
+            }      
            
         }
         catch {
