@@ -456,9 +456,17 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Currency           = $environment.envCurrency
                 SecurityGroupId    = $environment.envRbac                                 
             }   
+       $environmentt = @{
+            location = 'uksouth'
+            properties = @{
+                displayName = 'PPFromAPI'
+                environmentSku = 'Sandbox'
+            }
+        }      
       
-      
-        $environmentt = New-AdminPowerAppEnvironment -DisplayName "test" -Location "uksouth" -EnvironmentSku "Sandbox" -Templates "D365_Sales"        
+       $ApiVersion = "2018-01-01"
+       $postEnvironmentUri = "https://{bapEndpoint}/providers/Microsoft.BusinessAppPlatform/environments`?api-version={apiVersion}&id=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments";
+       $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environmentt  -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)   
          Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
             Write-Output "D365 for Sales: $ppD365SalesApp"
             Write-Output "D365 for Customer Service: $ppD365CustomerServiceApp"
@@ -466,8 +474,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
            
         }
         catch {
-            Write-Output "Failed to create environment citizen.'`r`n$_'"
-            Write-Output $_
+            Write-Output "Failed to create environment citizen.'`r`n$_'"        
             Write-Output $_.ScriptStackTrace          
             Write-Warning "Failed to create citizen environment $($environment.envName)"
         }
