@@ -1,125 +1,36 @@
 <#
     PowerShell script to bootstrap/configure Power Platform from the North Star Reference Implementation. (aka.ms/ppnorthstar)
     Note: The script is designed and optimized to run as a deploymentScript invoked from Azure Resource Manager.
-    Refer to https: //github.com/microsoft/industry/blob/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/ppDeploymentScript.json for details around the input parameters.
+    Refer to https://github.com/microsoft/industry/blob/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/ppDeploymentScript.json for details around the input parameters.
 #>
-[CmdletBinding()
-]
+[CmdletBinding()]
 param (
     #Security, govarnance and compliance
-    [Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPGuestMakerSetting,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPAppSharingSetting,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPGuestMakerSetting,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAppSharingSetting,
     #Admin environment and settings
-    [Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPEnvCreationSetting,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPTrialEnvCreationSetting,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPEnvCapacitySetting,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPTenantIsolationSetting,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPTenantDLP,           
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPEnvCreationSetting,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTrialEnvCreationSetting,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPEnvCapacitySetting,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTenantIsolationSetting,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTenantDLP,           
 
     #Landing Zones
-    [Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPDefaultRenameText,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPDefaultDLP,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPDefaultManagedEnv,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPDefaultManagedSharing,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPCitizen,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPCitizenNaming,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPCitizenRegion,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPCitizenDlp,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPCitizenManagedEnv,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPCitizenAlm,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPCitizenCurrency,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$PPCitizenLanguage,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$ppD365SalesApp,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$ppD365CustomerServiceApp,
-[Parameter(Mandatory = $false)
-][string
-][AllowEmptyString()
-][AllowNull()
-]$ppD365FieldServiceApp        
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultRenameText,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultDLP,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultManagedEnv,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultManagedSharing,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizen,    
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenNaming,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenRegion,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenDlp,    
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenManagedEnv,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenAlm,    
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenCurrency,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,     
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp        
 )
 
 $DeploymentScriptOutputs = @{}
@@ -140,8 +51,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #     mailEnabled=$false
 #     securityEnabled=$true
 #     mailNickname="PowerPlatformDevelopmentGroup"
-#
-}
+#    }
 
 #    $testSecurityGroup = @{
 #     description="Security Group used for Power Platform - Test environment"
@@ -149,8 +59,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #     mailEnabled=$false
 #     securityEnabled=$true
 #     mailNickname="PowerPlatformTestGroup"
-#
-}
+#    }
 
 #    $productionSecurityGroup = @{
 #     description="Security Group used for Power Platform - Production environment"
@@ -158,8 +67,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #     mailEnabled=$false
 #     securityEnabled=$true
 #     mailNickname="PowerPlatformProductionGroup"
-#
-}
+#    }
 
 #    $adminSecurityGroup = @{
 #     description="Security Group used for Power Platform - Admin environment"
@@ -167,8 +75,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #     mailEnabled=$false
 #     securityEnabled=$true
 #     mailNickname="PowerPlatformAdminGroup"
-#
-}
+#    }
 
 #    $makersM365Group = @{
 #     description="Microsoft 365 Group used for Power Platform Makers"
@@ -177,8 +84,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #     mailEnabled=$true
 #     securityEnabled=$true
 #     mailNickname="Makers"
-#
-}
+#    }
 
 #    $usersM365Group = @{
 #     description="Microsoft 365 Group used for Power Platform Users"
@@ -187,8 +93,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #     mailEnabled=$true
 #     securityEnabled=$true
 #     mailNickname="Users"
-#
-}
+#    }
 
 #    $adminsM365Group = @{
 #     description="Microsoft 365 Group used for Power Platform Admins"
@@ -197,8 +102,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #     mailEnabled=$true
 #     securityEnabled=$true
 #     mailNickname="Admins"
-#
-}
+#    }
    
    # Create the Security Groups for Dev/Test/Prod/Admin and the Makers M365 Group
 #    New-MgGroup @devSecurityGroup
@@ -234,103 +138,40 @@ $envTiers = 'dev', 'test'
 #region supporting functions
 function New-EnvironmentCreationObject {
     param (
-        [Parameter(Mandatory = $true, ParameterSetName = 'ARMInputString')
-    ]$ARMInputString,
-    [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')
-    ][int
-    ]$EnvCount,
-    [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')
-    ]$EnvNaming,
-    [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')
-    ]$EnvRegion,
-    [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')
-    ]$EnvLanguage,
-    [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')
-    ]$EnvCurrency,
-    [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')
-    ]$EnvDescription,
-    [Parameter(Mandatory = $false)
-    ][switch
-    ]$EnvALM,
-    [Parameter(Mandatory = $false, ParameterSetName = 'EnvCount')
-    ][switch
-    ]$EnvDataverse
+        [Parameter(Mandatory = $true, ParameterSetName = 'ARMInputString')]$ARMInputString,
+        [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')][int]$EnvCount,
+        [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')]$EnvNaming,
+        [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')]$EnvRegion,
+        [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')]$EnvLanguage,
+        [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')]$EnvCurrency,
+        [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')]$EnvDescription,
+        [Parameter(Mandatory = $false)][switch]$EnvALM,
+        [Parameter(Mandatory = $false, ParameterSetName = 'EnvCount')][switch]$EnvDataverse
     )
-    if (-not [string
-    ]: :IsNullOrEmpty($ARMInputString)) {
+    if (-not [string]::IsNullOrEmpty($ARMInputString)) {
         foreach ($env in ($ARMInputString -split 'ppEnvName:')) {
             if ($env -match ".") {
                 $environment = $env.TrimEnd(',')
                 if ($EnvALM) {
                     foreach ($envTier in $envTiers) {
-                        [PSCustomObject
-                        ]@{
-                            envRegion      = ($environment -split (','))[
-                                2
-                            ].Split(':')[
-                                1
-                            ]
-                            envLanguage    = ($environment -split (','))[
-                                3
-                            ].Split(':')[
-                                1
-                            ]
-                            envCurrency    = ($environment -split (','))[
-                                4
-                            ].Split(':')[
-                                1
-                            ]
-                            envDescription = ($environment -split (','))[
-                                1
-                            ].Split(':')[
-                                1
-                            ]
-                            envRbac        = ($environment -split (','))[
-                                5
-                            ].Split(':')[
-                                1
-                            ]
-                            envName        = '{
-                                0
-                            }-{
-                                1
-                            }' -f ($environment -split (','))[
-                                0
-                            ], $envTier
+                        [PSCustomObject]@{
+                            envRegion      = ($environment -split (','))[2].Split(':')[1]
+                            envLanguage    = ($environment -split (','))[3].Split(':')[1]
+                            envCurrency    = ($environment -split (','))[4].Split(':')[1]
+                            envDescription = ($environment -split (','))[1].Split(':')[1]
+                            envRbac        = ($environment -split (','))[5].Split(':')[1]
+                            envName        = '{0}-{1}' -f ($environment -split (','))[0], $envTier
                         }
                     }
                 }
                 else {
-                    [PSCustomObject
-                    ]@{
-                        envName        = ($environment -split (','))[
-                            0
-                        ]
-                        envRegion      = ($environment -split (','))[
-                            2
-                        ].Split(':')[
-                            1
-                        ]
-                        envLanguage    = ($environment -split (','))[
-                            3
-                        ].Split(':')[
-                            1
-                        ]
-                        envCurrency    = ($environment -split (','))[
-                            4
-                        ].Split(':')[
-                            1
-                        ]
-                        envDescription = ($environment -split (','))[
-                            1
-                        ].Split(':')[
-                            1
-                        ]
-                        envRbac        = ($environment -split (','))[
-                            5
-                        ].Split(':')[
-                            1
-                        ]
+                    [PSCustomObject]@{
+                        envName        = ($environment -split (','))[0]
+                        envRegion      = ($environment -split (','))[2].Split(':')[1]
+                        envLanguage    = ($environment -split (','))[3].Split(':')[1]
+                        envCurrency    = ($environment -split (','))[4].Split(':')[1]
+                        envDescription = ($environment -split (','))[1].Split(':')[1]
+                        envRbac        = ($environment -split (','))[5].Split(':')[1]
                     }
                 }
             }
@@ -357,8 +198,7 @@ function New-EnvironmentCreationObject {
                         $securityGroupId = $adminSecurityGroupId
                     }
 
-                    [PSCustomObject
-                    ]@{
+                    [PSCustomObject]@{
                         envName        = "{0}-{1}" -f $environmentName, $envTier
                         envRegion      = $EnvRegion
                         envDataverse   = $EnvDataverse
@@ -370,8 +210,7 @@ function New-EnvironmentCreationObject {
                 }
             }
             else {
-                [PSCustomObject
-                ]@{
+                [PSCustomObject]@{
                     envName        = $environmentName
                     envRegion      = $EnvRegion
                     envDataverse   = $EnvDataverse
@@ -386,16 +225,12 @@ function New-EnvironmentCreationObject {
 }
 function New-DLPAssignmentFromEnv {
     param (
-        [Parameter(Mandatory = $true)
-    ][string[]
-    ]$Environments,
-    [Parameter(Mandatory = $true)
-    ][string
-    ]$EnvironmentDLP
+        [Parameter(Mandatory = $true)][string[]]$Environments,
+        [Parameter(Mandatory = $true)][string]$EnvironmentDLP
     )
     #DLP Template references
     $dlpPolicies = @{
-        baseUri          = 'https: //raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/'
+        baseUri          = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/'
         tenant           = @{
             low    = 'lowTenantDlpPolicy.json'
             medium = 'mediumTenantDlpPolicy.json'
@@ -408,19 +243,12 @@ function New-DLPAssignmentFromEnv {
     }
 
     # Get base template from repo
-    $templateFile = if ($EnvironmentDLP -in 'low', 'medium', 'high') { $dlpPolicies['tenant'
-        ].$EnvironmentDLP
-    } else { $dlpPolicies[
-            "$EnvironmentDLP"
-        ]
-    }
-    if ([string
-    ]: :IsNullOrEmpty($templateFile)) {
+    $templateFile = if ($EnvironmentDLP -in 'low', 'medium', 'high') { $dlpPolicies['tenant'].$EnvironmentDLP } else { $dlpPolicies["$EnvironmentDLP"] }
+    if ([string]::IsNullOrEmpty($templateFile)) {
         throw "Cannot find DLP template $EnvironmentDLP"
     }
     try {
-        $template = (Invoke-WebRequest -Uri ($dlpPolicies['BaseUri'
-        ] + $templateFile)).Content | ConvertFrom-Json -Depth 100
+        $template = (Invoke-WebRequest -Uri ($dlpPolicies['BaseUri'] + $templateFile)).Content | ConvertFrom-Json -Depth 100
         Write-Output "Using base DLP template $templatefile"
     }
     catch {
@@ -429,14 +257,11 @@ function New-DLPAssignmentFromEnv {
 
     # Handle environment inclusion
     if (($Environments -contains 'AllEnvironments' -and $Environments.count -gt 1) -or ($Environments -ne 'AllEnvironments')) {
-        $environmentsToIncludeorExclude = $Environments | Where-Object { $_ -notlike 'AllEnvironments'
-        } | ForEach-Object -Process {
+        $environmentsToIncludeorExclude = $Environments | Where-Object { $_ -notlike 'AllEnvironments' } | ForEach-Object -Process {
             $envDisplayName = $_
             $envDetails = ''
-            $envDetails = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $envDisplayName
-            }
-            [PSCustomObject
-            ]@{
+            $envDetails = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $envDisplayName }
+            [PSCustomObject]@{
                 id   = $envDetails.id
                 name = $envDetails.name
                 type = 'Microsoft.BusinessAppPlatform/scopes/environments'
@@ -527,8 +352,7 @@ if ($PPTenantIsolationSetting -in 'inbound', 'outbound', 'both') {
 $defaultEnvAttempts = 0
 do {
     $defaultEnvAttempts++
-    $defaultEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.environmentSku -eq "Default"
-    }
+    $defaultEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.environmentSku -eq "Default" }
     if (-not ($defaultEnvironment)) {
         Write-Output "Getting default environment - attempt $defaultEnvAttempts"
         Start-Sleep -Seconds 15
@@ -536,16 +360,13 @@ do {
 } until ($defaultEnvironment -or $defaultEnvAttempts -eq 15)
 
 # Rename default environment if parameter provided
-if (-not [string
-]: :IsNullOrEmpty($PPDefaultRenameText)) {
+if (-not [string]::IsNullOrEmpty($PPDefaultRenameText)) {
     # Get old default environment name
     $oldDefaultName = $defaultEnvironment.properties.displayName
     if ($PPDefaultRenameText -ne $oldDefaultName) {
         $defaultEnvironment.properties.displayName = $PPDefaultRenameText
         $defaultEnvRequest = @{
-            Path        = '/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments/{
-                0
-            }' -f $defaultEnvironment.name
+            Path        = '/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments/{0}' -f $defaultEnvironment.name
             Method      = 'Patch'
             RequestBody = ($defaultEnvironment | ConvertTo-Json -Depth 100)
         }
@@ -595,8 +416,7 @@ if ($PPTenantDLP -in 'low', 'medium', 'high') {
 #region create landing zones for citizen devs
 $PPCitizenCount = 1
 $PPCitizenConfiguration = '';
-if ($PPCitizen -in "yes",
-"half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq 'custom') {
+if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq 'custom') {
     if ($PPCitizenConfiguration -ne '') {
         try {
             $environmentsToCreate = New-EnvironmentCreationObject -ARMInputString ($PPCitizenConfiguration -join ',') -EnvALM:($PPCitizenAlm -eq 'Yes')
@@ -634,35 +454,38 @@ if ($PPCitizen -in "yes",
                 Description        = $environment.envDescription
                 LanguageName       = $environment.envLanguage
                 Currency           = $environment.envCurrency
-                SecurityGroupId    = $environment.envRbac
+                SecurityGroupId    = $environment.envRbac                                 
             }
-            // $null = New-PowerOpsEnvironment @envCreationHt 
-            /* $environment = @{
+           // $null = New-PowerOpsEnvironment @envCreationHt 
+
+          /* $environment = @{
             location = $LocationName
             properties = @{
                 displayName = $DisplayName
                 environmentSku = $EnvironmentSku
             }
         }*/
-            /**/
-            //  $ApiVersion = "2018-01-01"
-            // $postEnvironmentUri = "https://{bapEndpoint}/providers/Microsoft.BusinessAppPlatform/environments`?api-version={apiVersion}&id=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments";
-            // $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environment  -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
-        $environmentt = New-AdminPowerAppEnvironment -DisplayName "test" -Location "uksouth" -EnvironmentSku "Sandbox"
-            /**/
-            //   $environmentsToCreateed = New-AdminPowerAppEnvironments -DisplayName $environment.envName -LocationName $environment.envRegion -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName PPPO -LanguageName 1033 -ProvisionDatabase
-            // $environmentsToCreateed = New-AdminPowerAppEnvironment -DisplayName $environment.envName -LocationName $environment.envRegion -EnvironmentSku 'Sandbox' -ProvisionDatabase true -CurrencyName $environment.envCurrency -LanguageName $environment.envLanguage 
-            Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
-            //  Write-Output "D365 for Sales: $environmentsToCreateed"
+        /**/
+       
+    
+      //  $ApiVersion = "2018-01-01"
+       // $postEnvironmentUri = "https://{bapEndpoint}/providers/Microsoft.BusinessAppPlatform/environments`?api-version={apiVersion}&id=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments";
+       // $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environment  -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
+       // $environmentt = New-AdminPowerAppEnvironment -DisplayName "test" -Location "uksouth" -EnvironmentSku "Sandbox"
+        /**/
+
+        //   $environmentsToCreateed = New-AdminPowerAppEnvironments -DisplayName $environment.envName -LocationName $environment.envRegion -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName PPPO -LanguageName 1033 -ProvisionDatabase
+          // $environmentsToCreateed = New-AdminPowerAppEnvironment -DisplayName $environment.envName -LocationName $environment.envRegion -EnvironmentSku 'Sandbox' -ProvisionDatabase true -CurrencyName $environment.envCurrency -LanguageName $environment.envLanguage 
+           // Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
+          //  Write-Output "D365 for Sales: $environmentsToCreateed"
             Write-Output "D365 for Sales: $ppD365SalesApp"
             Write-Output "D365 for Customer Service: $ppD365CustomerServiceApp"
             Write-Output "D365 for Field Service: $ppD365FieldServiceApp"        
             
-            if (-not [string
-            ]: :IsNullOrEmpty($environment.envRbac) -and $environment.envDataverse -eq $false) {
+            /*if (-not [string]::IsNullOrEmpty($environment.envRbac) -and $environment.envDataverse -eq $false) {
                 Write-Output "Assigning RBAC for principalId $($environment.envRbac) in citizen environment $($environment.envName)"
                 $null = New-PowerOpsRoleAssignment -PrincipalId $environment.envRbac -RoleDefinition EnvironmentAdmin -EnvironmentName $environment.envName
-            }
+            }*/
         }
         catch {
             Write-Output "Failed to create environment citizen.'`r`n$_'"
@@ -715,58 +538,42 @@ function New-AdminPowerAppEnvironments
  New-AdminPowerAppEnvironment -DisplayName 'Asia Dev' -Location asia -EnvironmentSku Production
  Creates a new Production Environment in Asia with the display name 'Asia Dev'
  #>
-    [CmdletBinding(DefaultParameterSetName="User")
-    ]
+    [CmdletBinding(DefaultParameterSetName="User")]
     param
     (
-        [Parameter(Mandatory = $false, ParameterSetName = "Name")
-    ]
-        [string
-    ]$DisplayName,
-    [Parameter(Mandatory = $true, ParameterSetName = "Name", ValueFromPipelineByPropertyName = $true)
-    ]
-        [string
-    ]$LocationName,
-    [ValidateSet("Trial",
-        "Production",
-        "Sandbox")
-    ]
-        [Parameter(Mandatory = $true, ParameterSetName = "Name")
-    ]
-        [string
-    ]$EnvironmentSku,
-    [Parameter(Mandatory = $false, ParameterSetName = "ProvisionDatabase")
-    ]
-        [Switch
-    ]$ProvisionDatabase,
-    [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)
-    ]
-        [string
-    ]$CurrencyName,
-    [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)
-    ]
-        [string
-    ]$LanguageName,
-    [Parameter(Mandatory = $false)
-    ]
-        [string[]
-    ]$Templates,
-    [Parameter(Mandatory = $false)
-    ]
-        [string
-    ]$SecurityGroupId = $null,
-    [Parameter(Mandatory = $false)
-    ]
-        [string
-    ]$DomainName = $null,
-    [Parameter(Mandatory = $false)
-    ]
-        [bool
-    ]$WaitUntilFinished = $true,
-    [Parameter(Mandatory = $false, ParameterSetName = "User")
-    ]
-        [string
-    ]$ApiVersion = "2018-01-01"
+        [Parameter(Mandatory = $false, ParameterSetName = "Name")]
+        [string]$DisplayName,
+
+        [Parameter(Mandatory = $true, ParameterSetName = "Name", ValueFromPipelineByPropertyName = $true)]
+        [string]$LocationName,
+
+        [ValidateSet("Trial", "Production", "Sandbox")]
+        [Parameter(Mandatory = $true, ParameterSetName = "Name")]
+        [string]$EnvironmentSku,
+
+        [Parameter(Mandatory = $false, ParameterSetName = "ProvisionDatabase")]
+        [Switch]$ProvisionDatabase,
+
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [string]$CurrencyName,
+    
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [string]$LanguageName,
+
+        [Parameter(Mandatory = $false)]
+        [string[]]$Templates,
+
+        [Parameter(Mandatory = $false)]
+        [string]$SecurityGroupId = $null,
+
+        [Parameter(Mandatory = $false)]
+        [string]$DomainName = $null,
+
+        [Parameter(Mandatory = $false)]
+        [bool]$WaitUntilFinished = $true,
+
+        [Parameter(Mandatory = $false, ParameterSetName = "User")]
+        [string]$ApiVersion = "2018-01-01"
     )
     process
     {
@@ -785,9 +592,7 @@ function New-AdminPowerAppEnvironments
             if ($CurrencyName -ne $null -and
                 $LanguageName -ne $null)
             {
-                $environment.properties[
-                    "linkedEnvironmentMetadata"
-                ] = @{
+                $environment.properties["linkedEnvironmentMetadata"] = @{
                     baseLanguage = $LanguageName
                     type = "LinkedD365Instance"
                     currency = @{
@@ -796,22 +601,16 @@ function New-AdminPowerAppEnvironments
                     templates = $Templates
                 }
 
-                if (-not [string
-                ]: :IsNullOrEmpty($SecurityGroupId))
+                if (-not [string]::IsNullOrEmpty($SecurityGroupId))
                 {
-                    $environment.properties[
-                        "linkedEnvironmentMetadata"
-                    ] += @{
+                    $environment.properties["linkedEnvironmentMetadata"] += @{
                        securityGroupId = $SecurityGroupId
                     }
                 }
 
-                if (-not [string
-                ]: :IsNullOrEmpty($DomainName))
+                if (-not [string]::IsNullOrEmpty($DomainName))
                 {
-                    $environment.properties[
-                        "linkedEnvironmentMetadata"
-                    ] += @{
+                    $environment.properties["linkedEnvironmentMetadata"] += @{
                         domainName = $DomainName
                     }
                 }
@@ -825,11 +624,8 @@ function New-AdminPowerAppEnvironments
             # By default we poll until the CDS database is finished provisioning
             If($WaitUntilFinished)
             {
-                $response = InvokeApiNoParseContent -Method POST -Route $postEnvironmentUri -Body $environment -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters[
-                    "Verbose"
-                ].IsPresent -eq $true)
-                $statusUrl = $response.Headers['Location'
-                ]
+                $response = InvokeApiNoParseContent -Method POST -Route $postEnvironmentUri -Body $environment -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
+                $statusUrl = $response.Headers['Location']
 
                 if ($response.StatusCode -eq "BadRequest")
                 {
@@ -847,9 +643,7 @@ function New-AdminPowerAppEnvironments
                     while(($response.StatusCode -ne 200) -and ($response.StatusCode -ne 404) -and ($response.StatusCode -ne 500) -and ($TimeDiff.TotalSeconds -lt $timeoutInSeconds))
                     {
                         Start-Sleep -s 5
-                        $response = InvokeApiNoParseContent -Route $statusUrl -Method GET -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters[
-                            "Verbose"
-                        ].IsPresent -eq $true)
+                        $response = InvokeApiNoParseContent -Route $statusUrl -Method GET -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
                         $nextTime = Get-Date -format HH:mm:ss
                         $TimeDiff = New-TimeSpan $currentTime $nextTime
                     }
@@ -860,9 +654,7 @@ function New-AdminPowerAppEnvironments
             # optionally the caller can choose to NOT wait until provisioning is complete and get the provisioning status by polling on Get-AdminPowerAppEnvironment and looking at the provisioning status field
             else
             {
-                $response = InvokeApi -Method POST -Route $route -Body $environment -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters[
-                    "Verbose"
-                ].IsPresent -eq $true)
+                $response = InvokeApi -Method POST -Route $route -Body $environment -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
 
                 if ($response.StatusCode -eq "BadRequest")
                 {
@@ -875,9 +667,7 @@ function New-AdminPowerAppEnvironments
         }
         else
         {
-            $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environment  -Verbose:($PSCmdlet.MyInvocation.BoundParameters[
-                "Verbose"
-            ].IsPresent -eq $true)
+            $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environment  -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
 
             if ($response.StatusCode -eq "BadRequest")
             {
@@ -892,5 +682,4 @@ function New-AdminPowerAppEnvironments
     }
 }
 
-$DeploymentScriptOutputs['Deployment'
-] = 'Successful'
+$DeploymentScriptOutputs['Deployment'] = 'Successful'
