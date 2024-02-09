@@ -464,7 +464,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
         } 
 
-        Install-Module -Name Microsoft.PowerApps.Administration.PowerShell
+        Install-Module -Name Microsoft.PowerApps.Administration.PowerShell -Scope CurrentUser
+        Install-Module -Name Microsoft.PowerApps.PowerShell -AllowClobber -Scope CurrentUser
         Import-Module (Join-Path (Split-Path $script:MyInvocation.MyCommand.Path) "Microsoft.PowerApps.RestClientModule.psm1") -NoClobber #-Force
           
       
