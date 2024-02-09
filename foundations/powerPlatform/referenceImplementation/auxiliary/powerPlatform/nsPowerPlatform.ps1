@@ -489,9 +489,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
         catch {
             throw "Failed to create environment citizen.'`r`n$_'"
             Write-Host $_
-            Write-Host $_.ScriptStackTrace
-          
-          //  Write-Warning "Failed to create citizen environment $($environment.envName)"
+            Write-Host $_.ScriptStackTrace          
+
         }
     }
     if ($PPCitizenDlp -eq "Yes") {
