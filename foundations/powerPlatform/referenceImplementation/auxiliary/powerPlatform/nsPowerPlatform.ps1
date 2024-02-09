@@ -456,7 +456,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 SecurityGroupId    = $environment.envRbac                                 
             }
            // $null = New-PowerOpsEnvironment @envCreationHt 
-           New-AdminPowerAppEnvironments -DisplayName $environment.envName -LocationName $environment.envRegion -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName PPPO -LanguageName 1033 -ProvisionDatabase
+           $environmentsToCreateed = New-AdminPowerAppEnvironments -DisplayName $environment.envName -LocationName $environment.envRegion -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName PPPO -LanguageName 1033 -ProvisionDatabase
           // $environmentsToCreateed = New-AdminPowerAppEnvironment -DisplayName $environment.envName -LocationName $environment.envRegion -EnvironmentSku 'Sandbox' -ProvisionDatabase true -CurrencyName $environment.envCurrency -LanguageName $environment.envLanguage 
             Write-Output "Created citizen environment $($environment.envName) in $($environment.envRegion)"
             Write-Output "D365 for Sales: $environmentsToCreateed"
@@ -479,7 +479,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
 }
 #endregion create landing zones for citizen devs
 
-function New-AdminPowerAppEnvironment
+function New-AdminPowerAppEnvironments
 {
 <#
  .SYNOPSIS
