@@ -133,7 +133,7 @@ $adminSecurityGroupId = ''
 
 
 #Default ALM environment tiers
-$envTiers = 'dev', 'test'
+$envTiers = 'dev', 'test', 'prod'
 
 #region supporting functions
 function New-EnvironmentCreationObject {
@@ -481,17 +481,30 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 "Authorization" = "Bearer $($Token)"
             }
 
-            Write-Output "Creating Environment: $($Env)"
+            Write-Output "Creating Environment: $($envCreationHt.Name)"
             
             # Form the request body to create new Environments in Power Platform
-            # Declaring the HTTP Post request
-        
+           
+
+            $templates = @()
+            if (ppD365SalesApp){
+                $templates += 'D365_Sales'   
+            }
+            if (ppD365CustomerServiceApp){
+                $templates += 'D365_CustomerService'   
+            }
+            if (ppD365FieldServiceApp){
+                $templates += 'D365_FieldService'   
+            }
+          
+            
+        # Declaring the HTTP Post request
             $PostBody = @{
                 "properties" = @{
                     "linkedEnvironmentMetadata" = @{
                         "baseLanguage" = "$($envCreationHt.LanguageName)"
                         "domainName"   = "$($envCreationHt.Name)"
-                        "templates"    = @("D365_Sales")
+                        "templates"    =  $templates
                     }
                     "databaseType"   = "CommonDataService"
                     "displayName"    = "$($envCreationHt.Name)"
@@ -508,7 +521,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 "ContentType" = "application/json"
             }
         
-            Write-Output "Invoking the request to create Environment: $($Env)"
+            Write-Output "Invoking the request to create Environment: $($envCreationHt.Name)"
         
             try {
                 $response = Invoke-RestMethod @PostParameters
