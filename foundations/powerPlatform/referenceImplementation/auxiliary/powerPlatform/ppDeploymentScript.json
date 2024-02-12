@@ -238,22 +238,22 @@
             }
         },       
         "ppD365SalesApp": {
-            "type": "bool",
-            "defaultValue": false,
+            "type": "string",
+            "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Sales."
             }
         },
         "ppD365CustomerServiceApp": {
-            "type": "bool",
-            "defaultValue": false,
+            "type": "string",
+            "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Customer Service."
             }
         },
         "ppD365FieldServiceApp": {
-            "type": "bool",
-            "defaultValue": false,
+            "type": "string",
+            "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Field Service."
             }
@@ -321,7 +321,7 @@
                                                     '-PPCitizenDlp', ' ', parameters('ppCitizenDlp'), ' ',
                                                     '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',
                                                     '-PPCitizenAlm', ' ', parameters('ppCitizenAlm'), ' ',                                                    
-                                                    '-ppD365SalesApp', ' ', bool(parameters('ppD365SalesApp')), ' ',
+                                                    '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
                                                     '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                                                     
                                                     )]",
