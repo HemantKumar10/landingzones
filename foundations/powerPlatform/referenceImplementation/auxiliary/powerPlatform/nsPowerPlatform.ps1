@@ -28,9 +28,9 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenAlm,    
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenCurrency,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,     
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp        
+    [Parameter(Mandatory = $false)][bool][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
+    [Parameter(Mandatory = $false)][bool][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
+    [Parameter(Mandatory = $false)][bool][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp        
 )
 
 $DeploymentScriptOutputs = @{}
