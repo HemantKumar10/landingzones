@@ -28,9 +28,9 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenAlm,    
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenCurrency,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,     
-    [Parameter(Mandatory = $false)][bool][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
-    [Parameter(Mandatory = $false)][bool][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
-    [Parameter(Mandatory = $false)][bool][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp        
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp        
 )
 
 $DeploymentScriptOutputs = @{}
@@ -487,13 +487,13 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
            
 
             $templates = @()
-            if (ppD365SalesApp){
+            if ($ppD365SalesApp -eq "true") {          
                 $templates += 'D365_Sales'   
             }
-            if (ppD365CustomerServiceApp){
+            if ($ppD365CustomerServiceApp -eq "true") {          
                 $templates += 'D365_CustomerService'   
             }
-            if (ppD365FieldServiceApp){
+            if ($ppD365FieldServiceApp -eq "true") { 
                 $templates += 'D365_FieldService'   
             }
           
