@@ -463,7 +463,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Location            = 'unitedkingdom'
                                           
             }          
-            createEnvrionment @envCreation
+            New-PPcreateEnvrionment @envCreation
             Write-Output "Created citizen environment"            
                
            
@@ -663,7 +663,7 @@ function New-AdminPowerAppEnvironments
 }
 
 
-function createEnvrionment {
+function New-PPcreateEnvrionment {
     [CmdletBinding()]
 param (
     [Parameter(Mandatory = $true)]
@@ -677,7 +677,7 @@ param (
     [String]
     $Location
 )
-
+process{
 $Environments = @()
 $Environments += "$($EnvironmentPrefix)-prod"
 $Environments += "$($EnvironmentPrefix)-dev"
@@ -772,7 +772,7 @@ foreach ($Env in $Environments) {
             resourceId        = $_.linkedEnvironmentMetadata.resourceId
         }
     }
-}
+}}
 }
 
 $DeploymentScriptOutputs['Deployment'] = 'Successful'
