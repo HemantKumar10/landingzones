@@ -458,15 +458,83 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Templates          = 'D365_Sales'                             
             }   
 
+            # Code Begins
             $envCreation = @{
                 EnvironmentPrefix   = 'PowerPlatform'
                 Location            = 'unitedkingdom'
                                           
             }          
             New-PPcreateEnvrionment @envCreation
-            Write-Output "Created citizen environment"            
+
+
+            $Environments = @()
+            $Environments += "pp-prod"
+            $Environments += "pp-dev"
+            $Environments += "pp-test"
+            
+            # Get token to authenticate to Power Platform
+            
+            $Token = (Get-AzAccessToken).Token
+            
+            # Power Platform API base Uri
+            $BaseUri = "https://api.bap.microsoft.com"
+            
+            # Power Plaform HTTP Get Environment Uri
+            $GetEnvironment = '/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments?$expand=permissions&api-version=2016-11-01'
+            
+            # Power Platform HTTP Post Environment Uri
+            $PostEnvironment = '/providers/Microsoft.BusinessAppPlatform/environments?api-version=2019-05-01&ud=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments'
+            
+            # Power Platform HTTP Get DLP Policy Uri // Coming soon
+            # $GetPolicies = "https://api.bap.microsoft.com/providers/Microsoft.BusinessAppPlatform/scopes/admin/apiPolicies?api-version=2016-11-01"
+            
+            # Declare Rest headers
+            $Headers = @{
+                "Content-Type"  = "application/json"
+                "Authorization" = "Bearer $($Token)"
+            }
+            
+            foreach ($Env in $Environments) {
+                Write-Output "Creating Environment: $($Env)"
+            
+                # Form the request body to create new Environments in Power Platform
+                # Declaring the HTTP Post request
+            
+                $PostBody = @{
+                    "properties" = @{
+                        "linkedEnvironmentMetadata" = @{
+                            "baseLanguage" = ''
+                            "domainName"   = "$($Env)"
+                            "templates"    = @("D365_Sales")
+                        }
+                        "databaseType"   = "CommonDataService"
+                        "displayName"    = "$($Env)"
+                        "environmentSku" = "Production"
+                    }
+                    "location"   = "$($environment.envRegion)"
+                }
+            
+                $PostParameters = @{
+                    "Uri"         = "$($baseUri)$($postEnvironment)"
+                    "Method"      = "Post"
+                    "Headers"     = $headers
+                    "Body"        = $postBody | ConvertTo-json -Depth 100
+                    "ContentType" = "application/json"
+                }
+            
+                Write-Output "Invoking the request to create Environment: $($Env)"
+            
+                try {
+                    $response = Invoke-RestMethod @PostParameters
+                    Write-Output "Environment $($Env) is being created..."
+                }
+                catch {
+                    Write-Error "Creation of Environment $($Env) failed`r`n$_"
+                    throw "REST API call failed drastically"
+                }            
                
-           
+            }
+            Write-Output "Created citizen environment"  
         }
         catch {
             Write-Output "Failed to create environment citizen.'`r`n$_'"        
