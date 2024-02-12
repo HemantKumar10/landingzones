@@ -459,11 +459,6 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }   
 
             # Code Begins
-            $Environments = @()
-            $Environments += "pp-prod"
-            $Environments += "pp-dev"
-            $Environments += "pp-test"
-            
             # Get token to authenticate to Power Platform
             
             $Token = (Get-AzAccessToken).Token
@@ -485,47 +480,44 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 "Content-Type"  = "application/json"
                 "Authorization" = "Bearer $($Token)"
             }
+
+            Write-Output "Creating Environment: $($Env)"
             
-            foreach ($Env in $Environments) {
-                Write-Output "Creating Environment: $($Env)"
-            
-                # Form the request body to create new Environments in Power Platform
-                # Declaring the HTTP Post request
-            
-                $PostBody = @{
-                    "properties" = @{
-                        "linkedEnvironmentMetadata" = @{
-                            "baseLanguage" = ''
-                            "domainName"   = "$($Env)"
-                            "templates"    = @("D365_Sales")
-                        }
-                        "databaseType"   = "CommonDataService"
-                        "displayName"    = "$($Env)"
-                        "environmentSku" = "Production"
+            # Form the request body to create new Environments in Power Platform
+            # Declaring the HTTP Post request
+        
+            $PostBody = @{
+                "properties" = @{
+                    "linkedEnvironmentMetadata" = @{
+                        "baseLanguage" = "$($envCreationHt.LanguageName)"
+                        "domainName"   = "$($envCreationHt.Name)"
+                        "templates"    = @("D365_Sales")
                     }
-                    "location"   = "$($environment.envRegion)"
+                    "databaseType"   = "CommonDataService"
+                    "displayName"    = "$($envCreationHt.Name)"
+                    "environmentSku" = "Sandbox"
                 }
-            
-                $PostParameters = @{
-                    "Uri"         = "$($baseUri)$($postEnvironment)"
-                    "Method"      = "Post"
-                    "Headers"     = $headers
-                    "Body"        = $postBody | ConvertTo-json -Depth 100
-                    "ContentType" = "application/json"
-                }
-            
-                Write-Output "Invoking the request to create Environment: $($Env)"
-            
-                try {
-                    $response = Invoke-RestMethod @PostParameters
-                    Write-Output "Environment $($Env) is being created..."
-                }
-                catch {
-                    Write-Error "Creation of Environment $($Env) failed`r`n$_"
-                    throw "REST API call failed drastically"
-                }            
-               
+                "location"   = "$($environment.envRegion)"
             }
+        
+            $PostParameters = @{
+                "Uri"         = "$($baseUri)$($postEnvironment)"
+                "Method"      = "Post"
+                "Headers"     = $headers
+                "Body"        = $postBody | ConvertTo-json -Depth 100
+                "ContentType" = "application/json"
+            }
+        
+            Write-Output "Invoking the request to create Environment: $($Env)"
+        
+            try {
+                $response = Invoke-RestMethod @PostParameters
+                Write-Output "Environment $($envCreationHt.Name) is being created..."
+            }
+            catch {
+                Write-Error "Creation of Environment $($envCreationHt.Name) failed`r`n$_"
+                throw "REST API call failed drastically"
+            }  
             Write-Output "Created citizen environment"  
         }
         catch {
@@ -539,300 +531,5 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
     }
 }
 #endregion create landing zones for citizen devs
-
-function New-AdminPowerAppEnvironments
-{
-<#
- .SYNOPSIS
- Creates an Environment.
- .DESCRIPTION
- The New-AdminPowerAppEnvironment cmdlet creates a new Environment by the logged in user.
- Api version 2019-05-01 adds the capability to create an environment with a database. The new commandline argument 'ProvisionDatabase'
- acts as switch to indicate we need to create an environment with the database. If the switch is set, LanguageName and CurrencyName arguments
- are mandatory to pass while Templates,SecurityGroupId and DomainName are optional.
- Use Get-Help New-AdminPowerAppEnvironment -Examples for more detail.
- .PARAMETER DisplayName
- The display name of the new Environment.
- .PARAMETER LocationName
- The location of the new Environment. Use Get-AdminPowerAppEnvironmentLocations to see the valid locations.
- .PARAMETER EnvironmentSku
- The Environment type (Trial or Production).
- .PARAMETER ProvisionDatabase
- The switch to provision Cds database along with creating the environment. If set, LanguageName and CurrencyName are mandatory to pass as arguments.
- .PARAMETER CurrencyName
- The default currency for the database, use Get-AdminPowerAppCdsDatabaseCurrencies to get the supported values
- .PARAMETER LanguageName
- The default languages for the database, use Get-AdminPowerAppCdsDatabaseLanguages to get the support values
- .PARAMETER Templates
- The list of templates used for provisioning. If it is null, an empty Common Data Service database will be created
- .PARAMETER SecurityGroupId
- The Azure Active Directory security group object identifier to restrict database membership.
- .PARAMETER DomainName
- The domain name.
- .PARAMETER WaitUntilFinished
- If set to true, the function will not return until provisioning the database is complete (as either a success or failure)
- .EXAMPLE
- New-AdminPowerAppEnvironment -DisplayName 'HQ Apps' -Location unitedstates -EnvironmentSku Trial
- Creates a new Trial Environment in the United States with the display name 'HQ Apps'
- .EXAMPLE
- New-AdminPowerAppEnvironment -DisplayName 'Asia Dev' -Location asia -EnvironmentSku Production
- Creates a new Production Environment in Asia with the display name 'Asia Dev'
- #>
-    [CmdletBinding(DefaultParameterSetName="User")]
-    param
-    (
-        [Parameter(Mandatory = $false, ParameterSetName = "Name")]
-        [string]$DisplayName,
-
-        [Parameter(Mandatory = $true, ParameterSetName = "Name", ValueFromPipelineByPropertyName = $true)]
-        [string]$LocationName,
-
-        [ValidateSet("Trial", "Production", "Sandbox")]
-        [Parameter(Mandatory = $true, ParameterSetName = "Name")]
-        [string]$EnvironmentSku,
-
-        [Parameter(Mandatory = $false, ParameterSetName = "ProvisionDatabase")]
-        [Switch]$ProvisionDatabase,
-
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [string]$CurrencyName,
-    
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [string]$LanguageName,
-
-        [Parameter(Mandatory = $false)]
-        [string[]]$Templates,
-
-        [Parameter(Mandatory = $false)]
-        [string]$SecurityGroupId = $null,
-
-        [Parameter(Mandatory = $false)]
-        [string]$DomainName = $null,
-
-        [Parameter(Mandatory = $false)]
-        [bool]$WaitUntilFinished = $true,
-
-        [Parameter(Mandatory = $false, ParameterSetName = "User")]
-        [string]$ApiVersion = "2018-01-01"
-    )
-    process
-    {
-        $postEnvironmentUri = "https://{bapEndpoint}/providers/Microsoft.BusinessAppPlatform/environments`?api-version={apiVersion}&id=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments";
-
-        $environment = @{
-            location = $LocationName
-            properties = @{
-                displayName = $DisplayName
-                environmentSku = $EnvironmentSku
-            }
-        }
-
-        if ($ProvisionDatabase)
-        {
-            if ($CurrencyName -ne $null -and
-                $LanguageName -ne $null)
-            {
-                $environment.properties["linkedEnvironmentMetadata"] = @{
-                    baseLanguage = $LanguageName
-                    type = "LinkedD365Instance"
-                    currency = @{
-                        code = $CurrencyName
-                    }
-                    templates = $Templates
-                }
-
-                if (-not [string]::IsNullOrEmpty($SecurityGroupId))
-                {
-                    $environment.properties["linkedEnvironmentMetadata"] += @{
-                       securityGroupId = $SecurityGroupId
-                    }
-                }
-
-                if (-not [string]::IsNullOrEmpty($DomainName))
-                {
-                    $environment.properties["linkedEnvironmentMetadata"] += @{
-                        domainName = $DomainName
-                    }
-                }
-            }
-            else
-            {
-                Write-Error "CurrencyName and Language must be passed as arguments."
-                throw
-            }
-
-            # By default we poll until the CDS database is finished provisioning
-            If($WaitUntilFinished)
-            {
-                $response = InvokeApiNoParseContent -Method POST -Route $postEnvironmentUri -Body $environment -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
-                $statusUrl = $response.Headers['Location']
-
-                if ($response.StatusCode -eq "BadRequest")
-                {
-                    #Write-Error "An error occured."
-                    CreateHttpResponse($response)
-                }
-                else
-                {
-                    $currentTime = Get-Date -format HH:mm:ss
-                    $nextTime = Get-Date -format HH:mm:ss
-                    $TimeDiff = New-TimeSpan $currentTime $nextTime
-                    $timeoutInSeconds = 300
-        
-                    #Wait until the environment has been deleted, there is an error, or we hit a timeout
-                    while(($response.StatusCode -ne 200) -and ($response.StatusCode -ne 404) -and ($response.StatusCode -ne 500) -and ($TimeDiff.TotalSeconds -lt $timeoutInSeconds))
-                    {
-                        Start-Sleep -s 5
-                        $response = InvokeApiNoParseContent -Route $statusUrl -Method GET -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
-                        $nextTime = Get-Date -format HH:mm:ss
-                        $TimeDiff = New-TimeSpan $currentTime $nextTime
-                    }
-
-                    CreateHttpResponse($response)
-                }
-            }
-            # optionally the caller can choose to NOT wait until provisioning is complete and get the provisioning status by polling on Get-AdminPowerAppEnvironment and looking at the provisioning status field
-            else
-            {
-                $response = InvokeApi -Method POST -Route $route -Body $environment -ApiVersion $ApiVersion -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
-
-                if ($response.StatusCode -eq "BadRequest")
-                {
-                    #Write-Error "An error occured."
-                    CreateHttpResponse($response)
-                }
-
-                CreateHttpResponse($response)
-            }
-        }
-        else
-        {
-            $response = InvokeApi -Method POST -Route $postEnvironmentUri -ApiVersion $ApiVersion -Body $environment  -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
-
-            if ($response.StatusCode -eq "BadRequest")
-            {
-                #Write-Error "An error occured."
-                CreateHttpResponse($response)
-            }
-            else
-            {
-                CreateEnvironmentObject -EnvObject $response -ReturnCdsDatabaseType $false
-            }
-        }
-    }
-}
-
-
-function New-PPcreateEnvrionment {
-    [CmdletBinding()]
-param (
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullOrEmpty()]
-    [String]
-    $EnvironmentPrefix,
-
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet('unitedstates', 'europe', 'asia', 'australia', 'india', 'japan', 'canada', 'unitedkingdom', 'unitedstatesfirstrelease', 'southamerica', 'france', 'switzerland', 'germany', 'unitedarabemirates')]
-    [String]
-    $Location
-)
-process{
-$Environments = @()
-$Environments += "$($EnvironmentPrefix)-prod"
-$Environments += "$($EnvironmentPrefix)-dev"
-$Environments += "$($EnvironmentPrefix)-test"
-
-# Get token to authenticate to Power Platform
-
-$Token = (Get-AzAccessToken).Token
-
-# Power Platform API base Uri
-$BaseUri = "https://api.bap.microsoft.com"
-
-# Power Plaform HTTP Get Environment Uri
-$GetEnvironment = '/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments?$expand=permissions&api-version=2016-11-01'
-
-# Power Platform HTTP Post Environment Uri
-$PostEnvironment = '/providers/Microsoft.BusinessAppPlatform/environments?api-version=2019-05-01&ud=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments'
-
-# Power Platform HTTP Get DLP Policy Uri // Coming soon
-# $GetPolicies = "https://api.bap.microsoft.com/providers/Microsoft.BusinessAppPlatform/scopes/admin/apiPolicies?api-version=2016-11-01"
-
-# Declare Rest headers
-$Headers = @{
-    "Content-Type"  = "application/json"
-    "Authorization" = "Bearer $($Token)"
-}
-
-foreach ($Env in $Environments) {
-    Write-Output "Creating Environment: $($Env)"
-
-    # Form the request body to create new Environments in Power Platform
-    # Declaring the HTTP Post request
-
-    $PostBody = @{
-        "properties" = @{
-            "linkedEnvironmentMetadata" = @{
-                "baseLanguage" = ''
-                "domainName"   = "$($Env)"
-                "templates"    = @("D365_DeveloperEdition")
-            }
-            "databaseType"   = "CommonDataService"
-            "displayName"    = "$($Env)"
-            "environmentSku" = "Production"
-        }
-        "location"   = "$($Location)"
-    }
-
-    $PostParameters = @{
-        "Uri"         = "$($baseUri)$($postEnvironment)"
-        "Method"      = "Post"
-        "Headers"     = $headers
-        "Body"        = $postBody | ConvertTo-json -Depth 100
-        "ContentType" = "application/json"
-    }
-
-    Write-Output "Invoking the request to create Environment: $($Env)"
-
-    try {
-        $response = Invoke-RestMethod @PostParameters
-        Write-Output "Environment $($Env) is being created..."
-    }
-    catch {
-        Write-Error "Creation of Environment $($Env) failed`r`n$_"
-        throw "REST API call failed drastically"
-    }
-
-    # Get newly created environments
-
-    $GetParameters = @{
-        "Uri"         = "$($BaseUri)$($GetEnvironment)"
-        "Method"      = "Get"
-        "Headers"     = $headers
-        "ContentType" = "application/json"
-    }
-
-    Write-Output "Checking environment status for $($Env)"
-    Start-Sleep -Seconds 30
-    try {
-        $response = Invoke-RestMethod @GetParameters
-    }
-    catch {
-        Write-Output "Retrieving the environment failed.`r`n$_"
-        throw "Ouch...."
-    }
-    $response.value.properties | Where-Object { $_.displayName -eq $($Env) } | Sort-Object -Property createdTime -Descending -Top 1 | Foreach-Object -Process {
-        [PSCustomObject]@{
-            Name              = $_.displayName
-            environmentType   = $_.environmentType
-            provisioningState = $_.provisioningState
-            azureRegionHint   = $_.azureRegionHint
-            createdTime       = $_.createdTime
-            resourceId        = $_.linkedEnvironmentMetadata.resourceId
-        }
-    }
-}}
-}
 
 $DeploymentScriptOutputs['Deployment'] = 'Successful'
