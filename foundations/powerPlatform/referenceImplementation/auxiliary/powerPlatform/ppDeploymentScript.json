@@ -321,7 +321,7 @@
                                                     '-PPCitizenDlp', ' ', parameters('ppCitizenDlp'), ' ',
                                                     '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',
                                                     '-PPCitizenAlm', ' ', parameters('ppCitizenAlm'), ' ',                                                    
-                                                    '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',
+                                                    '-ppD365SalesApp', ' ', bool(parameters('ppD365SalesApp')), ' ',
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
                                                     '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                                                     
                                                     )]",
