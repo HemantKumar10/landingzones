@@ -459,14 +459,6 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }   
 
             # Code Begins
-            $envCreation = @{
-                EnvironmentPrefix   = 'PowerPlatform'
-                Location            = 'unitedkingdom'
-                                          
-            }          
-            New-PPcreateEnvrionment @envCreation
-
-
             $Environments = @()
             $Environments += "pp-prod"
             $Environments += "pp-dev"
