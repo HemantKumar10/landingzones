@@ -303,7 +303,7 @@ function New-CreateSecurityGroup {
             # Get token to authenticate to Power Platform
            <# $Token = (Get-AzAccessToken -ResourceTypeName MSGraph).Token  #>
             
-            <#$Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/default").Token>
+            <#$Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/default").Token #>
 
             $Token  = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com" -Scope 'Group.ReadWrite.All').Token
 
