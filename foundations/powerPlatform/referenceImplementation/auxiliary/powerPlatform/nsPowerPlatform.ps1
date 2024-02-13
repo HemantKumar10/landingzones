@@ -317,6 +317,7 @@ function New-CreateSecurityGroup {
             try{
             Connect-AzAccount -Identity
             $token = Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com"
+            Install-module Microsoft.Graph 
             Connect-MgGraph -AccessToken $token.Token
             $params = @{
                 displayName = "Library Assist"
