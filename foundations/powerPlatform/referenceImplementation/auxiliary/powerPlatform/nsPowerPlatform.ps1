@@ -305,15 +305,13 @@ function New-CreateSecurityGroup {
             
             <#$Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/default").Token #>
             try{
-                $tokenx =  Get-AzAccessToken -ResourceUrl 'https://graph.microsoft.com' [-Permission 'Group.ReadWrite.All']
+                <#$tokenx =  Get-AzAccessToken -ResourceUrl 'https://graph.microsoft.com' [-Permission 'Group.ReadWrite.All']#>
                 $tokeny =  Get-AzAccessToken -Scope 'Group.ReadWrite.All'
             }
-            catch{
-                Write-Error "AccessTokenx- $($tokenx) failed`r`n$_"
+            catch{              
                 Write-Error "AccessTokeny- $($tokeny) failed`r`n$_"              
-            }
-         
-            Write-Output "Bearer $($tokenx)"
+            }         
+            
             Write-Output "Bearer $($tokeny)"
 
         
