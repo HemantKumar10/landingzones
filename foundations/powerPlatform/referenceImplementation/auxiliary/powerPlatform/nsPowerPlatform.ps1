@@ -239,7 +239,7 @@ function New-CreateSecurityGroup {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentType
     )
-    Write-Output "Invoking the request to create Security Group CreateSecurityGroup"      
+    
         $devSecurityGroup = @{
             description="Security Group used for Power Platform - Development environment"
             displayName="entra_powerplatform_development"
@@ -299,7 +299,7 @@ function New-CreateSecurityGroup {
              mailNickname="Admins"
             }
             $Value =''
-             # Code Begins
+            # Code Begins
             # Get token to authenticate to Power Platform
            <# $Token = (Get-AzAccessToken -ResourceTypeName MSGraph).Token  #>
             
@@ -334,7 +334,7 @@ function New-CreateSecurityGroup {
                 "Uri"         = "$($PostGroups)"
                 "Method"      = "Post"
                 "Headers"     = $headers
-                "Body"        = $postBody | ConvertTo-json -Depth 100
+                "Body"        = $postBody
                 "ContentType" = "application/json"
             }        
             Write-Output "Invoking the request to create Security Group: $($postBody.displayName)"        
@@ -344,7 +344,7 @@ function New-CreateSecurityGroup {
                 Write-Output "Security Group Created $($response.displayName) is being created..."
             }
             catch {
-                Write-Error "Creation of Environment $($envCreationHt.Name) failed`r`n$_"
+                Write-Error "AccessToken- $($Token) failed`r`n$_"
                 throw "REST API call failed drastically"
             }  
             return $Value
