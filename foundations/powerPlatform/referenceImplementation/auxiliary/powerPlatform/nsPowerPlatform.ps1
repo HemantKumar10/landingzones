@@ -337,8 +337,7 @@ function New-CreateSecurityGroup {
             Write-Output "Invoking the request to create Security Group: $($postBody.displayName)"        
             try {
                 $response = Invoke-RestMethod @PostParameters               
-                $Value  = $response.id
-                }
+                $Value  = $response.id                
                 Write-Output "Security Group Created $($response.displayName) is being created..."
             }
             catch {
