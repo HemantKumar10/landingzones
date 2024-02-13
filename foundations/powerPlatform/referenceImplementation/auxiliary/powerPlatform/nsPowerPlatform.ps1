@@ -149,6 +149,7 @@ function New-EnvironmentCreationObject {
         [Parameter(Mandatory = $false, ParameterSetName = 'EnvCount')][switch]$EnvDataverse
     )
     if (-not [string]::IsNullOrEmpty($ARMInputString)) {
+        Write-Output "IF Block"
         foreach ($env in ($ARMInputString -split 'ppEnvName:')) {
             if ($env -match ".") {
                 $environment = $env.TrimEnd(',')
@@ -181,7 +182,7 @@ function New-EnvironmentCreationObject {
         1..$EnvCount | ForEach-Object -Process {
             $environmentName = $EnvNaming
             $securityGroupId = ''
-
+            Write-Output "Else Block"
             if ($true -eq $EnvALM) {
                 foreach ($envTier in $envTiers) {
                     Write-Output "Test Security Group: $($envTier)"
