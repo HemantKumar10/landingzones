@@ -522,11 +522,11 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                         "baseLanguage" = "$($envCreationHt.LanguageName)"
                         "domainName"   = "$($envCreationHt.Name)"
                         "templates"    =  $templates
+                        "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
                     }
                     "databaseType"   = "CommonDataService"
                     "displayName"    = "$($envCreationHt.Name)"
-                    "environmentSku" = "Sandbox"
-                    "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
+                    "environmentSku" = "Sandbox"                   
                 }
                 "location"   = "$($environment.envRegion)"
             }
