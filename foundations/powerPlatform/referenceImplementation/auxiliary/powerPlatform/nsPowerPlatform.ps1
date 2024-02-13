@@ -304,10 +304,19 @@ function New-CreateSecurityGroup {
            <# $Token = (Get-AzAccessToken -ResourceTypeName MSGraph).Token  #>
             
             <#$Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/default").Token #>
+            try{
+                $tokenx =  Get-AzAccessToken -ResourceUrl 'https://graph.microsoft.com' [-Permission 'Group.ReadWrite.All']
+                $tokeny =  Get-AzAccessToken -Scope 'Group.ReadWrite.All'
+            }
+            catch{
+                Write-Error "AccessTokenx- $($tokenx) failed`r`n$_"
+                Write-Error "AccessTokeny- $($tokeny) failed`r`n$_"              
+            }
+         
+            Write-Output "Bearer $($tokenx)"
+            Write-Output "Bearer $($tokeny)"
 
-            $Token  = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com" -Scope 'Group.ReadWrite.All').Token
-
-            Write-Output "Bearer $($Token)"
+        
             # Power Platform HTTP Post Group Uri
             $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
             
