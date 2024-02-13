@@ -148,8 +148,7 @@ function New-EnvironmentCreationObject {
         [Parameter(Mandatory = $false)][switch]$EnvALM,
         [Parameter(Mandatory = $false, ParameterSetName = 'EnvCount')][switch]$EnvDataverse
     )
-    if (-not [string]::IsNullOrEmpty($ARMInputString)) {
-        Write-Output "IF Block"
+    if (-not [string]::IsNullOrEmpty($ARMInputString)) {      
         foreach ($env in ($ARMInputString -split 'ppEnvName:')) {
             if ($env -match ".") {
                 $environment = $env.TrimEnd(',')
@@ -178,17 +177,13 @@ function New-EnvironmentCreationObject {
             }
         }
     }
-    else {
-
-        Write-Output "Else Block"     
+    else {         
         1..$EnvCount | ForEach-Object -Process {
             $environmentName = $EnvNaming
-            $securityGroupId = ''
-       
+            $securityGroupId = ''       
             if ($true -eq $EnvALM) {
-                foreach ($envTier in $envTiers) {
-                    Write-Output "Test Security Group: $($envTier)"
-                    if ( $envTier -eq 'dev' ){
+                foreach ($envTier in $envTiers) { 
+                    if($envTier -eq 'dev'){
                         $securityGroupId = $devSecurityGroupId
                     }
                     if ( $envTier -eq 'test' ){
@@ -213,8 +208,7 @@ function New-EnvironmentCreationObject {
                 }
             }
             else {
-
-                Write-Output "Else Else Block"
+              
                 [PSCustomObject]@{
                     envName        = $environmentName
                     envRegion      = $EnvRegion
@@ -514,6 +508,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                     "databaseType"   = "CommonDataService"
                     "displayName"    = "$($envCreationHt.Name)"
                     "environmentSku" = "Sandbox"
+                    "securityGroupId" = "$($environment.envRbac)",
                 }
                 "location"   = "$($environment.envRegion)"
             }
@@ -529,7 +524,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             Write-Output "Invoking the request to create Environment: $($envCreationHt.Name)"
         
             try {
-               
+                $response = Invoke-RestMethod @PostParameters
                 Write-Output "Environment $($envCreationHt.Name) is being created..."
             }
             catch {
