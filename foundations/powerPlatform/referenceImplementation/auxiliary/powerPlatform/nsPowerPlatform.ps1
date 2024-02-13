@@ -314,7 +314,24 @@ function New-CreateSecurityGroup {
             }         
             
             Write-Output "Bearer $($tokeny)" #> 
-
+            try{
+            Connect-AzAccount -Identity
+            $token = Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com"
+            Connect-MgGraph -AccessToken $token.Token
+            $params = @{
+                displayName = "Library Assist"
+                mailEnabled = $true
+                mailNickname = "library"
+                securityEnabled = $true
+                groupTypes = @(
+                    "Unified"
+                )
+            }            
+            New-MgGroup -BodyParameter $params
+             }
+             catch{              
+             Write-Error "AccessTokeny- $($token.Token) failed`r`n$_"              
+         }    
         
             # Power Platform HTTP Post Group Uri
             $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
