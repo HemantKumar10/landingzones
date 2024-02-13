@@ -179,10 +179,12 @@ function New-EnvironmentCreationObject {
         }
     }
     else {
+
+        Write-Output "Else Block"     
         1..$EnvCount | ForEach-Object -Process {
             $environmentName = $EnvNaming
             $securityGroupId = ''
-            Write-Output "Else Block"
+       
             if ($true -eq $EnvALM) {
                 foreach ($envTier in $envTiers) {
                     Write-Output "Test Security Group: $($envTier)"
@@ -211,6 +213,8 @@ function New-EnvironmentCreationObject {
                 }
             }
             else {
+
+                Write-Output "Else Else Block"
                 [PSCustomObject]@{
                     envName        = $environmentName
                     envRegion      = $EnvRegion
