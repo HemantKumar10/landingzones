@@ -305,8 +305,9 @@ function New-CreateSecurityGroup {
             
             <#$Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/default").Token #>
             try{
-                <#$tokenx =  Get-AzAccessToken -ResourceUrl 'https://graph.microsoft.com' [-Permission 'Group.ReadWrite.All']#>
-                $tokeny =  Get-AzAccessToken -Scope 'Group.ReadWrite.All'
+                <#$tokenx =  Get-AzAccessToken -ResourceUrl 'https://graph.microsoft.com' [-Permission 'Group.ReadWrite.All']#>               
+                $tokeny =  Get-AzAccessToken -Scopes 'Group.ReadWrite.All'
+                Connect-MgGraph -Identity
             }
             catch{              
                 Write-Error "AccessTokeny- $($tokeny) failed`r`n$_"              
