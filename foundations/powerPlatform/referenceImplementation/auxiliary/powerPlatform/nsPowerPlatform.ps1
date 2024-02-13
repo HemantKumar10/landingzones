@@ -185,20 +185,23 @@ function New-EnvironmentCreationObject {
             if ($true -eq $EnvALM) {
                 foreach ($envTier in $envTiers) { 
                     if($envTier -eq 'dev'){
-                        $securityGroupId = $devSecurityGroupId
+                        $sgId = New-CreateSecurityGroup -EnvironmentType dev
+                        $securityGroupId = $sgId
                         $envSku = 'Sandbox'  
                     }
                     if ( $envTier -eq 'test' ){
-                        $securityGroupId = $testSecurityGroupId
+                        $sgId = New-CreateSecurityGroup -EnvironmentType test
+                        $securityGroupId = $sgId
                         $envSku = 'Sandbox'  
                     }
                     if ( $envTier -eq 'prod' ){
-                        $securityGroupId = $prodSecurityGroupId
-                        $envSku ='Production'
-                     
+                        $sgId = New-CreateSecurityGroup -EnvironmentType prod
+                        $securityGroupId = $sgId
+                        $envSku ='Production'                     
                     }
                     if ( $envTier -eq 'admin' ){
-                        $securityGroupId = $adminSecurityGroupId
+                        $sgId = New-CreateSecurityGroup -EnvironmentType admin
+                        $securityGroupId = $sgId
                         $envSku ='Production'
                     }
 
@@ -230,6 +233,122 @@ function New-EnvironmentCreationObject {
         }
     }
 }
+
+
+function New-CreateSecurityGroup {
+    param (      
+        [Parameter(Mandatory = $true)][string]$EnvironmentType
+    )
+
+        $devSecurityGroup = @{
+            description="Security Group used for Power Platform - Development environment"
+            displayName="entra_powerplatform_development"
+            mailEnabled=$false
+            securityEnabled=$true
+            mailNickname="PowerPlatformDevelopmentGroup"
+           }
+        
+          $testSecurityGroup = @{
+            description="Security Group used for Power Platform - Test environment"
+             displayName="entra_powerplatform_test"
+            mailEnabled=$false
+             securityEnabled=$true
+             mailNickname="PowerPlatformTestGroup"
+            }
+        
+            $productionSecurityGroup = @{
+            description="Security Group used for Power Platform - Production environment"
+             displayName="entra_powerplatform_production"
+             mailEnabled=$false
+             securityEnabled=$true
+             mailNickname="PowerPlatformProductionGroup"
+            }
+        
+            $adminSecurityGroup = @{
+             description="Security Group used for Power Platform - Admin environment"
+             displayName="entra_powerplatform_admin"
+             mailEnabled=$false
+             securityEnabled=$true
+             mailNickname="PowerPlatformAdminGroup"
+            }
+        
+            $makersM365Group = @{
+             description="Microsoft 365 Group used for Power Platform Makers"
+             displayName="entra_powerplatform_makers"
+             GroupTypes="Unified"
+             mailEnabled=$true
+             securityEnabled=$true
+             mailNickname="Makers"
+            }
+        
+            $usersM365Group = @{
+             description="Microsoft 365 Group used for Power Platform Users"
+             displayName="entra_powerplatform_users"
+             GroupTypes="Unified"
+             mailEnabled=$true
+             securityEnabled=$true
+             mailNickname="Users"
+            }
+        
+           $adminsM365Group = @{
+             description="Microsoft 365 Group used for Power Platform Admins"
+             displayName="entra_powerplatform_admins"
+             GroupTypes="Unified"
+             mailEnabled=$true
+             securityEnabled=$true
+             mailNickname="Admins"
+            }
+            $Value =''
+             # Code Begins
+            # Get token to authenticate to Power Platform
+            $Token = (Get-AzAccessToken).Token  
+            
+            # Power Platform HTTP Post Group Uri
+            $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
+            
+            # Declare Rest headers
+            $Headers = @{
+                "Content-Type"  = "application/json"
+                "Authorization" = "Bearer $($Token)"
+            }
+           # Declaring the HTTP Post request
+            $PostBody = @{             
+            }
+            if ($EnvironmentType -eq "dev") {          
+                $PostBody = $devSecurityGroup   
+            }
+           elseif ($EnvironmentType -eq "test") {          
+                $PostBody = $testSecurityGroup   
+            }
+            elseif ($EnvironmentType -eq "prod") {          
+                $PostBody = $productionSecurityGroup   
+            }
+            elseif ($EnvironmentType -eq "admin") {          
+                $PostBody = $adminSecurityGroup   
+            }           
+        
+            $PostParameters = @{
+                "Uri"         = "$($PostGroups)"
+                "Method"      = "Post"
+                "Headers"     = $headers
+                "Body"        = $postBody | ConvertTo-json -Depth 100
+                "ContentType" = "application/json"
+            }        
+            Write-Output "Invoking the request to create Security Group: $($postBody.displayName)"        
+            try {
+                $response = Invoke-RestMethod @PostParameters               
+                $Value  = $response.id
+                }
+                Write-Output "Security Group Created $($response.displayName) is being created..."
+            }
+            catch {
+                Write-Error "Creation of Environment $($envCreationHt.Name) failed`r`n$_"
+                throw "REST API call failed drastically"
+            }  
+            return $Value
+}
+
+
 function New-DLPAssignmentFromEnv {
     param (
         [Parameter(Mandatory = $true)][string[]]$Environments,
@@ -299,13 +418,7 @@ function New-DLPAssignmentFromEnv {
     }
 }
 
-function New-CreateSecurityGroup {
-    param (
-        [Parameter(Mandatory = $true)][string[]]$GroupName,
-        [Parameter(Mandatory = $true)][string]$EnvironmentDLP
-    )
-   
-}
+
 
 #endregion supporting functions
 
@@ -526,7 +639,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                     }
                     "databaseType"   = "CommonDataService"
                     "displayName"    = "$($envCreationHt.Name)"
-                    "environmentSku" = "Sandbox"                   
+                    "environmentSku" = "$($envCreationHt.EnvSku)"                 
                 }
                 "location"   = "$($environment.envRegion)"
             }
