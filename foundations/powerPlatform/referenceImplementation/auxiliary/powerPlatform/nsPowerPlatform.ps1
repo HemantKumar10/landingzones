@@ -180,20 +180,26 @@ function New-EnvironmentCreationObject {
     else {         
         1..$EnvCount | ForEach-Object -Process {
             $environmentName = $EnvNaming
-            $securityGroupId = ''       
+            $securityGroupId = ''      
+            $envSku = 'Sandbox'     
             if ($true -eq $EnvALM) {
                 foreach ($envTier in $envTiers) { 
                     if($envTier -eq 'dev'){
                         $securityGroupId = $devSecurityGroupId
+                        $envSku = 'Sandbox'  
                     }
                     if ( $envTier -eq 'test' ){
                         $securityGroupId = $testSecurityGroupId
+                        $envSku = 'Sandbox'  
                     }
                     if ( $envTier -eq 'prod' ){
                         $securityGroupId = $prodSecurityGroupId
+                        $envSku ='Production'
+                     
                     }
                     if ( $envTier -eq 'admin' ){
                         $securityGroupId = $adminSecurityGroupId
+                        $envSku ='Production'
                     }
 
                     [PSCustomObject]@{
@@ -204,6 +210,7 @@ function New-EnvironmentCreationObject {
                         envCurrency    = $envCurrency
                         envDescription = $envDescription
                         envRbac        = $securityGroupId
+                        envSku         = $envSku
                     }
                 }
             }
@@ -217,6 +224,7 @@ function New-EnvironmentCreationObject {
                     envCurrency    = $envCurrency
                     envDescription = $envDescription
                     envRbac        = ''
+                    envSku         = $envSku
                 }
             }
         }
@@ -290,6 +298,15 @@ function New-DLPAssignmentFromEnv {
         Write-Warning "Created Default $EnvironmentDLP DLP Policy`r`n$_"
     }
 }
+
+function New-CreateSecurityGroup {
+    param (
+        [Parameter(Mandatory = $true)][string[]]$GroupName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentDLP
+    )
+   
+}
+
 #endregion supporting functions
 
 #region set tenant settings
@@ -454,6 +471,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 LanguageName       = $environment.envLanguage
                 Currency           = $environment.envCurrency
                 SecurityGroupId    = $environment.envRbac  
+                EnvSku             = $environment.envSKu 
                 Templates          = 'D365_Sales'                             
             }   
 
@@ -479,7 +497,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 "Content-Type"  = "application/json"
                 "Authorization" = "Bearer $($Token)"
             }
-
+            Write-Output "Creating Environment: $($envCreationHt.EnvSku)"
             Write-Output "Creating Environment: $($envCreationHt.Name)"
             
             # Form the request body to create new Environments in Power Platform
@@ -508,7 +526,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                     "databaseType"   = "CommonDataService"
                     "displayName"    = "$($envCreationHt.Name)"
                     "environmentSku" = "Sandbox"
-                    "securityGroupId" = "$($environment.envRbac)",
+                    "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
                 }
                 "location"   = "$($environment.envRegion)"
             }
