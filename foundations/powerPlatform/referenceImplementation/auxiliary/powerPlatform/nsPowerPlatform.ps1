@@ -239,7 +239,7 @@ function New-CreateSecurityGroup {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentType
     )
-
+    Write-Output "Invoking the request to create Security Group CreateSecurityGroup"      
         $devSecurityGroup = @{
             description="Security Group used for Power Platform - Development environment"
             displayName="entra_powerplatform_development"
@@ -583,8 +583,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 LanguageName       = $environment.envLanguage
                 Currency           = $environment.envCurrency
                 SecurityGroupId    = $environment.envRbac  
-                EnvSku             = $environment.envSKu 
-                Templates          = 'D365_Sales'                             
+                EnvSku             = $environment.envSKu                                           
             }   
 
             # Code Begins
