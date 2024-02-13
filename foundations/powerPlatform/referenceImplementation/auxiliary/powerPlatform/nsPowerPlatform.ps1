@@ -303,7 +303,9 @@ function New-CreateSecurityGroup {
             # Get token to authenticate to Power Platform
            <# $Token = (Get-AzAccessToken -ResourceTypeName MSGraph).Token  #>
             
-           $Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
+            $Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
+
+            Write-Output "Bearer $($Token)"
             # Power Platform HTTP Post Group Uri
             $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
             
