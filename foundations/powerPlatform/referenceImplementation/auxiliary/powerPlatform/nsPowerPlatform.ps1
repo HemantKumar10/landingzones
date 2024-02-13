@@ -184,7 +184,7 @@ function New-EnvironmentCreationObject {
 
             if ($true -eq $EnvALM) {
                 foreach ($envTier in $envTiers) {
-
+                    Write-Output "Test Security Group: $($envTier)"
                     if ( $envTier -eq 'dev' ){
                         $securityGroupId = $devSecurityGroupId
                     }
@@ -524,7 +524,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             Write-Output "Invoking the request to create Environment: $($envCreationHt.Name)"
         
             try {
-                $response = Invoke-RestMethod @PostParameters
+               
                 Write-Output "Environment $($envCreationHt.Name) is being created..."
             }
             catch {
