@@ -373,16 +373,19 @@ function New-InstallPackaggeToEnvironment {
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token   
 
-            
+            $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/Group.ReadWrite.All").Token
+               Write-Output "Token Graph $($Token1) "
 
             $Token1 = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/AppManagement.ApplicationPackages.Install").Token
-            Write-Output "Token1 $($Token1) "
+
+            
+            Write-Output "Token1 $($TokenGraph) "
 
             
             $Token2 = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
-            Write-Output "Token1 $($Token2) "
+            Write-Output "Token2 $($Token2) "
 
-            Import-Module "MSAL.PS"
+            Import-Module MSAL.PS
             $AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'
              
             
