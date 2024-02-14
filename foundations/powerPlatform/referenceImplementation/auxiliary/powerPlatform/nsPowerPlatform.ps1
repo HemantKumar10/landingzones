@@ -371,25 +371,19 @@ function New-InstallPackaggeToEnvironment {
     ) 
             # Code Begins
             # Get token to authenticate to Power Platform
-            $Token = (Get-AzAccessToken).Token   
 
+
+            <# $Token = (Get-AzAccessToken).Token 
             $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/Group.ReadWrite.All").Token
                Write-Output "Token Graph $($Token1) "
-
-            $Token1 = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/AppManagement.ApplicationPackages.Install").Token
-
-            
+            $Token1 = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/AppManagement.ApplicationPackages.Install").Token            
             Write-Output "Token1 $($TokenGraph) "
-
-            
-            $Token2 = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
-            Write-Output "Token2 $($Token2) "
-
             Import-Module MSAL.PS
-            $AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'
-             
+            $AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'   
+            Write-Output "TokenX $($AuthResult.AccessToken) " #>
+
             
-            Write-Output "TokenX $($AuthResult.AccessToken) "
+            $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
             # Power Platform HTTP Post Environment Uri
             $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
             
