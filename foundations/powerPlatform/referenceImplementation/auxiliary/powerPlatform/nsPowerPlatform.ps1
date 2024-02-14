@@ -382,6 +382,9 @@ function New-InstallPackaggeToEnvironment {
             $AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'   
             Write-Output "TokenX $($AuthResult.AccessToken) " #>
 
+            $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
+            Write-Output "TokenGraph $($TokenGraph) "
+
             
             $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
             # Power Platform HTTP Post Environment Uri
@@ -741,7 +744,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             Write-Output "Checking environment status for $($envCreationHt.Name)"
             Start-Sleep -Seconds 30    
             try {
-                New-InstallPackaggeToEnvironment -EnvironmentId '776bf4ec-cbc8-e7eb-a8dd-a363d2f0ada8' -PackageName 'msdyn_AppDeploymentAnchor'
+                New-InstallPackaggeToEnvironment -EnvironmentId '2f5d95c0-8c06-eef0-9958-aa265de897a3' -PackageName 'msdyn_AppDeploymentAnchor'  
                 Write-Output "Invoke Get environment status for $($envCreationHt.Name)"
                 $response = Invoke-RestMethod @GetParameters
                 Write-Host ($response | Format-List | Out-String)
