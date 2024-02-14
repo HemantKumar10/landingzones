@@ -185,23 +185,23 @@ function New-EnvironmentCreationObject {
             if ($true -eq $EnvALM) {
                 foreach ($envTier in $envTiers) { 
                     if($envTier -eq 'dev'){
-                        $sgId = New-CreateSecurityGroup -EnvironmentType dev
-                        $securityGroupId = $sgId
+                        <# $sgId = New-CreateSecurityGroup -EnvironmentType dev
+                        $securityGroupId = $sgId #>
                         $envSku = 'Sandbox'  
                     }
                     if ( $envTier -eq 'test' ){
-                        $sgId = New-CreateSecurityGroup -EnvironmentType test
-                        $securityGroupId = $sgId
+                        <# $sgId = New-CreateSecurityGroup -EnvironmentType test
+                        $securityGroupId = $sgId #>
                         $envSku = 'Sandbox'  
                     }
                     if ( $envTier -eq 'prod' ){
-                        $sgId = New-CreateSecurityGroup -EnvironmentType prod
-                        $securityGroupId = $sgId
+                        <# $sgId = New-CreateSecurityGroup -EnvironmentType prod
+                        $securityGroupId = $sgId #>
                         $envSku ='Production'                     
                     }
                     if ( $envTier -eq 'admin' ){
-                        $sgId = New-CreateSecurityGroup -EnvironmentType admin
-                        $securityGroupId = $sgId
+                        <#$sgId = New-CreateSecurityGroup -EnvironmentType admin
+                        $securityGroupId = $sgId #>
                         $envSku ='Production'
                     }
 
@@ -356,8 +356,7 @@ function New-CreateSecurityGroup {
                 $Value  = $response.id                
                 Write-Output "Security Group Created $($response.displayName) is being created..."
             }
-            catch {
-                Write-Error "Post Body- $($postBody) failed`r`n$_"
+            catch {            
                 Write-Error "AccessToken- $($Token) failed`r`n$_"
                 throw "REST API call failed drastically"
             }  
@@ -641,7 +640,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             if ($ppD365FieldServiceApp -eq "true") { 
                 $templates += 'D365_FieldService'   
             }
-          
+            
+           # "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
             
         # Declaring the HTTP Post request
             $PostBody = @{
@@ -650,7 +650,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                         "baseLanguage" = "$($envCreationHt.LanguageName)"
                         "domainName"   = "$($envCreationHt.Name)"
                         "templates"    =  $templates
-                        "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
+                        
                     }
                     "databaseType"   = "CommonDataService"
                     "displayName"    = "$($envCreationHt.Name)"
