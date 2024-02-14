@@ -347,7 +347,7 @@ function New-CreateSecurityGroup {
                 "Uri"         = "$($PostGroups)"
                 "Method"      = "Post"
                 "Headers"     = $headers
-                "Body"        = $postBody
+                "Body"        = $postBody | ConvertTo-json -Depth 100
                 "ContentType" = "application/json"
             }        
             Write-Output "Invoking the request to create Security Group: $($postBody.displayName)"        
@@ -357,6 +357,7 @@ function New-CreateSecurityGroup {
                 Write-Output "Security Group Created $($response.displayName) is being created..."
             }
             catch {
+                Write-Error "Post Body- $($postBody) failed`r`n$_"
                 Write-Error "AccessToken- $($Token) failed`r`n$_"
                 throw "REST API call failed drastically"
             }  
