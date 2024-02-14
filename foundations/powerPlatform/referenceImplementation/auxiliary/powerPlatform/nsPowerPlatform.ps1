@@ -364,6 +364,43 @@ function New-CreateSecurityGroup {
 }
 
 
+function New-InstallPackaggeToEnvironment {
+    param (      
+        [Parameter(Mandatory = $true)][string]$EnvironmentId,
+        [Parameter(Mandatory = $true)][string]$PackageName
+    ) 
+            # Code Begins
+            # Get token to authenticate to Power Platform
+            $Token = (Get-AzAccessToken).Token   
+            # Power Platform HTTP Post Environment Uri
+            $PostEnvironment = "/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
+            
+            # Declare Rest headers
+            $Headers = @{
+                "Content-Type"  = "application/json"
+                "Authorization" = "Bearer $($Token)"
+            }
+           # Declaring the HTTP Post request
+                     
+        
+            $PostParameters = @{
+                "Uri"         = "$($PostEnvironment)"
+                "Method"      = "Post"
+                "Headers"     = $headers
+                "ContentType" = "application/json"
+            }  
+            try {
+                Invoke-RestMethod @PostParameters  
+                Write-Output "Application Installtion $($PackageName) is being done..."
+            }
+            catch {            
+                Write-Error "AccessToken- $($Token) failed`r`n$_"
+                throw "REST API call failed drastically"
+            }  
+          
+}
+
+
 function New-DLPAssignmentFromEnv {
     param (
         [Parameter(Mandatory = $true)][string[]]$Environments,
@@ -678,6 +715,36 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 throw "REST API call failed drastically"
             }  
             Write-Output "Created citizen environment"  
+            # Get newly created environments
+
+            $GetParameters = @{
+                "Uri"         = "$($BaseUri)$($GetEnvironment)"
+                "Method"      = "Get"
+                "Headers"     = $headers
+                "ContentType" = "application/json"
+            }
+
+            Write-Output "Checking environment status for $($envCreationHt.Name)"
+            Start-Sleep -Seconds 30
+            try {
+                $response = Invoke-RestMethod @GetParameters
+            }
+            catch {
+                Write-Output "Retrieving the environment failed.`r`n$_"
+                throw "Ouch...."
+            }
+            $response.value.properties | Where-Object { $_.displayName -eq $($envCreationHt.Name) } | Sort-Object -Property createdTime -Descending -Top 1 | Foreach-Object -Process {
+                [PSCustomObject]@{
+                    Name              = $_.displayName
+                    environmentType   = $_.environmentType
+                    provisioningState = $_.provisioningState
+                    azureRegionHint   = $_.azureRegionHint
+                    createdTime       = $_.createdTime
+                    resourceId        = $_.linkedEnvironmentMetadata.resourceId
+                }
+                Write-Output "environmentID $($_.linkedEnvironmentMetadata.resourceId)"
+                New-InstallPackaggeToEnvironment -EnvironmentId $_.linkedEnvironmentMetadata.resourceId -PackageName 'msdyn_AppDeploymentAnchor'
+            }
         }
         catch {
             Write-Output "Failed to create environment citizen.'`r`n$_'"        
