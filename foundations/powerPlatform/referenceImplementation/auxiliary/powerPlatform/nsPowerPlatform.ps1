@@ -381,10 +381,6 @@ function New-InstallPackaggeToEnvironment {
             Import-Module MSAL.PS
             $AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'   
             Write-Output "TokenX $($AuthResult.AccessToken) " #>
-
-            $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
-            Write-Output "TokenGraph $($TokenGraph) "
-
             
             $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
             # Power Platform HTTP Post Environment Uri
@@ -744,7 +740,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             Write-Output "Checking environment status for $($envCreationHt.Name)"
             Start-Sleep -Seconds 30    
             try {
-                New-InstallPackaggeToEnvironment -EnvironmentId '2f5d95c0-8c06-eef0-9958-aa265de897a3' -PackageName 'msdyn_AppDeploymentAnchor'  
+                New-InstallPackaggeToEnvironment -EnvironmentId '32512600-a32e-e22f-85f0-c7168370b4a5' -PackageName 'msdyn_AppDeploymentAnchor' 
+                New-InstallPackaggeToEnvironment -EnvironmentId '893b6e65-b6b6-ee11-9073-6045bd0f1aa0' -PackageName 'msdyn_AppDeploymentAnchor'   
                 Write-Output "Invoke Get environment status for $($envCreationHt.Name)"
                 $response = Invoke-RestMethod @GetParameters
                 Write-Host ($response | Format-List | Out-String)
@@ -755,6 +752,9 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
             Write-Output "Invoke Get environment After for $($envCreationHt.Name)"
             $response.value.properties | Where-Object { $_.displayName -eq $($envCreationHt.Name) } | Sort-Object -Property createdTime -Descending -Top 1 | Foreach-Object -Process {
+
+                Write-Host ($_ | Format-List | Out-String)
+
                 [PSCustomObject]@{
                     Name              = $_.displayName
                     environmentType   = $_.environmentType
@@ -764,7 +764,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                     resourceId        = $_.linkedEnvironmentMetadata.resourceId
                 }
                 Write-Output "environmentID $($_.linkedEnvironmentMetadata.resourceId)"
-                New-InstallPackaggeToEnvironment -EnvironmentId $_.linkedEnvironmentMetadata.resourceId -PackageName 'msdyn_AppDeploymentAnchor'
+                <# New-InstallPackaggeToEnvironment -EnvironmentId $_.linkedEnvironmentMetadata.resourceId -PackageName 'msdyn_AppDeploymentAnchor' #>
             }
         }
         catch {
