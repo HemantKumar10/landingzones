@@ -708,7 +708,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
         
             try {
                 $response = Invoke-RestMethod @PostParameters
-                Write-Host ($response | Format-List | Out-String)
+               
                 Write-Output "Environment $($envCreationHt.Name) is being created..."
             }
             catch {
@@ -724,12 +724,15 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 "Headers"     = $headers
                 "ContentType" = "application/json"
             }
-
+            
+           
             Write-Output "Checking environment status for $($envCreationHt.Name)"
             Start-Sleep -Seconds 30    
             try {
+                New-InstallPackaggeToEnvironment -EnvironmentId '776bf4ec-cbc8-e7eb-a8dd-a363d2f0ada8' -PackageName 'msdyn_AppDeploymentAnchor'
                 Write-Output "Invoke Get environment status for $($envCreationHt.Name)"
                 $response = Invoke-RestMethod @GetParameters
+                Write-Host ($response | Format-List | Out-String)
             }
             catch {
                 Write-Output "Retrieving the environment failed.`r`n$_"
