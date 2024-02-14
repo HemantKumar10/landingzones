@@ -372,8 +372,23 @@ function New-InstallPackaggeToEnvironment {
             # Code Begins
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token   
+
+            
+
+            $Token1 = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/AppManagement.ApplicationPackages.Install").Token
+            Write-Output "Token1 $($Token1) "
+
+            
+            $Token2 = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
+            Write-Output "Token1 $($Token2) "
+
+            Import-Module "MSAL.PS"
+            $AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'
+             
+            
+            Write-Output "TokenX $($AuthResult.AccessToken) "
             # Power Platform HTTP Post Environment Uri
-            $PostEnvironment = "/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
+            $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
             
             # Declare Rest headers
             $Headers = @{
