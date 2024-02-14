@@ -708,7 +708,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
         
             try {
                 $response = Invoke-RestMethod @PostParameters
-                Write-Output  $response
+                Write-Host ($response | Format-List | Out-String)
                 Write-Output "Environment $($envCreationHt.Name) is being created..."
             }
             catch {
@@ -726,15 +726,16 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
 
             Write-Output "Checking environment status for $($envCreationHt.Name)"
-            Start-Sleep -Seconds 30
-            Write-Output "Checking environment status for $($envCreationHt.Name)"
+            Start-Sleep -Seconds 30    
             try {
+                Write-Output "Invoke Get environment status for $($envCreationHt.Name)"
                 $response = Invoke-RestMethod @GetParameters
             }
             catch {
                 Write-Output "Retrieving the environment failed.`r`n$_"
                 throw "Ouch...."
             }
+            Write-Output "Invoke Get environment After for $($envCreationHt.Name)"
             $response.value.properties | Where-Object { $_.displayName -eq $($envCreationHt.Name) } | Sort-Object -Property createdTime -Descending -Top 1 | Foreach-Object -Process {
                 [PSCustomObject]@{
                     Name              = $_.displayName
