@@ -750,19 +750,11 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 throw "Ouch...."
             }
             Write-Output "Invoke Get environment After for $($envCreationHt.Name)"
-            $response.value.properties | Where-Object { $_.displayName -eq $($envCreationHt.Name) } | Sort-Object -Property createdTime -Descending -Top 1 | Foreach-Object -Process {
-                Write-Host ($_ | Format-List | Out-String)
-                [PSCustomObject]@{
-                    Name              = $_.displayName
-                    environmentType   = $_.environmentType
-                    provisioningState = $_.provisioningState
-                    azureRegionHint   = $_.azureRegionHint
-                    createdTime       = $_.createdTime
-                    resourceId        = $_.linkedEnvironmentMetadata.resourceId
-                }
-                Write-Output "environmentID $($_.linkedEnvironmentMetadata.resourceId)"
-                <# New-InstallPackaggeToEnvironment -EnvironmentId $_.linkedEnvironmentMetadata.resourceId -PackageName 'msdyn_AppDeploymentAnchor' #>
-            }
+          
+                $response.value | Where-Object { $_.properties.displayName -eq $($envCreationHt.Name) } | Foreach-Object -Process {
+                    Write-Host ($_ | Format-List | Out-String)  
+                }            
+
         }
         catch {
             Write-Output "Failed to create environment citizen.'`r`n$_'"        
