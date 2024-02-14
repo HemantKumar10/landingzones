@@ -405,8 +405,7 @@ function New-InstallPackaggeToEnvironment {
                 Write-Output "Application Installtion $($PackageName) is being done..."
             }
             catch {            
-                Write-Error "AccessToken- $($Token) failed`r`n$_"
-                throw "REST API call failed drastically"
+                Write-Error "$($PackageName) Installtion EnvironmentId $($EnvironmentId) failed`r`n$_"               
             }  
           
 }
@@ -738,10 +737,10 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             
            
             Write-Output "Checking environment status for $($envCreationHt.Name)"
-            Start-Sleep -Seconds 30    
+            Start-Sleep -Seconds 120    
             try {
-                New-InstallPackaggeToEnvironment -EnvironmentId '32512600-a32e-e22f-85f0-c7168370b4a5' -PackageName 'msdyn_AppDeploymentAnchor' 
-                New-InstallPackaggeToEnvironment -EnvironmentId '893b6e65-b6b6-ee11-9073-6045bd0f1aa0' -PackageName 'msdyn_AppDeploymentAnchor'   
+                <# New-InstallPackaggeToEnvironment -EnvironmentId '32512600-a32e-e22f-85f0-c7168370b4a5' -PackageName 'msdyn_AppDeploymentAnchor' #>
+           
                 Write-Output "Invoke Get environment status for $($envCreationHt.Name)"
                 $response = Invoke-RestMethod @GetParameters
                 Write-Host ($response | Format-List | Out-String)
@@ -752,9 +751,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
             Write-Output "Invoke Get environment After for $($envCreationHt.Name)"
             $response.value.properties | Where-Object { $_.displayName -eq $($envCreationHt.Name) } | Sort-Object -Property createdTime -Descending -Top 1 | Foreach-Object -Process {
-
                 Write-Host ($_ | Format-List | Out-String)
-
                 [PSCustomObject]@{
                     Name              = $_.displayName
                     environmentType   = $_.environmentType
