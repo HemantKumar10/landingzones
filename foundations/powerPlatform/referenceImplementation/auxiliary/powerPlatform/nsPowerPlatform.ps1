@@ -708,6 +708,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
         
             try {
                 $response = Invoke-RestMethod @PostParameters
+                Write-Output  $response
                 Write-Output "Environment $($envCreationHt.Name) is being created..."
             }
             catch {
@@ -726,6 +727,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
 
             Write-Output "Checking environment status for $($envCreationHt.Name)"
             Start-Sleep -Seconds 30
+            Write-Output "Checking environment status for $($envCreationHt.Name)"
             try {
                 $response = Invoke-RestMethod @GetParameters
             }
