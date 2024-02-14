@@ -307,32 +307,17 @@ function New-CreateSecurityGroup {
             <# try{
                 $tokenx =  Get-AzAccessToken -ResourceUrl 'https://graph.microsoft.com' [-Permission 'Group.ReadWrite.All']              
                 $tokeny =  Get-AzAccessToken -Scopes 'Group.ReadWrite.All'
-                Connect-MgGraph -Identity
+                Connect-AzAccount -Identity
+                $token = Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com"
+                Install-module Microsoft.Graph 
+                Connect-MgGraph -AccessToken $token.Token
             }
             catch{              
                 Write-Error "AccessTokeny- $($tokeny) failed`r`n$_"              
             }         
             
             Write-Output "Bearer $($tokeny)" #> 
-            try{
-            Connect-AzAccount -Identity
-            $token = Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com"
-            Install-module Microsoft.Graph 
-            Connect-MgGraph -AccessToken $token.Token
-            $params = @{
-                displayName = "Library Assist"
-                mailEnabled = $true
-                mailNickname = "library"
-                securityEnabled = $true
-                groupTypes = @(
-                    "Unified"
-                )
-            }            
-            New-MgGroup -BodyParameter $params
-             }
-             catch{              
-             Write-Error "AccessTokeny- $($token.Token) failed`r`n$_"              
-         }    
+            $Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token     
         
             # Power Platform HTTP Post Group Uri
             $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
