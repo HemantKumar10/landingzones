@@ -381,7 +381,10 @@ function New-InstallPackaggeToEnvironment {
             Import-Module MSAL.PS
             $AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'   
             Write-Output "TokenX $($AuthResult.AccessToken) " #>
-            
+
+            $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
+            Write-Output "Group: $($TokenGraph)"
+
             $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
             # Power Platform HTTP Post Environment Uri
             $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
@@ -649,6 +652,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 EnvSku             = $environment.envSKu                                           
             }   
 
+
+            
             # Code Begins
             # Get token to authenticate to Power Platform
             
