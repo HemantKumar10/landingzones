@@ -746,13 +746,12 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Write-Host ($response | Format-List | Out-String)
             }
             catch {
-                Write-Output "Retrieving the environment failed.`r`n$_"
-                throw "Ouch...."
-            }
-            Write-Output "Invoke Get environment After for $($envCreationHt.Name)"
-          
-                $response.value | Where-Object { $_.properties.displayName -eq $($envCreationHt.Name) } | Foreach-Object -Process {
-                    Write-Host ($_ | Format-List | Out-String)  
+                Write-Output "Retrieving the environment failed.`r`n$_"              
+            }          
+             $response.value | Where-Object { $_.properties.displayName -eq $($envCreationHt.Name) } | Foreach-Object -Process {  
+                Write-Output "$($envCreationHt.Name): Installation of App Power Platform Pipeline started "          
+                    New-InstallPackaggeToEnvironment -EnvironmentId $($_.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                    Write-Output "$($envCreationHt.Name): Installation of App Power Platform Pipeline completed"  
                 }            
 
         }
