@@ -651,7 +651,10 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 SecurityGroupId    = $environment.envRbac  
                 EnvSku             = $environment.envSKu                                           
             }   
-
+            
+            # Starts Here: Code to create Group
+            New-AzureADGroup -DisplayName 'Test' -MailEnabled $False -MailNickName 'PowerPlatformDevelopmentGroup' -SecurityEnabled $True -Description 'Security Group used for Power Platform - Development environment'
+            # Ends Here:  Code to create group 
 
             
             # Code Begins
