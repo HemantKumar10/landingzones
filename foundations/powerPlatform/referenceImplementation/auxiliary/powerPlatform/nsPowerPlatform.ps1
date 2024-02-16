@@ -617,8 +617,6 @@ if ($PPAdminEnvEnablement -eq 'Yes' -and -not [string]::IsNullOrEmpty($PPAdminEn
         try {
             $adminEnvName = '{0}-admin-{1}' -f $PPAdminEnvNaming, $envTier
             $null = New-PowerOpsEnvironment -Name $adminEnvName -Location $PPAdminRegion -Dataverse $true -ManagedEnvironment ($PPAdminManagedEnv -eq 'Yes')
-            Write-Output $null
-            Write-Host ($null | Format-List | Out-String)
             Write-Output "Created environment $adminEnvName in $PPAdminRegion"
         }
         catch {
@@ -630,19 +628,29 @@ if ($PPAdminEnvEnablement -eq 'Yes' -and -not [string]::IsNullOrEmpty($PPAdminEn
     if ($PPAdminDlp -eq "Yes") {
         $adminEnvironments = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -like "$PPAdminEnvNaming-admin*" }
         try {
-            New-DLPAssignmentFromEnv -Environments $adminEnvironments.properties.displayName -EnvironmentDLP 'adminEnv'
-
-            Start-Sleep -Seconds 120  
-            #Starts Install Power Platform Pipeline App in Admin Envrionemnt
-            $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $adminEnvName }
-            New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
-            #Ends Install Power Platform Pipeline App in Admin Envrionemnt
+            New-DLPAssignmentFromEnv -Environments $adminEnvironments.properties.displayName -EnvironmentDLP 'adminEnv'          
             Write-Output "Created Default Admin Environment DLP Policy"
         }
         catch {
             Write-Warning "Created Default Admin Environment DLP Policy`r`n$_"
         }
     }
+
+    Start-Sleep -Seconds 30  
+    #Starts Install Power Platform Pipeline App in Admin Envrionemnt
+    foreach ($envTier in $envTiers) {
+        try {
+    $adminEnvName = '{0}-admin-{1}' -f $PPAdminEnvNaming, $envTier    
+    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $adminEnvName }
+    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+        }
+        catch {
+            Write-Warning "Error installing App`r`n$_"
+        }
+    }
+    #Ends Install Power Platform Pipeline App in Admin Envrionemnt
+
+
 }
 #endregion create admin environments and import COE solution
 
@@ -818,22 +826,5 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
     }
 }
 #endregion create landing zones for citizen devs
-
-#region install Powerplatform Pipline App to Admin
-
-if ($PPAdminEnvEnablement -eq 'Yes' -and -not [string]::IsNullOrEmpty($PPAdminEnvNaming)) {
-$defaultEnvAttempts = 0
-do {
-    $defaultEnvAttempts++
-    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $adminEnvName }
-    Write-Output "Admin environment Id $($adminEnvironment.name)"
-    if (-not ($adminEnvironment)) {
-        Write-Host ($adminEnvironment | Format-List | Out-String)
-        Write-Output "Getting default environment - attempt $defaultEnvAttempts"
-        Start-Sleep -Seconds 15
-    }
-} until ($adminEnvironment -or $defaultEnvAttempts -eq 15)
-}
-#endregion
 
 $DeploymentScriptOutputs['Deployment'] = 'Successful'
