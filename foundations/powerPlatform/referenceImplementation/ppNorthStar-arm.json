@@ -93,7 +93,73 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
+        },   
+
+        "ppAdminEnvEnablement": {
+            "type": "string",
+            "allowedValues": [
+                "yes",
+                "no"
+            ],
+            "defaultValue": "no",
+            "metadata": {
+                "description": "select to enable/disable this setting."
+            }
+        },
+        "ppAdminEnvNaming": {
+            "type": "string",
+            "maxLength": 15,
+            "defaultValue": "''",
+            "metadata": {
+                "description": "Provide naming convention for the Admin environments."
+            }
+        },
+        "ppAdminRegion": {
+            "type": "string",
+            "allowedValues": [
+                "europe",
+                "unitedstates",
+                "unitedkingdom",
+                "asia",
+                "japan",
+                "india",
+                "canada",
+                "southamerica",
+                "unitedkingdom",
+                "france",
+                "germany",
+                "unitedarabemirates",
+                "australia",
+                "norway"
+            ],
+            "defaultValue": "unitedstates",
+            "metadata": {
+                "description": "Provide location for the Admin environments."
+            }
+        },
+        "ppAdminDlp": {
+            "type": "string",
+            "defaultValue": "no",
+            "allowedValues": [
+                "yes",
+                "no"
+            ],
+            "metadata": {
+                "description": "Select if recommended DLP policies should be assigned for the Admin environments."
+            }
+        },
+        "ppAdminManagedEnv": {
+            "type": "string",
+            "defaultValue": "no",
+            "allowedValues": [
+                "no",
+                "yes"
+            ],
+            "metadata": {
+                "description": "Select to enable/disable this setting."
+            }
         },       
+
         "ppDefaultRenameText": {
             "type": "string",
             "defaultValue": "Personal",
@@ -297,7 +363,24 @@
                     },
                     "ppTenantIsolationSetting": {
                         "value": "[parameters('ppTenantIsolationSetting')]"
-                    },                   
+                    },  
+
+                      "ppAdminEnvEnablement": {
+                        "value": "[parameters('ppAdminEnvEnablement')]"
+                    },
+                    "ppAdminEnvNaming": {
+                        "value": "[parameters('ppAdminEnvNaming')]"
+                    },
+                    "ppAdminRegion": {
+                        "value": "[parameters('ppAdminRegion')]"
+                    },                  
+                    "ppAdminDlp": {
+                        "value": "[parameters('ppAdminDlp')]"
+                    },
+                    "ppAdminManagedEnv": {
+                        "value": "[parameters('ppAdminManagedEnv')]"
+                    },
+
                     "ppCitizenAlm": {
                         "value": "[parameters('ppCitizenAlm')]"
                     },                                                          
