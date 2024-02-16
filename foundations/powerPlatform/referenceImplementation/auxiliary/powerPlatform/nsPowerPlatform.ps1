@@ -606,7 +606,7 @@ if ($defaultEnvironment.properties.governanceConfiguration.protectionLevel -ne '
 
 
 #region create admin environments and import COE solution
-$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq 'AdminX-admin-prod' }
+
 Write-Output "Admin environment Id $($adminEnvironment.name)"
 
 
@@ -631,6 +631,12 @@ if ($PPAdminEnvEnablement -eq 'Yes' -and -not [string]::IsNullOrEmpty($PPAdminEn
         $adminEnvironments = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -like "$PPAdminEnvNaming-admin*" }
         try {
             New-DLPAssignmentFromEnv -Environments $adminEnvironments.properties.displayName -EnvironmentDLP 'adminEnv'
+
+            Start-Sleep -Seconds 120  
+            #Starts Install Power Platform Pipeline App in Admin Envrionemnt
+            $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $adminEnvName }
+            New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+            #Ends Install Power Platform Pipeline App in Admin Envrionemnt
             Write-Output "Created Default Admin Environment DLP Policy"
         }
         catch {
@@ -786,20 +792,20 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 "ContentType" = "application/json"
             }          
             
-            Start-Sleep -Seconds 120    
+           #Start-Sleep -Seconds 120    
             try {
                 <# New-InstallPackaggeToEnvironment -EnvironmentId '32512600-a32e-e22f-85f0-c7168370b4a5' -PackageName 'msdyn_AppDeploymentAnchor' #>
-                $response = Invoke-RestMethod @GetParameters
+                <#$response = Invoke-RestMethod @GetParameters #>
                 #Write-Host ($response | Format-List | Out-String)
             }
             catch {
                 Write-Output "Retrieving the environment failed.`r`n$_"              
             }          
-             $response.value | Where-Object { $_.properties.displayName -eq $($envCreationHt.Name) } | Foreach-Object -Process {  
+            <# $response.value | Where-Object { $_.properties.displayName -eq $($envCreationHt.Name) } | Foreach-Object -Process {  
                 Write-Output "$($envCreationHt.Name): Installation of App Power Platform Pipeline started "          
-                    New-InstallPackaggeToEnvironment -EnvironmentId $($_.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                  New-InstallPackaggeToEnvironment -EnvironmentId $($_.name) -PackageName 'msdyn_AppDeploymentAnchor'
                     Write-Output "$($envCreationHt.Name): Installation of App Power Platform Pipeline completed"  
-                }            
+                } #>            
 
         }
         catch {
