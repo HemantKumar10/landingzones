@@ -1436,7 +1436,7 @@
                             "type": "Microsoft.Common.DropDown",
                             "label": "Select region for the new Admin Environments",
                             "placeholder": "",
-                            "defaultValue": "",
+                            "defaultValue": "United Kingdom",
                             "toolTip": "",
                             "visible": "[equals(steps('landingZones').ppAdminEnvEnablement, 'yes')]",
                             "constraints": {
@@ -1448,6 +1448,10 @@
                                     {
                                         "label": "United States",
                                         "value": "unitedstates"
+                                    },
+                                    {
+                                        "label": "United Kingdom",
+                                        "value": "unitedkingdom"
                                     },
                                     {
                                         "label": "United Arab Emirates",
