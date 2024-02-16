@@ -13,7 +13,16 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTrialEnvCreationSetting,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPEnvCapacitySetting,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTenantIsolationSetting,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTenantDLP,           
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTenantDLP,   
+    
+    #Start - Admin environment
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminEnvEnablement,   
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminEnvNaming,
+    [ValidateSet('unitedstates', 'europe', 'asia', 'australia', 'india', 'japan', 'canada', 'unitedkingdom', 'unitedstatesfirstrelease', 'southamerica', 'france', 'switzerland', 'germany', 'unitedarabemirates', 'norway')][Parameter(Mandatory = $false)][string]$PPAdminRegion,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminDlp,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminManagedEnv,
+ 
+    #End - Admin environment
 
     #Landing Zones
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultRenameText,
@@ -594,6 +603,35 @@ if ($defaultEnvironment.properties.governanceConfiguration.protectionLevel -ne '
     }
 }
 #endregion default environment
+
+
+#region create admin environments and import COE solution
+if ($PPAdminEnvEnablement -eq 'Yes' -and -not [string]::IsNullOrEmpty($PPAdminEnvNaming)) {
+    # Create environment
+    foreach ($envTier in $envTiers) {
+        try {
+            $adminEnvName = '{0}-admin-{1}' -f $PPAdminEnvNaming, $envTier
+            $null = New-PowerOpsEnvironment -Name $adminEnvName -Location $PPAdminRegion -Dataverse $true -ManagedEnvironment ($PPAdminManagedEnv -eq 'Yes')
+            Write-Output "Created environment $adminEnvName in $PPAdminRegion"
+        }
+        catch {
+            throw "Failed to create admin environment $adminEnvName`r `n$_"
+        }
+    }
+
+    # Assign DLP to created environments
+    if ($PPAdminDlp -eq "Yes") {
+        $adminEnvironments = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -like "$PPAdminEnvNaming-admin*" }
+        try {
+            New-DLPAssignmentFromEnv -Environments $adminEnvironments.properties.displayName -EnvironmentDLP 'adminEnv'
+            Write-Output "Created Default Admin Environment DLP Policy"
+        }
+        catch {
+            Write-Warning "Created Default Admin Environment DLP Policy`r`n$_"
+        }
+    }
+}
+#endregion create admin environments and import COE solution
 
 #region create default tenant dlp policies
 if ($PPTenantDLP -in 'low', 'medium', 'high') {
