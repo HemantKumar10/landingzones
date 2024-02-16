@@ -392,7 +392,7 @@ function New-InstallPackaggeToEnvironment {
             Write-Output "TokenX $($AuthResult.AccessToken) " #>
 
             $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
-            Write-Output "Group: $($TokenGraph)"
+           
 
             $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
             # Power Platform HTTP Post Environment Uri
@@ -692,7 +692,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             
             # Starts Here: Code to create Group
             #New-AzADGroup -DisplayName 'Test' -MailEnabled $False -MailNickName 'PowerPlatformDevelopmentGroup' -SecurityEnabled $True -Description 'Security Group used for Power Platform - Development environment'
-            New-AzADGroup -DisplayName 'PowerPlatformDevelopmentGroup' -MailNickName 'PowerPlatformDevelopmentGroup' 
+            #New-AzADGroup -DisplayName 'PowerPlatformDevelopmentGroup' -MailNickName 'PowerPlatformDevelopmentGroup' 
             # Ends Here:  Code to create group 
 
             
@@ -718,7 +718,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 "Content-Type"  = "application/json"
                 "Authorization" = "Bearer $($Token)"
             }
-            Write-Output "Creating Environment: $($envCreationHt.EnvSku)"
+      
             Write-Output "Creating Environment: $($envCreationHt.Name)"
             
             # Form the request body to create new Environments in Power Platform
@@ -764,31 +764,24 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             Write-Output "Invoking the request to create Environment: $($envCreationHt.Name)"
         
             try {
-                $response = Invoke-RestMethod @PostParameters
-               
-                Write-Output "Environment $($envCreationHt.Name) is being created..."
+                $response = Invoke-RestMethod @PostParameters               
+                Write-Output "Citizen Environment $($envCreationHt.Name) is being created..."
             }
             catch {
-                Write-Error "Creation of Environment $($envCreationHt.Name) failed`r`n$_"
+                Write-Error "Creation of citizen Environment $($envCreationHt.Name) failed`r`n$_"
                 throw "REST API call failed drastically"
             }  
-            Write-Output "Created citizen environment"  
             # Get newly created environments
-
             $GetParameters = @{
                 "Uri"         = "$($BaseUri)$($GetEnvironment)"
                 "Method"      = "Get"
                 "Headers"     = $headers
                 "ContentType" = "application/json"
-            }
+            }          
             
-           
-            Write-Output "Checking environment status for $($envCreationHt.Name)"
             Start-Sleep -Seconds 120    
             try {
                 <# New-InstallPackaggeToEnvironment -EnvironmentId '32512600-a32e-e22f-85f0-c7168370b4a5' -PackageName 'msdyn_AppDeploymentAnchor' #>
-           
-                Write-Output "Invoke Get environment status for $($envCreationHt.Name)"
                 $response = Invoke-RestMethod @GetParameters
                 Write-Host ($response | Format-List | Out-String)
             }
@@ -803,9 +796,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
 
         }
         catch {
-            Write-Output "Failed to create environment citizen.'`r`n$_'"        
-            Write-Output $_.ScriptStackTrace          
             Write-Warning "Failed to create citizen environment $($environment.envName)"
+            Write-Output "Failed to create environment citizen.'`r`n$_'"  
         }
     }
     if ($PPCitizenDlp -eq "Yes") {
