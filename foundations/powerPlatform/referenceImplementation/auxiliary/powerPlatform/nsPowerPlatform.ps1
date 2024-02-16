@@ -606,6 +606,10 @@ if ($defaultEnvironment.properties.governanceConfiguration.protectionLevel -ne '
 
 
 #region create admin environments and import COE solution
+$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq 'AdminX-admin-prod' }
+Write-Output "Admin environment Id $($adminEnvironment.name)"
+
+
 $adminEnvName =''
 if ($PPAdminEnvEnablement -eq 'Yes' -and -not [string]::IsNullOrEmpty($PPAdminEnvNaming)) {
     # Create environment
@@ -816,6 +820,7 @@ $defaultEnvAttempts = 0
 do {
     $defaultEnvAttempts++
     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $adminEnvName }
+    Write-Output "Admin environment Id $($adminEnvironment.name)"
     if (-not ($adminEnvironment)) {
         Write-Host ($adminEnvironment | Format-List | Out-String)
         Write-Output "Getting default environment - attempt $defaultEnvAttempts"
