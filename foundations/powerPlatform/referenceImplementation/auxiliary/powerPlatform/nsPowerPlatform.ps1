@@ -15,11 +15,11 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTenantIsolationSetting,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPTenantDLP,   
     
-    #Start - Admin environment
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminEnvEnablement,   
+    #Start - Admin environment    
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminEnvNaming,
     [ValidateSet('unitedstates', 'europe', 'unitedkingdom', 'asia', 'australia', 'india', 'japan', 'canada', 'unitedkingdom', 'unitedstatesfirstrelease', 'southamerica', 'france', 'switzerland', 'germany', 'unitedarabemirates', 'norway')][Parameter(Mandatory = $false)][string]$PPAdminRegion,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminDlp,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminEnvEnablement,   
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPAdminManagedEnv,
  
     #End - Admin environment
@@ -606,12 +606,15 @@ if ($defaultEnvironment.properties.governanceConfiguration.protectionLevel -ne '
 
 
 #region create admin environments and import COE solution
+$adminEnvName =''
 if ($PPAdminEnvEnablement -eq 'Yes' -and -not [string]::IsNullOrEmpty($PPAdminEnvNaming)) {
     # Create environment
     foreach ($envTier in $envTiers) {
         try {
             $adminEnvName = '{0}-admin-{1}' -f $PPAdminEnvNaming, $envTier
             $null = New-PowerOpsEnvironment -Name $adminEnvName -Location $PPAdminRegion -Dataverse $true -ManagedEnvironment ($PPAdminManagedEnv -eq 'Yes')
+            Write-Output $null
+            Write-Host ($null | Format-List | Out-String)
             Write-Output "Created environment $adminEnvName in $PPAdminRegion"
         }
         catch {
@@ -783,7 +786,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             try {
                 <# New-InstallPackaggeToEnvironment -EnvironmentId '32512600-a32e-e22f-85f0-c7168370b4a5' -PackageName 'msdyn_AppDeploymentAnchor' #>
                 $response = Invoke-RestMethod @GetParameters
-                Write-Host ($response | Format-List | Out-String)
+                #Write-Host ($response | Format-List | Out-String)
             }
             catch {
                 Write-Output "Retrieving the environment failed.`r`n$_"              
@@ -805,5 +808,21 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
     }
 }
 #endregion create landing zones for citizen devs
+
+#region install Powerplatform Pipline App to Admin
+
+if ($PPAdminEnvEnablement -eq 'Yes' -and -not [string]::IsNullOrEmpty($PPAdminEnvNaming)) {
+$defaultEnvAttempts = 0
+do {
+    $defaultEnvAttempts++
+    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $adminEnvName }
+    if (-not ($adminEnvironment)) {
+        Write-Host ($adminEnvironment | Format-List | Out-String)
+        Write-Output "Getting default environment - attempt $defaultEnvAttempts"
+        Start-Sleep -Seconds 15
+    }
+} until ($adminEnvironment -or $defaultEnvAttempts -eq 15)
+}
+#endregion
 
 $DeploymentScriptOutputs['Deployment'] = 'Successful'
