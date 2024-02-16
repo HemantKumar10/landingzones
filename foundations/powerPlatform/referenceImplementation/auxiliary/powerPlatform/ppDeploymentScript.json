@@ -88,7 +88,73 @@
             "metadata": {
                 "description": "Select tenant isolation setting"
             }
-        },       
+        },   
+        "ppAdminEnvEnablement": {
+            "type": "string",
+            "allowedValues": [
+                "yes",
+                "no"
+            ],
+            "defaultValue": "no",
+            "metadata": {
+                "description": "select to enable/disable this setting."
+            }
+        },
+        "ppAdminEnvNaming": {
+            "type": "string",
+            "maxLength": 15,
+            "defaultValue": "''",
+            "metadata": {
+                "description": "Provide naming convention for the Admin environments."
+            }
+        },
+        "ppAdminRegion": {
+            "type": "string",
+            "allowedValues": [
+                "europe",
+                "unitedstates",
+                "asia",
+                "japan",
+                "india",
+                "canada",
+                "southamerica",
+                "unitedkingdom",
+                "france",
+                "germany",
+                "unitedarabemirates",
+                "australia",
+                "norway"
+            ],
+            "defaultValue": "unitedstates",
+            "metadata": {
+                "description": "Provide location for the Admin environments."
+            }
+        },
+        "ppAdminDlp": {
+            "type": "string",
+            "defaultValue": "no",
+            "allowedValues": [
+                "yes",
+                "no"
+            ],
+            "metadata": {
+                "description": "Select to enable/disable this setting."
+            }
+        },
+        "ppAdminManagedEnv": {
+            "type": "string",
+            "defaultValue": "no",
+            "allowedValues": [
+                "no",
+                "yes"
+            ],
+            "metadata": {
+                "description": "Select to enable/disable this setting."
+            }
+        },
+        
+
+
         "ppDefaultRenameText": {
             "type": "string",
             "defaultValue": "''",
@@ -308,7 +374,12 @@
                                                     '-PPTrialEnvCreationSetting', ' ', parameters('ppTrialEnvCreationSetting'), ' ',
                                                     '-PPEnvCapacitySetting', ' ', parameters('ppEnvCapacitySetting'), ' ',
                                                     '-PPTenantDLP', ' ', parameters('ppTenantDlp'), ' ',
-                                                    '-PPTenantIsolationSetting', ' ', parameters('ppTenantIsolationSetting'), ' ',                                                    
+                                                    '-PPTenantIsolationSetting', ' ', parameters('ppTenantIsolationSetting'), ' ', 
+                                                    '-PPAdminEnvEnablement', ' ', parameters('ppAdminEnvEnablement'), ' ',
+                                                    '-PPAdminEnvNaming', ' ', parameters('ppAdminEnvNaming'), ' ',                                                   
+                                                    '-PPAdminRegion', ' ', parameters('ppAdminRegion'), ' ',                                                 
+                                                    '-PPAdminDlp', ' ', parameters('ppAdminDlp'), ' ',
+                                                    '-PPAdminManagedEnv', ' ', parameters('ppAdminManagedEnv'), ' ',                                                  
                                                     '-PPDefaultRenameText', ' ', parameters('ppDefaultRenameText'), ' ',
                                                     '-PPDefaultDLP', ' ', parameters('ppDefaultDlp'), ' ',
                                                     '-PPDefaultManagedEnv', ' ', parameters('ppDefaultManagedEnv'), ' ',
