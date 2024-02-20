@@ -134,7 +134,7 @@ $adminSecurityGroupId = ''
 #Default ALM environment tiers
 $envTiers = 'dev', 'test', 'prod', 'admin'
 
-$envAdminName =''
+$Global:envAdminName = ''
 #region supporting functions
 function New-EnvironmentCreationObject {
     param (
@@ -202,7 +202,7 @@ function New-EnvironmentCreationObject {
                     if ( $envTier -eq 'admin' ){
                         <#$sgId = New-CreateSecurityGroup -EnvironmentType admin
                         $securityGroupId = $sgId #>
-                        $envAdminName = "{0}-{1}" -f $environmentName, $envTier
+                        $Global:envAdminName =  "{0}-{1}" -f $environmentName, $envTier                   
                         $envSku ='Production'
                     }
 
@@ -688,13 +688,13 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             # Form the request body to create new Environments in Power Platform           
 
             $templates = @()
-            if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $envAdminName) {          
+            if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
                 $templates += 'D365_Sales'   
             }
-            if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $envAdminName) {          
+            if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
                 $templates += 'D365_CustomerService'   
             }
-            if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $envAdminName) { 
+            if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) { 
                 $templates += 'D365_FieldService'   
             }
             
@@ -739,8 +739,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
 
 
            #Starts Install Power Platform Pipeline App in Admin Envrionemnt
-           Write-Output "Admin Envrionement Name $($envAdminName)."
-           If($envCreationHt.Name -eq $envAdminName){
+           Write-Output "Admin Envrionement Name $($Global:envAdminName)."
+           If($envCreationHt.Name -eq $Global:envAdminName ){
             Start-Sleep -Seconds 120           
             foreach ($envTier in $envTiers) {
                 try {          
