@@ -685,17 +685,16 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
       
             Write-Output "Creating Environment: $($envCreationHt.Name)"
             
-            # Form the request body to create new Environments in Power Platform
-           
+            # Form the request body to create new Environments in Power Platform           
 
             $templates = @()
-            if ($ppD365SalesApp -eq "true") {          
+            if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $envAdminName) {          
                 $templates += 'D365_Sales'   
             }
-            if ($ppD365CustomerServiceApp -eq "true") {          
+            if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $envAdminName) {          
                 $templates += 'D365_CustomerService'   
             }
-            if ($ppD365FieldServiceApp -eq "true") { 
+            if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $envAdminName) { 
                 $templates += 'D365_FieldService'   
             }
             
@@ -740,8 +739,9 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
 
 
            #Starts Install Power Platform Pipeline App in Admin Envrionemnt
+           Write-Output "Admin Envrionement Name $($envAdminName)."
            If($envCreationHt.Name -eq $envAdminName){
-            Start-Sleep -Seconds 60           
+            Start-Sleep -Seconds 120           
             foreach ($envTier in $envTiers) {
                 try {          
                           $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
