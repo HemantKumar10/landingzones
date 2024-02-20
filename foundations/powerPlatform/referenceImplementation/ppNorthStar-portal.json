@@ -1385,12 +1385,7 @@
         "outputs": {
             "parameters": {
                 "ppIdentity": "[steps('powerp').ppIdentity.id]",                                
-                "ppTenantIsolationSetting": "[steps('tenant').ppTenantIsolationSetting]",
-                "ppAdminEnvEnablement": "[steps('landingZones').ppAdminEnvEnablement]",
-                "ppAdminEnvNaming": "[steps('landingZones').ppAdminEnvNaming]",
-                "ppAdminRegion": "[steps('landingZones').ppAdminRegion]",
-                "ppAdminDlp": "[steps('landingZones').ppAdminDlp]",
-                "ppAdminManagedEnv": "[steps('landingZones').ppAdminManagedEnv]" ,  
+                "ppTenantIsolationSetting": "[steps('tenant').ppTenantIsolationSetting]",               
                 "ppGuestMakerSetting": "[steps('tenant').ppGuestMakerSetting]",
                 "ppAppSharingSetting": "[steps('tenant').ppAppSharingSetting]",
                 "ppEnvCreationSetting": "[steps('tenant').ppEnvCreationSetting]",
