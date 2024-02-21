@@ -1348,7 +1348,7 @@
                                     }
                                 ]
                             },
-                            "visible": true
+                            "visible": false
                         },                        
                         {
                             "name": "ppD365SalesApp",
@@ -1357,7 +1357,7 @@
                             "constraints": {
                                 "required": false
                             },
-                            "visible": "[not(equals(steps('landingZones').ppD365Apps, 'no'))]"
+                            "visible": true
                         },
                         {
                             "name": "ppD365CustomerServiceApp",
@@ -1366,7 +1366,7 @@
                             "constraints": {
                                 "required": false
                             },
-                            "visible": "[not(equals(steps('landingZones').ppD365Apps, 'no'))]"
+                            "visible": true
                         },
                         {
                             "name": "ppD365FieldServiceApp",
@@ -1375,7 +1375,7 @@
                             "constraints": {
                                 "required": false
                             },
-                            "visible": "[not(equals(steps('landingZones').ppD365Apps, 'no'))]"
+                            "visible": true
                         }
                     ]
                 }
