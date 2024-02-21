@@ -261,7 +261,9 @@
             "northStarDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'PPLZ-Setup'), 64)]"
         },
         "resourceNamePrefix": "PPLZ",       
-        "emptyString": "''"
+        "emptyString": "''",
+        "defaultYesString": "yes",
+        "defaultNoString": "no"
     },
     "resources": [
         {
@@ -345,13 +347,13 @@
                         "value": "[if(empty(parameters('ppCitizenCurrency')), variables('emptyString'), parameters('ppCitizenCurrency'))]"
                     },          
                  "ppD365SalesApp": {
-                        "value": "[if(parameters('ppD365SalesApp'), 'yes', 'no')]"
+                        "value": "[if(empty(parameters('ppD365SalesApp')),variables('defaultNoString'), parameters('ppD365SalesApp'))]"
                     },
                     "ppD365CustomerServiceApp": {
-                        "value": "[if(parameters('ppD365CustomerServiceApp'), 'yes', 'no')]"
+                          "value": "[if(empty(parameters('ppD365CustomerServiceApp')),variables('defaultNoString'), parameters('ppD365CustomerServiceApp'))]"
                     },
                     "ppD365FieldServiceApp": {
-                        "value": "[if(parameters('ppD365FieldServiceApp'), 'yes', 'no')]"
+                            "value": "[if(empty(parameters('ppD365FieldServiceApp')),variables('defaultNoString'), parameters('ppD365FieldServiceApp'))]"
                     }                    
                 }
             }
