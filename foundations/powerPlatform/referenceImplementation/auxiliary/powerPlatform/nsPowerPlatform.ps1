@@ -690,15 +690,15 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             # Form the request body to create new Environments in Power Platform           
 
             $templates = @()
-            if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {      
+            if ($ppD365SalesApp -eq 'yes' -and $envCreationHt.Name -ne $Global:envAdminName ) {      
                 Write-Output "D365 Sales App true"    
                 $templates += 'D365_Sales'   
             }
-            if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
+            if ($ppD365CustomerServiceApp -eq 'yes' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
                 $templates += 'D365_CustomerService'   
                 Write-Output "D365 Customer Service App true"    
             }
-            if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) { 
+            if ($ppD365FieldServiceApp -eq 'yes' -and $envCreationHt.Name -ne $Global:envAdminName ) { 
                 $templates += 'D365_FieldService'   
                 Write-Output "D365 Field Servoce Service App true"   
             }
