@@ -241,21 +241,21 @@
         },       
         "ppD365SalesApp": {
             "type": "string",
-            "defaultValue": "false",
+            "defaultValue": "",
             "metadata": {
                 "description": "Dynamics 365 for Sales."
             }
         },
         "ppD365CustomerServiceApp": {
             "type": "string",
-            "defaultValue": "false",
+            "defaultValue": "",
             "metadata": {
                 "description": "Dynamics 365 for Customer Service."
             }
         },
         "ppD365FieldServiceApp": {
             "type": "string",
-            "defaultValue": "false",
+            "defaultValue": "",
             "metadata": {
                 "description": "Dynamics 365 for Field Service."
             }
