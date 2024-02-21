@@ -240,21 +240,21 @@
             }
         },       
         "ppD365SalesApp": {
-            "type": "bool",
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Sales."
             }
         },
         "ppD365CustomerServiceApp": {
-            "type": "bool",
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Customer Service."
             }
         },
         "ppD365FieldServiceApp": {
-            "type": "bool",
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Field Service."
