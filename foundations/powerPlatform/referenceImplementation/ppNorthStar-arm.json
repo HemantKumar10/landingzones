@@ -343,15 +343,15 @@
                     },
                     "ppCitizenCurrency": {
                         "value": "[if(empty(parameters('ppCitizenCurrency')), variables('emptyString'), parameters('ppCitizenCurrency'))]"
-                    },                    
+                    },          
                     "ppD365SalesApp": {
-                        "value": "[if(parameters('ppD365SalesApp'), 'True', 'False')]"
+                        "value": "'True'"
                     },
                     "ppD365CustomerServiceApp": {
-                        "value": "[if(parameters('ppD365CustomerServiceApp'), 'True', 'False')]"
+                           "value": "'False'"
                     },
                     "ppD365FieldServiceApp": {
-                        "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
+                              "value": "'False'"
                     }                    
                 }
             }
