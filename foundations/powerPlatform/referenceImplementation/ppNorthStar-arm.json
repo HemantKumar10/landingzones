@@ -347,13 +347,13 @@
                         "value": "[if(empty(parameters('ppCitizenCurrency')), variables('emptyString'), parameters('ppCitizenCurrency'))]"
                     },          
                  "ppD365SalesApp": {
-                        "value": "[if(empty(parameters('ppD365SalesApp')),variables('defaultNoString'), parameters('ppD365SalesApp'))]"
+                        "value": "[parameters('ppD365SalesApp')]"
                     },
                     "ppD365CustomerServiceApp": {
-                          "value": "[if(empty(parameters('ppD365CustomerServiceApp')),variables('defaultNoString'), parameters('ppD365CustomerServiceApp'))]"
+                          "value": "[parameters('ppD365CustomerServiceApp')]"
                     },
                     "ppD365FieldServiceApp": {
-                            "value": "[if(empty(parameters('ppD365FieldServiceApp')),variables('defaultNoString'), parameters('ppD365FieldServiceApp'))]"
+                            "value": "[parameters('ppD365FieldServiceApp')]"
                     }                    
                 }
             }
