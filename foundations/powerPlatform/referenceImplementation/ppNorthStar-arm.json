@@ -231,21 +231,21 @@
             }
         },       
         "ppD365SalesApp": {
-            "type": "string",
+            "type": "bool",
             "defaultValue": "",
             "metadata": {
                 "description": "Dynamics 365 for Sales."
             }
         },
         "ppD365CustomerServiceApp": {
-            "type": "string",
+            "type": "bool",
             "defaultValue": "",
             "metadata": {
                 "description": "Dynamics 365 for Customer Service."
             }
         },
         "ppD365FieldServiceApp": {
-            "type": "string",
+            "type": "bool",
             "defaultValue": "",
             "metadata": {
                 "description": "Dynamics 365 for Field Service."
@@ -261,9 +261,7 @@
             "northStarDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'PPLZ-Setup'), 64)]"
         },
         "resourceNamePrefix": "PPLZ",       
-        "emptyString": "''",
-             "trueString": "True",
-                "falseString": "False"
+        "emptyString": "''"
     },
     "resources": [
         {
@@ -345,15 +343,15 @@
                     },
                     "ppCitizenCurrency": {
                         "value": "[if(empty(parameters('ppCitizenCurrency')), variables('emptyString'), parameters('ppCitizenCurrency'))]"
-                    }, 
+                    },                    
+                    "ppD365SalesApp": {
+                        "value": "[if(parameters('ppD365SalesApp'), 'True', 'False')]"
+                    },
                     "ppD365CustomerServiceApp": {
-                        "value": "[if(parameters('ppD365CustomerServiceApp'), variables('trueString'), variables('falseString'))]"
+                        "value": "[if(parameters('ppD365CustomerServiceApp'), 'True', 'False')]"
                     },
                     "ppD365FieldServiceApp": {
-                        "value": "[if(parameters('ppD365FieldServiceApp'), variables('trueString'), variables('falseString'))]"
-                    },
-                     "ppD365SalesApp": {
-                        "value": "[if(empty(parameters('ppD365SalesApp')), variables('emptyString'), if(parameters('ppD365SalesApp'), 'True', 'False'))]"
+                        "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
                     }                    
                 }
             }
