@@ -170,7 +170,7 @@
             ],
             "defaultValue": "unitedstates",
             "metadata": {
-                "description": "Provide location for the Admin environments."
+                "description": "Provide location for the citizen dev environments."
             }
         },
         "ppCitizenDlp": {
@@ -241,21 +241,21 @@
         },       
         "ppD365SalesApp": {
             "type": "string",
-            "defaultValue": "False",
+            "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Sales."
             }
         },
         "ppD365CustomerServiceApp": {
             "type": "string",
-            "defaultValue": "False",
+            "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Customer Service."
             }
         },
         "ppD365FieldServiceApp": {
             "type": "string",
-            "defaultValue": "False",
+            "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 for Field Service."
             }
