@@ -598,11 +598,38 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Write-Output "section D365_FieldService : $($ppD365FieldServiceApp)"  
             }
             try {
-                Enable-PowerOpsManagedEnvironment -EnvironmentName '4cd19824-df8f-edeb-bca4-c96b18cedba9'
+                #Enable-PowerOpsManagedEnvironment -EnvironmentName '4cd19824-df8f-edeb-bca4-c96b18cedba9'
+                Write-Output "Enable Managed"  
+                $GovernanceConfiguration = [pscustomobject] @{ 
+                    protectionLevel = "Standard" 
+                    settings = [pscustomobject]@{ 
+                        extendedSettings = @{} 
+                    }
+                }                 
+                Set-AdminPowerAppEnvironmentGovernanceConfiguration -EnvironmentName '4cd19824-df8f-edeb-bca4-c96b18cedba9' -UpdatedGovernanceConfiguration $GovernanceConfiguration 
             }
             catch {
                 Write-Error "Enable Failed failed`r`n$_"
             }
+
+            
+                    $testRequest = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq 'Graph-admin' }
+                    $testRequest.properties.governanceConfiguration.protectionLevel = "Standard"
+                    $testEnvRequest = @{
+                        Path        = '/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments/{0}' -f $testRequest.name
+                        Method      = 'Patch'
+                        RequestBody = ($testRequest | ConvertTo-Json -Depth 100)
+                    }
+                    try {
+                        Invoke-PowerOpsRequest @testEnvRequest
+                        Write-Output "Enabled done"
+                    }
+                    catch {
+                        Write-Warning "Failed to rename Default Environment`r`n$_"
+                    }
+                
+           
+           
 
            
            # "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
