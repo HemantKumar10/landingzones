@@ -561,6 +561,8 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             # Code Begins
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token
+
+            Write-Output "Token:  $($Token)"
             
             # Power Platform API base Uri
             $BaseUri = "https://api.bap.microsoft.com"
@@ -643,7 +645,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             foreach ($envTier in $envTiers) {
                 try {          
                           $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
-                          New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                          #New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
                           Enable-PowerOpsManagedEnvironment -EnvironmentName $adminEnvironment.name
                 }
                 catch {
