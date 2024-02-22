@@ -26,115 +26,18 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenManagedEnv,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenAlm,    
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenCurrency,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,   
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,    
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,     
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp
- 
-      
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp        
 )
 
 $DeploymentScriptOutputs = @{}
 #Install required modules
-Install-Module -Name PowerOps -AllowPrerelease -Force
-
-#region Entra Groups
-# TO DO - Install module to create Entra Security and M365 Groups.
-# TO DO - get the IDs for the created security groups, and set them to the parameters below. 
-
-# Install-module Microsoft.Graph  
-# Connect-MgGraph -Scopes "Group.ReadWrite.All"
-
-# Define the details for the Security Groups and the Makers Microsoft 365 Group
-#    $devSecurityGroup = @{
-#     description="Security Group used for Power Platform - Development environment"
-#     displayName="entra_powerplatform_development"
-#     mailEnabled=$false
-#     securityEnabled=$true
-#     mailNickname="PowerPlatformDevelopmentGroup"
-#    }
-
-#    $testSecurityGroup = @{
-#     description="Security Group used for Power Platform - Test environment"
-#     displayName="entra_powerplatform_test"
-#     mailEnabled=$false
-#     securityEnabled=$true
-#     mailNickname="PowerPlatformTestGroup"
-#    }
-
-#    $productionSecurityGroup = @{
-#     description="Security Group used for Power Platform - Production environment"
-#     displayName="entra_powerplatform_production"
-#     mailEnabled=$false
-#     securityEnabled=$true
-#     mailNickname="PowerPlatformProductionGroup"
-#    }
-
-#    $adminSecurityGroup = @{
-#     description="Security Group used for Power Platform - Admin environment"
-#     displayName="entra_powerplatform_admin"
-#     mailEnabled=$false
-#     securityEnabled=$true
-#     mailNickname="PowerPlatformAdminGroup"
-#    }
-
-#    $makersM365Group = @{
-#     description="Microsoft 365 Group used for Power Platform Makers"
-#     displayName="entra_powerplatform_makers"
-#     GroupTypes="Unified"
-#     mailEnabled=$true
-#     securityEnabled=$true
-#     mailNickname="Makers"
-#    }
-
-#    $usersM365Group = @{
-#     description="Microsoft 365 Group used for Power Platform Users"
-#     displayName="entra_powerplatform_users"
-#     GroupTypes="Unified"
-#     mailEnabled=$true
-#     securityEnabled=$true
-#     mailNickname="Users"
-#    }
-
-#    $adminsM365Group = @{
-#     description="Microsoft 365 Group used for Power Platform Admins"
-#     displayName="entra_powerplatform_admins"
-#     GroupTypes="Unified"
-#     mailEnabled=$true
-#     securityEnabled=$true
-#     mailNickname="Admins"
-#    }
-   
-   # Create the Security Groups for Dev/Test/Prod/Admin and the Makers M365 Group
-#    New-MgGroup @devSecurityGroup
-#    New-MgGroup @testSecurityGroup
-#    New-MgGroup @productionSecurityGroup
-#    New-MgGroup @adminSecurityGroup
-#    New-MgGroup @makersM365Group
-#    New-MgGroup @usersM365Group
-#    New-MgGroup @adminsM365Group
-   
-#Get the created groups IDs
-$devSecurityGroupId = '2f178b09-3e99-4f68-b3dc-177daa6d662f'
-$testSecurityGroupId = 'eae9814e-26cf-43f5-a7be-f08c5b5b0a50'
-$prodSecurityGroupId = ''
-$adminSecurityGroupId = ''
-
-#endregion Entra Groups
-
-#region Dynamics 365 Applications
-# TO DO - Install PowerApp.Administation module and pass the managed identity ID 
-# TO DO - modify the sample below to create the 4 environments, including (or not) the templates for D365 Apps. 
-
-# Install-Module -Name Microsoft.PowerApps.Administration.PowerShell -Identity -ClientId "5d09226d-8c9e-41b4-893e-231e0f7d285a" 
-# Import-Module -Name Microsoft.PowerApps.Administration.PowerShell
-# New-AdminPowerAppEnvironment -DisplayName 'BC-ANS-RND-PS' -Location unitedkingdom -RegionName uksouth -CurrencyName GBP -EnvironmentSku Sandbox -Templates "D365_Sales" -WaitUntilFinished $true -DomainName BCANSRNDPS -LanguageName 1033 -ProvisionDatabase
-
-#endregion Dynamics 365 Applications
-
+Install-Module -Name PowerOps -AllowPrerelease -Force   
 
 #Default ALM environment tiers
-$envTiers = 'dev', 'test', 'prod', 'admin'
+$envTiers = 'dev'
 
 $Global:envAdminName = ''
 #region supporting functions
@@ -186,9 +89,9 @@ function New-EnvironmentCreationObject {
             $envSku = 'Sandbox'     
             if ($true -eq $EnvALM) {
                 foreach ($envTier in $envTiers) { 
-                    if($envTier -eq 'dev'){
-                        <# $sgId = New-CreateSecurityGroup -EnvironmentType dev
-                        $securityGroupId = $sgId #>
+                    if($envTier -eq 'dev'){                        
+                        <#$sgId = New-CreateSecurityGroup -EnvironmentType dev                        
+                        $securityGroupId = $sgId#>                        
                         $envSku = 'Sandbox'  
                     }
                     if ( $envTier -eq 'test' ){
@@ -236,7 +139,6 @@ function New-EnvironmentCreationObject {
         }
     }
 }
-
 
 function New-CreateSecurityGroup {
     param (      
@@ -366,7 +268,6 @@ function New-CreateSecurityGroup {
             return $Value
 }
 
-
 function New-InstallPackaggeToEnvironment {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentId,
@@ -398,8 +299,6 @@ function New-InstallPackaggeToEnvironment {
                 "Authorization" = "Bearer $($Token)"
             }
            # Declaring the HTTP Post request
-                     
-        
             $PostParameters = @{
                 "Uri"         = "$($PostEnvironment)"
                 "Method"      = "Post"
@@ -485,8 +384,6 @@ function New-DLPAssignmentFromEnv {
         Write-Warning "Created Default $EnvironmentDLP DLP Policy`r`n$_"
     }
 }
-
-
 
 #endregion supporting functions
 
@@ -612,6 +509,9 @@ if ($PPTenantDLP -in 'low', 'medium', 'high') {
 #endregion create default tenant dlp policies
 
 #region create landing zones for citizen devs
+  $Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/").Token
+            Write-Output "Graph Token: $($Token)"
+
 $PPCitizenCount = 1
 $PPCitizenConfiguration = '';
 if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq 'custom') {
@@ -664,7 +564,6 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             
             # Code Begins
             # Get token to authenticate to Power Platform
-            
             $Token = (Get-AzAccessToken).Token
             
             # Power Platform API base Uri
@@ -686,21 +585,19 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
       
             Write-Output "Creating Environment: $($envCreationHt.Name)"
+            Write-Output "DEV Security Group. Security Group ID: $environment.envRbac"
             
             # Form the request body to create new Environments in Power Platform           
 
             $templates = @()
-            if ($ppD365SalesApp -eq 'True' -and $envCreationHt.Name -ne $Global:envAdminName ) {      
-                Write-Output "D365 Sales App true"    
+            if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
                 $templates += 'D365_Sales'   
             }
-            if ($ppD365CustomerServiceApp -eq 'True' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
+            if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
                 $templates += 'D365_CustomerService'   
-                Write-Output "D365 Customer Service App true"    
             }
-            if ($ppD365FieldServiceApp -eq 'True' -and $envCreationHt.Name -ne $Global:envAdminName ) { 
+            if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) { 
                 $templates += 'D365_FieldService'   
-                Write-Output "D365 Field Servoce Service App true"   
             }
             
            # "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
@@ -739,9 +636,6 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Write-Error "Creation of citizen Environment $($envCreationHt.Name) failed`r`n$_"
                 throw "REST API call failed drastically"
             }  
-
-
-
 
            #Starts Install Power Platform Pipeline App in Admin Envrionemnt
            Write-Output "Admin Envrionement Name $($Global:envAdminName)."
