@@ -542,33 +542,6 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
         }
     }
     foreach ($environment in $environmentsToCreate) {
-
-
-                #Section to create envrionment by OOB function
-                $eTemplate = 'D365_Sales'
-                try {
-                    
-                    $eCreateOOB = @{
-                        Name               = $environment.envName
-                        Location           = $environment.envRegion
-                        Dataverse          = $true
-                        ManagedEnvironment = $PPCitizenManagedEnv -eq 'Yes'
-                        Description        = $environment.envDescription
-                        LanguageName       = $environment.envLanguage
-                        Currency           = $environment.envCurrency
-                        EnvironmentSku     = $environment.envSKu 
-                        Templates          = $eTemplate                                      
-                    }  
-                    $null = New-PowerOpsEnvironment @eCreateOOB
-                }
-                catch {
-                    Write-Output "Failed OOB'`r`n$_'"  
-                    <#Do this if a terminating exception happens#>
-                }
-
-
-
-        
         try {
             $envCreationHt = @{
                 Name               = $environment.envName
@@ -610,7 +583,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
       
             Write-Output "Creating Environment: $($envCreationHt.Name)"
-            3Write-Output "DEV Security Group. Security Group ID: $environment.envRbac"
+            #Write-Output "DEV Security Group. Security Group ID: $environment.envRbac"
             
             # Form the request body to create new Environments in Power Platform           
 
