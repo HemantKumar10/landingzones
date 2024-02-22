@@ -561,9 +561,6 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             # Code Begins
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token
-
-            Write-Output "Token:  $($Token)"
-            
             # Power Platform API base Uri
             $BaseUri = "https://api.bap.microsoft.com"
             
@@ -600,7 +597,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 $templates += 'D365_FieldService'   
                 Write-Output "section D365_FieldService : $($ppD365FieldServiceApp)"  
             }
-            
+            Enable-PowerOpsManagedEnvironment -EnvironmentName '4cd19824-df8f-edeb-bca4-c96b18cedba9'
            # "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
             
         # Declaring the HTTP Post request
@@ -646,7 +643,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 try {          
                           $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
                           #New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
-                          Enable-PowerOpsManagedEnvironment -EnvironmentName $adminEnvironment.name
+                          #Enable-PowerOpsManagedEnvironment -EnvironmentName '4cd19824-df8f-edeb-bca4-c96b18cedba9'
                 }
                 catch {
                     Write-Warning "Error installing App`r`n$_"
