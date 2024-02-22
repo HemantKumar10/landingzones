@@ -37,7 +37,7 @@ $DeploymentScriptOutputs = @{}
 Install-Module -Name PowerOps -AllowPrerelease -Force   
 
 #Default ALM environment tiers
-$envTiers = 'dev'
+$envTiers = 'dev','test','prod','admin'
 
 $Global:envAdminName = ''
 #region supporting functions
@@ -542,6 +542,32 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
         }
     }
     foreach ($environment in $environmentsToCreate) {
+
+
+                #Section to create envrionment by OOB function
+                $eTemplate = 'D365_Sales'
+                try {
+                    
+                    $eCreateOOB = @{
+                        Name               = $environment.envName
+                        Location           = $environment.envRegion
+                        Dataverse          = $true
+                        ManagedEnvironment = $PPCitizenManagedEnv -eq 'Yes'
+                        Description        = $environment.envDescription
+                        LanguageName       = $environment.envLanguage
+                        Currency           = $environment.envCurrency
+                        EnvironmentSku     = $environment.envSKu 
+                        Templates          = $eTemplate                                      
+                    }  
+                    $null = New-PowerOpsEnvironment @eCreateOOB
+                }
+                catch {
+                    Write-Output "Failed OOB'`r`n$_'"  
+                    <#Do this if a terminating exception happens#>
+                }
+
+
+
         
         try {
             $envCreationHt = @{
@@ -554,8 +580,7 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 Currency           = $environment.envCurrency
                 SecurityGroupId    = $environment.envRbac  
                 EnvSku             = $environment.envSKu                                           
-            }   
-            
+            }  
             # Starts Here: Code to create Group
             #New-AzADGroup -DisplayName 'Test' -MailEnabled $False -MailNickName 'PowerPlatformDevelopmentGroup' -SecurityEnabled $True -Description 'Security Group used for Power Platform - Development environment'
             #New-AzADGroup -DisplayName 'PowerPlatformDevelopmentGroup' -MailNickName 'PowerPlatformDevelopmentGroup' 
@@ -585,19 +610,22 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
             }
       
             Write-Output "Creating Environment: $($envCreationHt.Name)"
-            Write-Output "DEV Security Group. Security Group ID: $environment.envRbac"
+            3Write-Output "DEV Security Group. Security Group ID: $environment.envRbac"
             
             # Form the request body to create new Environments in Power Platform           
 
             $templates = @()
             if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
                 $templates += 'D365_Sales'   
+                Write-Output "section D365_Sales : $($ppD365SalesApp)"
             }
             if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
-                $templates += 'D365_CustomerService'   
+                $templates += 'D365_CustomerService' 
+                Write-Output "section D365_CustomerService : $($ppD365CustomerServiceApp)"  
             }
             if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) { 
                 $templates += 'D365_FieldService'   
+                Write-Output "section D365_FieldService : $($ppD365FieldServiceApp)"  
             }
             
            # "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
