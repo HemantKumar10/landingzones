@@ -40,11 +40,10 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 $envTiers = 'dev','test','prod','admin'
 
 $Global:envAdminName = ''
+
 #region supporting functions
 function New-EnvironmentCreationObject {
-    param (
-        [Parameter(Mandatory = $true, ParameterSetName = 'ARMInputString')]$ARMInputString,
-        [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')][int]$EnvCount,
+    param (             
         [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')]$EnvNaming,
         [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')]$EnvRegion,
         [Parameter(Mandatory = $true, ParameterSetName = 'EnvCount')]$EnvLanguage,
@@ -53,98 +52,57 @@ function New-EnvironmentCreationObject {
         [Parameter(Mandatory = $false)][switch]$EnvALM,
         [Parameter(Mandatory = $false, ParameterSetName = 'EnvCount')][switch]$EnvDataverse
     )
-    if (-not [string]::IsNullOrEmpty($ARMInputString)) {      
-        foreach ($env in ($ARMInputString -split 'ppEnvName:')) {
-            if ($env -match ".") {
-                $environment = $env.TrimEnd(',')
-                if ($EnvALM) {
-                    foreach ($envTier in $envTiers) {
-                        [PSCustomObject]@{
-                            envRegion      = ($environment -split (','))[2].Split(':')[1]
-                            envLanguage    = ($environment -split (','))[3].Split(':')[1]
-                            envCurrency    = ($environment -split (','))[4].Split(':')[1]
-                            envDescription = ($environment -split (','))[1].Split(':')[1]
-                            envRbac        = ($environment -split (','))[5].Split(':')[1]
-                            envName        = '{0}-{1}' -f ($environment -split (','))[0], $envTier
-                        }
-                    }
-                }
-                else {
-                    [PSCustomObject]@{
-                        envName        = ($environment -split (','))[0]
-                        envRegion      = ($environment -split (','))[2].Split(':')[1]
-                        envLanguage    = ($environment -split (','))[3].Split(':')[1]
-                        envCurrency    = ($environment -split (','))[4].Split(':')[1]
-                        envDescription = ($environment -split (','))[1].Split(':')[1]
-                        envRbac        = ($environment -split (','))[5].Split(':')[1]
-                    }
-                }
+                
+    $environmentName = $EnvNaming
+    $securityGroupId = ''      
+    $envSku = 'Sandbox'                 
+    if ($true -eq $EnvALM) {                
+        foreach ($envTier in $envTiers) {                 
+            if($envTier -eq 'dev'){                                          
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType dev                                    
+                $securityGroupId = $createdSecurityGroup
+                $envSku = 'Sandbox'  
+                $envDescription = 'Environment used for development purposes'
             }
-        }
-    }
-    else {         
-        1..$EnvCount | ForEach-Object -Process {
-            $environmentName = $EnvNaming
-            $securityGroupId = ''      
-            $envSku = 'Sandbox'     
-            if ($true -eq $EnvALM) {
-                foreach ($envTier in $envTiers) { 
-                    if($envTier -eq 'dev'){                        
-                        <#$sgId = New-CreateSecurityGroup -EnvironmentType dev                        
-                        $securityGroupId = $sgId#>                        
-                        $envSku = 'Sandbox'  
-                    }
-                    if ( $envTier -eq 'test' ){
-                        <# $sgId = New-CreateSecurityGroup -EnvironmentType test
-                        $securityGroupId = $sgId #>
-                        $envSku = 'Sandbox'  
-                    }
-                    if ( $envTier -eq 'prod' ){
-                        <# $sgId = New-CreateSecurityGroup -EnvironmentType prod
-                        $securityGroupId = $sgId #>
-                        $envSku ='Production'                     
-                    }
-                    if ( $envTier -eq 'admin' ){
-                        <#$sgId = New-CreateSecurityGroup -EnvironmentType admin
-                        $securityGroupId = $sgId #>
-                        $Global:envAdminName =  "{0}-{1}" -f $environmentName, $envTier                   
-                        $envSku ='Production'
-                    }
+            if ( $envTier -eq 'test' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType test
+                $securityGroupId = $createdSecurityGroup
+                $envSku = 'Sandbox'  
+                $envDescription = 'Environment used for testing purposes'
+            }
+            if ( $envTier -eq 'prod' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType prod
+                $securityGroupId = $createdSecurityGroup
+                $envSku ='Production'      
+                $envDescription = 'Environment used for production purposes'               
+            }
+            if ( $envTier -eq 'admin' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType admin
+                $securityGroupId = $createdSecurityGroup                
+                $envSku ='Production'
+                $envDescription = 'Environment used for administration purposes'     
+                $Global:envAdminName =  "{0}-{1}" -f $environmentName, $envTier                   
+            }
 
-                    [PSCustomObject]@{
-                        envName        = "{0}-{1}" -f $environmentName, $envTier
-                        envRegion      = $EnvRegion
-                        envDataverse   = $EnvDataverse
-                        envLanguage    = $envLanguage
-                        envCurrency    = $envCurrency
-                        envDescription = $envDescription
-                        envRbac        = $securityGroupId
-                        envSku         = $envSku
-                    }
-                }
-            }
-            else {
-              
-                [PSCustomObject]@{
-                    envName        = $environmentName
-                    envRegion      = $EnvRegion
-                    envDataverse   = $EnvDataverse
-                    envLanguage    = $envLanguage
-                    envCurrency    = $envCurrency
-                    envDescription = $envDescription
-                    envRbac        = ''
-                    envSku         = $envSku
-                }
+            [PSCustomObject]@{
+                envName        = "{0}-{1}" -f $environmentName, $envTier                        
+                envRegion      = $EnvRegion
+                envDataverse   = $EnvDataverse
+                envLanguage    = $envLanguage
+                envCurrency    = $envCurrency
+                envDescription = $envDescription
+                envRbac        = $securityGroupId
+                envSku         = $envSku
             }
         }
-    }
+    }   
 }
 
 function New-CreateSecurityGroup {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentType
     )
-    
+
         $devSecurityGroup = @{
             description="Security Group used for Power Platform - Development environment"
             displayName="entra_powerplatform_development"
@@ -176,53 +134,16 @@ function New-CreateSecurityGroup {
              securityEnabled=$true
              mailNickname="PowerPlatformAdminGroup"
             }
-        
-            $makersM365Group = @{
-             description="Microsoft 365 Group used for Power Platform Makers"
-             displayName="entra_powerplatform_makers"
-             GroupTypes="Unified"
-             mailEnabled=$true
-             securityEnabled=$true
-             mailNickname="Makers"
-            }
-        
-            $usersM365Group = @{
-             description="Microsoft 365 Group used for Power Platform Users"
-             displayName="entra_powerplatform_users"
-             GroupTypes="Unified"
-             mailEnabled=$true
-             securityEnabled=$true
-             mailNickname="Users"
-            }
-        
-           $adminsM365Group = @{
-             description="Microsoft 365 Group used for Power Platform Admins"
-             displayName="entra_powerplatform_admins"
-             GroupTypes="Unified"
-             mailEnabled=$true
-             securityEnabled=$true
-             mailNickname="Admins"
-            }
+                
             $Value =''
             # Code Begins
-            # Get token to authenticate to Power Platform
-           <# $Token = (Get-AzAccessToken -ResourceTypeName MSGraph).Token  #>
+            # Get token to authenticate to Power Platform                       
+            #$Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default").Token            
             
-            $Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default").Token 
-            <# try{
-                $tokenx =  Get-AzAccessToken -ResourceUrl 'https://graph.microsoft.com' [-Permission 'Group.ReadWrite.All']              
-                $tokeny =  Get-AzAccessToken -Scopes 'Group.ReadWrite.All'
-                Connect-AzAccount -Identity
-                $token = Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com"
-                Install-module Microsoft.Graph 
-                Connect-MgGraph -AccessToken $token.Token
-            }
-            catch{              
-                Write-Error "AccessTokeny- $($tokeny) failed`r`n$_"              
-            }         
-            
-            Write-Output "Bearer $($tokeny)" #> 
-            $Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/v1.0/groups").Token     
+            #Write-Output "Bearer $($tokeny)" #> 
+            #$Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/v1.0/groups").Token   
+
+            $Token = "eyJ0eXAiOiJKV1QiLCJub25jZSI6InFDLTFlMl9xUHYwb0x0S1hFZFJyZnd1TG56cTV0VklhSVRVVUt6TS1NLWsiLCJhbGciOiJSUzI1NiIsIng1dCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSIsImtpZCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSJ9.eyJhdWQiOiJodHRwczovL2dyYXBoLm1pY3Jvc29mdC5jb20iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC84MjBmZjI0Mi1hNzU0LTRlN2EtOWJlOS1kZTdiNTM1MDI1MWYvIiwiaWF0IjoxNzA4OTUxNTk0LCJuYmYiOjE3MDg5NTE1OTQsImV4cCI6MTcwODk1NTY4MiwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFWUUFxLzhXQUFBQUkzRko3dURaN2lLTGxuUi9YTWlLRFF6VVdFL1lYNWFwSlp3dTEzNStkSUJpbXVkR29tSTJJUm1KT0xzSEE1bmpyTXpSbFJ2VzRGelJ1c0pKSVJYbkVib0F6T0NzeGpTMlZHeXF4SU9JU1lFPSIsImFtciI6WyJwd2QiLCJtZmEiXSwiYXBwX2Rpc3BsYXluYW1lIjoiUG9zdG1hbiIsImFwcGlkIjoiNjZkYzllZTktZTMyZi00ZWNlLTliMTktNjA4YjNhMGY0YjZkIiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiODIuNS4xODEuMzUiLCJuYW1lIjoiQm9nZGFuIENpb2JhbnUiLCJvaWQiOiJhOTI2N2JmMS03ZDlhLTRmYjgtOTM5ZC01NWM2M2JiMmU5M2MiLCJwbGF0ZiI6IjMiLCJwdWlkIjoiMTAwMzIwMDMxRjE2MEE1QiIsInJoIjoiMC5BUXdBUXZJUGdsU25lazZiNmQ1N1UxQWxId01BQUFBQUFBQUF3QUFBQUFBQUFBQU1BTEEuIiwic2NwIjoiRGlyZWN0b3J5LkFjY2Vzc0FzVXNlci5BbGwgRGlyZWN0b3J5LlJlYWQuQWxsIERpcmVjdG9yeS5SZWFkV3JpdGUuQWxsIERpcmVjdG9yeS5Xcml0ZS5SZXN0cmljdGVkIEdyb3VwLlJlYWQuQWxsIEdyb3VwLlJlYWRXcml0ZS5BbGwgTWFpbC5SZWFkIE1haWwuUmVhZC5TaGFyZWQgTWFpbC5SZWFkQmFzaWMgTWFpbC5SZWFkQmFzaWMuU2hhcmVkIE1haWwuUmVhZFdyaXRlIE1haWwuUmVhZFdyaXRlLlNoYXJlZCBNYWlsLlNlbmQgTWFpbC5TZW5kLlNoYXJlZCBVc2VyLkVuYWJsZURpc2FibGVBY2NvdW50LkFsbCBVc2VyLkV4cG9ydC5BbGwgVXNlci5JbnZpdGUuQWxsIFVzZXIuTWFuYWdlSWRlbnRpdGllcy5BbGwgVXNlci5SZWFkIFVzZXIuUmVhZC5BbGwgVXNlci5SZWFkQmFzaWMuQWxsIFVzZXIuUmVhZFdyaXRlIFVzZXIuUmVhZFdyaXRlLkFsbCBwcm9maWxlIG9wZW5pZCBlbWFpbCIsInNpZ25pbl9zdGF0ZSI6WyJrbXNpIl0sInN1YiI6IjRkMW1qcEhlUkp1cXYxWVRqUk1sekdwQmdQWjRRbTBIS214bXB4YWFPdTQiLCJ0ZW5hbnRfcmVnaW9uX3Njb3BlIjoiRVUiLCJ0aWQiOiI4MjBmZjI0Mi1hNzU0LTRlN2EtOWJlOS1kZTdiNTM1MDI1MWYiLCJ1bmlxdWVfbmFtZSI6ImJvZ2Rhbi5jaW9iYW51QGFuc2NvZW91dGxvb2sub25taWNyb3NvZnQuY29tIiwidXBuIjoiYm9nZGFuLmNpb2JhbnVAYW5zY29lb3V0bG9vay5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJGMzBHV0k2QUhVLXI2U2FjZ3o2UkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiLCJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX3N0Ijp7InN1YiI6InRlRk05X25YcXBZekprTHYxUThNMmtKWGM1cmtJZkVJQnQ2TURMelhSMGcifSwieG1zX3RjZHQiOjE2MjY0MjQzMzF9.WG9kGGB7Wb18eMEZNZdmGMnwbMg7-CjkpI6dmM6K-yh01Zt8YiVSRvqv_dRDddVTCjI1398pMfa-d542NCWGPlCvAamUryj07oEBH1qsHPhwHyxN5YUf7JsGCaYhZDhI2IH98THj1-tHdPC_Z81JAfCqzeb4cHMIYcL_foCF-PUNAYW1Fja1f5i-E0mZ4HzMCMp8-SCsBJm0e0IKApA_JQzNpSQJSL9-dC6UtO_jCntCh3tAY0BLurGULAo7soj3MkqamkC4IcrFwD7OSJDxstVTjMOfevyqulNAIpxHHXvw2WOlIi50xAbtPetMOMsuZBy-9KxoJ-UqQ_JJchxSjQ"
         
             # Power Platform HTTP Post Group Uri
             $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
@@ -255,16 +176,16 @@ function New-CreateSecurityGroup {
                 "Body"        = $postBody | ConvertTo-json -Depth 100
                 "ContentType" = "application/json"
             }        
-            Write-Output "Invoking the request to create Security Group: $($postBody.displayName)"        
+            
             try {
                 $response = Invoke-RestMethod @PostParameters               
-                $Value  = $response.id                
-                Write-Output "Security Group Created $($response.displayName) is being created..."
+                $Value  = $response.id                                
             }
             catch {            
                 Write-Error "AccessToken- $($Token) failed`r`n$_"
                 throw "REST API call failed drastically"
             }  
+
             return $Value
 }
 
@@ -273,48 +194,34 @@ function New-InstallPackaggeToEnvironment {
         [Parameter(Mandatory = $true)][string]$EnvironmentId,
         [Parameter(Mandatory = $true)][string]$PackageName
     ) 
-            # Code Begins
-            # Get token to authenticate to Power Platform
-
-
-            <# $Token = (Get-AzAccessToken).Token 
-            $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/Group.ReadWrite.All").Token
-               Write-Output "Token Graph $($Token1) "
-            $Token1 = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/AppManagement.ApplicationPackages.Install").Token            
-            Write-Output "Token1 $($TokenGraph) "
-            Import-Module MSAL.PS
-            $AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'   
-            Write-Output "TokenX $($AuthResult.AccessToken) " #>
-
-            $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
-           
-
-            $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
-            # Power Platform HTTP Post Environment Uri
-            $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
-            
-            # Declare Rest headers
-            $Headers = @{
-                "Content-Type"  = "application/json"
-                "Authorization" = "Bearer $($Token)"
-            }
-           # Declaring the HTTP Post request
-            $PostParameters = @{
-                "Uri"         = "$($PostEnvironment)"
-                "Method"      = "Post"
-                "Headers"     = $headers
-                "ContentType" = "application/json"
-            }  
-            try {
-                Invoke-RestMethod @PostParameters  
-                Write-Output "Application Installtion $($PackageName) is being done..."
-            }
-            catch {            
-                Write-Error "$($PackageName) Installtion EnvironmentId $($EnvironmentId) failed`r`n$_"               
-            }  
-          
+        # Code Begins
+        # Get token to authenticate to Power Platform
+        $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
+        
+        $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
+        # Power Platform HTTP Post Environment Uri
+        $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
+        
+        # Declare Rest headers
+        $Headers = @{
+            "Content-Type"  = "application/json"
+            "Authorization" = "Bearer $($Token)"
+        }
+        # Declaring the HTTP Post request
+        $PostParameters = @{
+            "Uri"         = "$($PostEnvironment)"
+            "Method"      = "Post"
+            "Headers"     = $headers
+            "ContentType" = "application/json"
+        }  
+        try {
+            Invoke-RestMethod @PostParameters  
+            Write-Output "Application Installation $($PackageName) in progress"
+        }
+        catch {            
+            Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
+        }          
 }
-
 
 function New-DLPAssignmentFromEnv {
     param (
@@ -495,144 +402,72 @@ if ($defaultEnvironment.properties.governanceConfiguration.protectionLevel -ne '
 }
 #endregion default environment
 
-
-#region create default tenant dlp policies
-if ($PPTenantDLP -in 'low', 'medium', 'high') {
+#region create landing zones for citizen devs
+if ($PPCitizen -in "yes") 
+{   
     try {
-        $null = New-DLPAssignmentFromEnv -Environments $defaultEnvironment.properties.displayName -EnvironmentDLP $PPTenantDLP
-        Write-Output "Created Default Tenant DLP Policy - $PPTenantDLP"
+        $envHt = @{            
+            EnvNaming       = $PPCitizenNaming
+            EnvRegion       = $PPCitizenRegion
+            envLanguage     = $PPCitizenLanguage
+            envCurrency     = $PPCitizenCurrency
+            envDescription  = ''
+            EnvALM          = $PPCitizenAlm -eq 'Yes'
+            EnvDataverse    = $PPCitizen -eq 'Yes'            
+        }
+        $environmentsToCreate = New-EnvironmentCreationObject @envHt
     }
     catch {
-        Write-Warning "Failed to create Default Tenant DLP Policy`r`n$_"
+        throw "Failed to create environment object. Input data is malformed. '`r`n$_'"
     }
-}
-#endregion create default tenant dlp policies
-
-#region create landing zones for citizen devs
-
-$PPCitizenCount = 1
-$PPCitizenConfiguration = '';
-if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq 'custom') {
-    if ($PPCitizenConfiguration -ne '') {
-        try {
-            $environmentsToCreate = New-EnvironmentCreationObject -ARMInputString ($PPCitizenConfiguration -join ',') -EnvALM:($PPCitizenAlm -eq 'Yes')
-        }
-        catch {
-            throw "Failed to create environment object. Input data is malformed. '`r`n$_'"
-        }
-    }
-    else {
-        try {
-            $envHt = @{
-                EnvCount       = $PPCitizenCount
-                EnvNaming      = $PPCitizenNaming
-                EnvRegion      = $PPCitizenRegion
-                envLanguage    = $PPCitizenLanguage
-                envCurrency    = $PPCitizenCurrency
-                envDescription = ''
-                EnvALM         = $PPCitizenAlm -eq 'Yes'
-                EnvDataverse   = $PPCitizen -eq 'Yes'
-            }
-            $environmentsToCreate = New-EnvironmentCreationObject @envHt
-        }
-        catch {
-            throw "Failed to create environment object. Input data is malformed. '`r`n$_'"
-        }
-    }
-    foreach ($environment in $environmentsToCreate) {
+    
+    foreach ($environment in $environmentsToCreate) 
+    {             
         try {
             $envCreationHt = @{
                 Name               = $environment.envName
+                Description        = $environment.envDescription
                 Location           = $environment.envRegion
                 Dataverse          = $true
-                ManagedEnvironment = $PPCitizenManagedEnv -eq 'Yes'
-                Description        = $environment.envDescription
+                ManagedEnvironment = $PPCitizenManagedEnv -eq 'Yes'                
                 LanguageName       = $environment.envLanguage
                 Currency           = $environment.envCurrency
-                SecurityGroupId    = $environment.envRbac  
+                SecurityGroupId    = $environment.envRbac
                 EnvSku             = $environment.envSKu                                           
             }  
-            # Starts Here: Code to create Group
-            #New-AzADGroup -DisplayName 'Test' -MailEnabled $False -MailNickName 'PowerPlatformDevelopmentGroup' -SecurityEnabled $True -Description 'Security Group used for Power Platform - Development environment'
-            #New-AzADGroup -DisplayName 'PowerPlatformDevelopmentGroup' -MailNickName 'PowerPlatformDevelopmentGroup' 
-            # Ends Here:  Code to create group 
-            
-            
+
+            Write-Output "Create Environment: $($envCreationHt.Name)" 
+                       
             # Code Begins
             # Get token to authenticate to Power Platform
-            $Token = (Get-AzAccessToken).Token
+            $Token = (Get-AzAccessToken).Token            
+            
             # Power Platform API base Uri
-            $BaseUri = "https://api.bap.microsoft.com"
+            $BaseUri = "https://api.bap.microsoft.com"            
             
             # Power Plaform HTTP Get Environment Uri
             $GetEnvironment = '/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments?$expand=permissions&api-version=2016-11-01'
             
             # Power Platform HTTP Post Environment Uri
             $PostEnvironment = '/providers/Microsoft.BusinessAppPlatform/environments?api-version=2019-05-01&ud=/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments'
-            
-            # Power Platform HTTP Get DLP Policy Uri // Coming soon
-            # $GetPolicies = "https://api.bap.microsoft.com/providers/Microsoft.BusinessAppPlatform/scopes/admin/apiPolicies?api-version=2016-11-01"
-            
+                       
             # Declare Rest headers
             $Headers = @{
                 "Content-Type"  = "application/json"
                 "Authorization" = "Bearer $($Token)"
-            }
-      
-            Write-Output "Creating Environment: $($envCreationHt.Name)"
-            #Write-Output "DEV Security Group. Security Group ID: $environment.envRbac"
+            }                              
             
             # Form the request body to create new Environments in Power Platform           
-
             $templates = @()
             if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
                 $templates += 'D365_Sales'   
-                Write-Output "section D365_Sales : $($ppD365SalesApp)"
             }
             if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
-                $templates += 'D365_CustomerService' 
-                Write-Output "section D365_CustomerService : $($ppD365CustomerServiceApp)"  
+                $templates += 'D365_CustomerService'   
             }
             if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) { 
                 $templates += 'D365_FieldService'   
-                Write-Output "section D365_FieldService : $($ppD365FieldServiceApp)"  
-            }
-            try {
-                #Enable-PowerOpsManagedEnvironment -EnvironmentName '4cd19824-df8f-edeb-bca4-c96b18cedba9'
-                Write-Output "Enable Managed"  
-                $GovernanceConfiguration = [pscustomobject] @{ 
-                    protectionLevel = "Standard" 
-                    settings = [pscustomobject]@{ 
-                        extendedSettings = @{} 
-                    }
-                }                 
-                Set-AdminPowerAppEnvironmentGovernanceConfiguration -EnvironmentName '4cd19824-df8f-edeb-bca4-c96b18cedba9' -UpdatedGovernanceConfiguration $GovernanceConfiguration 
-            }
-            catch {
-                Write-Error "Enable Failed failed`r`n$_"
-            }
-
-            
-                    $testRequest = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq 'Graph-admin' }
-                    $testRequest.properties.governanceConfiguration.protectionLevel = "Standard"
-                    $testEnvRequest = @{
-                        Path        = '/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments/{0}' -f $testRequest.name
-                        Method      = 'Patch'
-                        RequestBody = ($testRequest | ConvertTo-Json -Depth 100)
-                    }
-                    try {
-                        Invoke-PowerOpsRequest @testEnvRequest
-                        Write-Output "Enabled done"
-                    }
-                    catch {
-                        Write-Warning "Failed to rename Default Environment`r`n$_"
-                    }
-                
-           
-           
-
-           
-           # "securityGroupId"= "$($envCreationHt.SecurityGroupId)"
+            }           
             
         # Declaring the HTTP Post request
             $PostBody = @{
@@ -640,14 +475,15 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                     "linkedEnvironmentMetadata" = @{
                         "baseLanguage" = "$($envCreationHt.LanguageName)"
                         "domainName"   = "$($envCreationHt.Name)"
-                        "templates"    =  $templates
-                        
+                        "templates"    =  $templates  
+                        "securityGroupId" = "$($environment.envRbac)"
                     }
                     "databaseType"   = "CommonDataService"
                     "displayName"    = "$($envCreationHt.Name)"
-                    "environmentSku" = "$($envCreationHt.EnvSku)"                 
+                    "description"    = "$($envCreationHt.Description)"
+                    "environmentSku" = "$($envCreationHt.EnvSku)"                                        
                 }
-                "location"   = "$($environment.envRegion)"
+                "location"          = "$($environment.envRegion)"                
             }
         
             $PostParameters = @{
@@ -656,59 +492,15 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
                 "Headers"     = $headers
                 "Body"        = $postBody | ConvertTo-json -Depth 100
                 "ContentType" = "application/json"
-            }
-        
-            Write-Output "Invoking the request to create Environment: $($envCreationHt.Name)"
+            }            
         
             try {
-                $response = Invoke-RestMethod @PostParameters               
-                Write-Output "Citizen Environment $($envCreationHt.Name) is being created..."
+                $response = Invoke-RestMethod @PostParameters                               
             }
             catch {
                 Write-Error "Creation of citizen Environment $($envCreationHt.Name) failed`r`n$_"
                 throw "REST API call failed drastically"
-            }  
-
-           #Starts Install Power Platform Pipeline App in Admin Envrionemnt
-           Write-Output "Admin Envrionement Name $($Global:envAdminName)."
-           If($envCreationHt.Name -eq $Global:envAdminName ){
-            Start-Sleep -Seconds 120           
-            foreach ($envTier in $envTiers) {
-                try {          
-                          $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
-                           New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
-                          #Enable-PowerOpsManagedEnvironment -EnvironmentName '4cd19824-df8f-edeb-bca4-c96b18cedba9'
-                }
-                catch {
-                    Write-Warning "Error installing App`r`n$_"
-                }
-            }
-           }
-            #Ends Install Power Platform Pipeline App in Admin Envrionemnt
-
-            # Get newly created environments
-           <# $GetParameters = @{
-                "Uri"         = "$($BaseUri)$($GetEnvironment)"
-                "Method"      = "Get"
-                "Headers"     = $headers
-                "ContentType" = "application/json"
-            }   #>       
-            
-           #Start-Sleep -Seconds 120    
-            try {
-                <# New-InstallPackaggeToEnvironment -EnvironmentId '32512600-a32e-e22f-85f0-c7168370b4a5' -PackageName 'msdyn_AppDeploymentAnchor' #>
-                <#$response = Invoke-RestMethod @GetParameters #>
-                #Write-Host ($response | Format-List | Out-String)
-            }
-            catch {
-                Write-Output "Retrieving the environment failed.`r`n$_"              
-            }          
-            <# $response.value | Where-Object { $_.properties.displayName -eq $($envCreationHt.Name) } | Foreach-Object -Process {  
-                Write-Output "$($envCreationHt.Name): Installation of App Power Platform Pipeline started "          
-                  New-InstallPackaggeToEnvironment -EnvironmentId $($_.name) -PackageName 'msdyn_AppDeploymentAnchor'
-                    Write-Output "$($envCreationHt.Name): Installation of App Power Platform Pipeline completed"  
-                } #>            
-
+            }                                                       
         }
         catch {
             Write-Warning "Failed to create citizen environment $($environment.envName)"
@@ -718,6 +510,23 @@ if ($PPCitizen -in "yes", "half" -and $PPCitizenCount -ge 1 -or $PPCitizen -eq '
     if ($PPCitizenDlp -eq "Yes") {
         New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'citizenDlpPolicy'
     }
+
+    #region Install Power Platform Pipeline App in Admin Envrionemnt        
+    Start-Sleep -Seconds 60           
+    foreach ($envTier in $envTiers) 
+    {
+        if($envTier -eq 'dev')
+        {
+            try {          
+                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
+                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+            }
+            catch {
+                Write-Warning "Error installing App`r`n$_"
+            }
+        }
+    }    
+    #endregion Install Power Platform Pipeline App in Admin Envrionemnt   
 }
 #endregion create landing zones for citizen devs
 
