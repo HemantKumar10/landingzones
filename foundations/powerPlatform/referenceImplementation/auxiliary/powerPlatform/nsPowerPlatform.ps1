@@ -103,6 +103,9 @@ function New-CreateSecurityGroup {
         [Parameter(Mandatory = $true)][string]$EnvironmentType
     )
 
+    $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
+    Write-Output "Graph TOken $($TokenGraph)"  
+
         $devSecurityGroup = @{
             description="Security Group used for Power Platform - Development environment"
             displayName="entra_powerplatform_development"
@@ -181,7 +184,8 @@ function New-CreateSecurityGroup {
                 $response = Invoke-RestMethod @PostParameters               
                 $Value  = $response.id                                
             }
-            catch {            
+            catch {      
+                Write-Error "Graph token  $($TokenGraph)  "      
                 Write-Error "AccessToken- $($Token) failed`r`n$_"
                 throw "REST API call failed drastically"
             }  
@@ -442,9 +446,7 @@ if ($PPCitizen -in "yes")
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token    
             
-            $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
-            Write-Output "Graph TOken $($TokenGraph)"  
-
+       
 
             
             # Power Platform API base Uri
