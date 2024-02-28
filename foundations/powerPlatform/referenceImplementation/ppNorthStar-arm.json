@@ -258,9 +258,9 @@
         },
         "deploymentNamePrefix": "[concat(replace(tenant().displayName, ' ', ''), '-')]",        
         "deploymentNames": {           
-            "northStarDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'PPLZ-Setup'), 64)]"
+            "northStarDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'ANS-Setup'), 64)]"
         },
-        "resourceNamePrefix": "PPLZ",       
+        "resourceNamePrefix": "ANS",       
         "emptyString": "''"
     },
     "resources": [
@@ -297,8 +297,7 @@
                     },
                     "ppTenantIsolationSetting": {
                         "value": "[parameters('ppTenantIsolationSetting')]"
-                    },  
-                    
+                    },                      
                     "ppCitizenAlm": {
                         "value": "[parameters('ppCitizenAlm')]"
                     },                                                          
