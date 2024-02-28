@@ -103,8 +103,7 @@ function New-CreateSecurityGroup {
         [Parameter(Mandatory = $true)][string]$EnvironmentType
     )
 
-    $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
-    Write-Output "Graph TOken $($TokenGraph)"  
+   
 
         $devSecurityGroup = @{
             description="Security Group used for Power Platform - Development environment"
@@ -184,8 +183,7 @@ function New-CreateSecurityGroup {
                 $response = Invoke-RestMethod @PostParameters               
                 $Value  = $response.id                                
             }
-            catch {      
-                Write-Error "Graph token  $($TokenGraph)  "      
+            catch { 
                 Write-Error "AccessToken- $($Token) failed`r`n$_"
                 throw "REST API call failed drastically"
             }  
@@ -409,6 +407,16 @@ if ($defaultEnvironment.properties.governanceConfiguration.protectionLevel -ne '
 #region create landing zones for citizen devs
 if ($PPCitizen -in "yes") 
 {   
+    try {
+        $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
+        Write-Output "Graph TOken $($TokenGraph)"  
+    }
+    catch {
+        Write-Error "Graph TOken $($TokenGraph)"  
+    }
+
+
+
     try {
         $envHt = @{            
             EnvNaming       = $PPCitizenNaming
