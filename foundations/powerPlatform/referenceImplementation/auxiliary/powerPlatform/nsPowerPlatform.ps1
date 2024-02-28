@@ -440,7 +440,12 @@ if ($PPCitizen -in "yes")
                        
             # Code Begins
             # Get token to authenticate to Power Platform
-            $Token = (Get-AzAccessToken).Token            
+            $Token = (Get-AzAccessToken).Token    
+            
+            $TokenGraph = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/").Token
+            Write-Output "Graph TOken $($TokenGraph)"  
+
+
             
             # Power Platform API base Uri
             $BaseUri = "https://api.bap.microsoft.com"            
