@@ -512,7 +512,7 @@ if ($PPCitizen -in "yes")
     if ($PPCitizenDlp -eq "Yes") {
         New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'citizenDlpPolicy'
     }
-
+    New-InstallPackaggeToEnvironment -EnvironmentId '746611df-abf5-e8ba-9db8-d9a1c5a1bda7' -PackageName 'DynamicsMKT_AnchorSolution'
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
     Start-Sleep -Seconds 60           
     foreach ($envTier in $envTiers) 
@@ -520,9 +520,8 @@ if ($PPCitizen -in "yes")
         if($envTier -eq 'dev')
         {
             try {          
-                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
-                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'DynamicsMKT_AnchorSolution'
-                    #New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }               
+                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
             }
             catch {
                 Write-Warning "Error installing App`r`n$_"
