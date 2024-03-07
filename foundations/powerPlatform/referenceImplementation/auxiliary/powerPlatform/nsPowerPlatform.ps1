@@ -512,7 +512,7 @@ if ($PPCitizen -in "yes")
     if ($PPCitizenDlp -eq "Yes") {
         New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'citizenDlpPolicy'
     }
-    New-InstallPackaggeToEnvironment -EnvironmentId 'e37635f9-40c5-e821-b303-830e372a90a5' -PackageName 'MicrosoftDynamics_MktCompleteAnchorSolution'
+    New-InstallPackaggeToEnvironment -EnvironmentId '023ce484-2cb0-ebb8-90ce-20d3f0621aac' -PackageName 'MicrosoftDynamics_MktCompleteAnchorSolution'
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
     Start-Sleep -Seconds 60           
     foreach ($envTier in $envTiers) 
