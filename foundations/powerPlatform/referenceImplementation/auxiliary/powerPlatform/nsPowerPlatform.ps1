@@ -217,6 +217,52 @@ function New-InstallPackaggeToEnvironment {
         }          
 }
 
+
+function New-CreateDeploymentEnvrionmentRecord {
+    param (      
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL,
+        [Parameter(Mandatory = $true)][string]$EnvironmentName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentId,
+        [Parameter(Mandatory = $true)][string]$EnvironmentType
+    ) 
+        # Code Begins
+        # Get token to authenticate to Power Platform
+        
+        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+        # Power Platform HTTP Post Environment Uri
+        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
+        
+        # Declare Rest headers
+        $PostBody = @{
+           
+            "name" = "$($EnvironmentName)"
+            "environmenttype"   = $($EnvironmentType)
+            "environmentid"    =  "$($EnvironmentId)" 
+                           
+        }
+
+        # Declare Rest headers
+        $Headers = @{
+            "Content-Type"  = "application/json"
+            "Authorization" = "Bearer $($Token)"
+        }
+        # Declaring the HTTP Post request
+        $PostParameters = @{
+            "Uri"         = "$($PostEnvironment)"
+            "Method"      = "Post"
+            "Headers"     = $headers
+            "ContentType" = "application/json"
+            "Body"        = $postBody | ConvertTo-json -Depth 100
+        }   
+        try {
+            Invoke-RestMethod @PostParameters  
+            Write-Output "Deployment Envrionment $($EnvironmentName) in progress"
+        }
+        catch {            
+            Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
+        }          
+}
+
 function New-DLPAssignmentFromEnv {
     param (
         [Parameter(Mandatory = $true)][string[]]$Environments,
@@ -537,50 +583,6 @@ if ($PPCitizen -in "yes")
 #endregion create landing zones for citizen devs
 
 
-function New-CreateDeploymentEnvrionmentRecord {
-    param (      
-        [Parameter(Mandatory = $true)][string]$EnvironmentURL,
-        [Parameter(Mandatory = $true)][string]$EnvironmentName,
-        [Parameter(Mandatory = $true)][string]$EnvironmentId,
-        [Parameter(Mandatory = $true)][string]$EnvironmentType
-    ) 
-        # Code Begins
-        # Get token to authenticate to Power Platform
-        
-        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-        # Power Platform HTTP Post Environment Uri
-        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
-        
-        # Declare Rest headers
-        $PostBody = @{
-           
-            "name" = "$($EnvironmentName)"
-            "environmenttype"   = $($EnvironmentType)
-            "environmentid"    =  "$($EnvironmentId)" 
-                           
-        }
-
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
-        # Declaring the HTTP Post request
-        $PostParameters = @{
-            "Uri"         = "$($PostEnvironment)"
-            "Method"      = "Post"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-            "Body"        = $postBody | ConvertTo-json -Depth 100
-        }   
-        try {
-            Invoke-RestMethod @PostParameters  
-            Write-Output "Deployment Envrionment $($EnvironmentName) in progress"
-        }
-        catch {            
-            Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
-        }          
-}
 
 
 function New-CreateDeploymentPipeline {
