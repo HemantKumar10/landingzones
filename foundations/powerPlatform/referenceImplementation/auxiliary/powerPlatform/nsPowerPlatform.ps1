@@ -563,15 +563,18 @@ if ($PPCitizen -in "yes")
             try {          
                     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
                     New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
-                    try {
+                  <#  try {
                         Write-Output "Enabling managed environment for the Admin environment"
                         Enable-PowerOpsManagedEnvironment -EnvironmentName $adminEnvironment.name -GroupSharingDisabled $true
                     }
                     catch {
                         Write-Warning "Failed to enable managed environment for Admin environment"
-                    }
-                    Start-Sleep -Seconds 90  
+                    } #>
+                    New-CreateDeploymentEnvrionmentRecord -EnvironmentURL 'https://graph-admin.api.crm11.dynamics.com' -EnvironmentName 'Graph-admin' -EnvironmentId '9733c9e8-04e2-e65e-9829-1188d7c308aa' -EnvironmentType '200000000' 
+                    Start-Sleep -Seconds 120  
+                    #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $adminEnvironment.properties.linkedEnvironmentMetadata.friendlyName -EnvironmentId $adminEnvironment.name -EnvironmentType '200000000' 
                     New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $adminEnvironment.properties.linkedEnvironmentMetadata.friendlyName -EnvironmentId $adminEnvironment.name -EnvironmentType '200000000' 
+                    
             }
             catch {
                 Write-Warning "Error installing App`r`n$_"
