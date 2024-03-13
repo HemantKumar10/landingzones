@@ -37,7 +37,7 @@ $DeploymentScriptOutputs = @{}
 Install-Module -Name PowerOps -AllowPrerelease -Force   
 
 #Default ALM environment tiers
-$envTiers = 'dev','test','prod','admin'
+$envTiers = 'admin','dev','test','prod'
 
 $Global:envAdminName = ''
 
@@ -101,9 +101,9 @@ function New-EnvironmentCreationObject {
 function New-CreateSecurityGroup {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentType
-    )   
+    )
 
-            $devSecurityGroup = @{
+        $devSecurityGroup = @{
             description="Security Group used for Power Platform - Development environment"
             displayName="entra_powerplatform_development"
             mailEnabled=$false
@@ -111,7 +111,7 @@ function New-CreateSecurityGroup {
             mailNickname="PowerPlatformDevelopmentGroup"
            }
         
-            $testSecurityGroup = @{
+          $testSecurityGroup = @{
             description="Security Group used for Power Platform - Test environment"
              displayName="entra_powerplatform_test"
             mailEnabled=$false
@@ -140,9 +140,6 @@ function New-CreateSecurityGroup {
             # Get token to authenticate to Power Platform                       
             $Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default").Token            
             
-            #Write-Output "Bearer $($tokeny)" #> 
-            #$Token = (Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com/v1.0/groups").Token   
-
             # Power Platform HTTP Post Group Uri
             $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
             
@@ -179,8 +176,8 @@ function New-CreateSecurityGroup {
                 $response = Invoke-RestMethod @PostParameters               
                 $Value  = $response.id                                
             }
-            catch { 
-                Write-Error "AccessToken- $($Token) failed`r`n$_"
+            catch {           
+             
                 throw "REST API call failed drastically"
             }  
 
@@ -194,6 +191,7 @@ function New-InstallPackaggeToEnvironment {
     ) 
         # Code Begins
         # Get token to authenticate to Power Platform
+        
         $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
         # Power Platform HTTP Post Environment Uri
         $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
@@ -401,9 +399,6 @@ if ($defaultEnvironment.properties.governanceConfiguration.protectionLevel -ne '
 #region create landing zones for citizen devs
 if ($PPCitizen -in "yes") 
 {   
-   
-
-
     try {
         $envHt = @{            
             EnvNaming       = $PPCitizenNaming
@@ -436,20 +431,14 @@ if ($PPCitizen -in "yes")
             }  
 
             Write-Output "Create Environment: $($envCreationHt.Name)" 
-                       
-            # Code Begins
+                                   
             # Get token to authenticate to Power Platform
-            $Token = (Get-AzAccessToken).Token    
-            
-
-            $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
-            $envToken = (Get-AzAccessToken -ResourceUrl "https://powerplatform-dev.crm11.dynamics.com/user_impersonation").Token
-            Write-Output "ENv TOken- $Token"  
+            $Token = (Get-AzAccessToken).Token            
+        
 
             $envTkn = (Get-AzAccessToken -ResourceUrl "https://powerplatform-dev.crm11.dynamics.com").Token
             Write-Output "TOken- $envTkn"  
 
-            
             # Power Platform API base Uri
             $BaseUri = "https://api.bap.microsoft.com"            
             
@@ -463,7 +452,7 @@ if ($PPCitizen -in "yes")
             $Headers = @{
                 "Content-Type"  = "application/json"
                 "Authorization" = "Bearer $($Token)"
-            }                              
+            }
             
             # Form the request body to create new Environments in Power Platform           
             $templates = @()
@@ -485,7 +474,7 @@ if ($PPCitizen -in "yes")
                         "domainName"   = "$($envCreationHt.Name)"
                         "templates"    =  $templates  
                         "securityGroupId" = "$($environment.envRbac)"
-                    }
+                    }                    
                     "databaseType"   = "CommonDataService"
                     "displayName"    = "$($envCreationHt.Name)"
                     "description"    = "$($envCreationHt.Description)"
@@ -518,15 +507,15 @@ if ($PPCitizen -in "yes")
     if ($PPCitizenDlp -eq "Yes") {
         New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'citizenDlpPolicy'
     }
-    #New-InstallPackaggeToEnvironment -EnvironmentId '023ce484-2cb0-ebb8-90ce-20d3f0621aac' -PackageName 'MicrosoftDynamics_MktCompleteAnchorSolution'
+
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
-    Start-Sleep -Seconds 60           
+    Start-Sleep -Seconds 90           
     foreach ($envTier in $envTiers) 
     {
         if($envTier -eq 'dev')
         {
             try {          
-                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }               
+                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
                     New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
             }
             catch {
