@@ -37,7 +37,8 @@ $DeploymentScriptOutputs = @{}
 Install-Module -Name PowerOps -AllowPrerelease -Force   
 
 #Default ALM environment tiers
-$envTiers = 'admin','dev','test','prod'
+#$envTiers = 'admin','dev','test','prod'
+$envTiers = 'admin'
 
 $Global:envAdminName = ''
 
@@ -595,9 +596,12 @@ if ($PPCitizen -in "yes")
     Start-Sleep -Seconds 90           
     foreach ($envTier in $envTiers) 
     {
-        if($envTier -eq 'dev')
+        #if($envTier -eq 'dev')
         {
             try {          
+
+                   Write-Output "Admin Name: $($Global:envAdminName)" 
+                   Write-Output "Admin Name: $($envAdminName)" 
                     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
                     New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
                     #Write-Output "Operation Id $($operationId)"
