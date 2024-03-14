@@ -307,18 +307,20 @@ function New-CreateDeploymentEnvrionmentRecord {
         Write-Output "Token $($Token)"
         Write-Output " Envrionment URL $($PostEnvironment)"
         # Declare Rest headers
-        $PostBody = @{
-           
+        $PostBody = @{           
             "name" = "$($EnvironmentName)"
             "environmenttype"   = $($EnvironmentType)
             "environmentid"    =  "$($EnvironmentId)" 
-                           
         }
 
         # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
+        $Headers = @{            
             "Authorization" = "Bearer $($Token)"
+            "OData-MaxVersion" =4.0
+            "OData-Version" =4.0
+            "Accept"= "application/json"
+            "Content-Type" = "application/json; charset=utf-8"
+            "Prefer" = "odata.include-annotations='*'',return=representation"
         }
         # Declaring the HTTP Post request
         $PostParameters = @{
@@ -379,6 +381,8 @@ function New-CreateDeploymentPipeline {
 
 function New-AssociateDeploymentEnvironmentWithPipeline {
     param (      
+        [Parameter(Mandatory = $true)][string]$DeploymentPipelineId,
+        [Parameter(Mandatory = $true)][string]$DeploymentEnvrionmentId,
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
         # Code Begins
@@ -386,8 +390,12 @@ function New-AssociateDeploymentEnvironmentWithPipeline {
         
         $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
         # Power Platform HTTP Post Environment Uri
-        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
+        $refVar = '$ref'
+        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines($DeploymentPipelineId)/deploymentpipeline_deploymentenvironment/$refVar"           
         
+        $PostBody = @{
+            "@odata.id" = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments($DeploymentEnvrionmentId)"
+       }
         # Declare Rest headers
         $Headers = @{
             "Content-Type"  = "application/json"
@@ -399,13 +407,14 @@ function New-AssociateDeploymentEnvironmentWithPipeline {
             "Method"      = "Post"
             "Headers"     = $headers
             "ContentType" = "application/json"
+            "Body"        = $postBody | ConvertTo-json -Depth 100
         }  
         try {
             Invoke-RestMethod @PostParameters  
-            Write-Output "Application Installation $($PackageName) in progress"
+            Write-Output "Association of Envrionment and Pipeline completed"
         }
         catch {            
-            Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
+            Write-Error "Association of Envrionment and Pipeline failed`r`n$_"               
         }          
 }
 
