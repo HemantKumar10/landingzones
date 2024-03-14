@@ -602,10 +602,11 @@ if ($PPCitizen -in "yes")
 
                    Write-Output "Admin Name: $($Global:envAdminName)" 
                    Write-Output "Admin Name: $($envAdminName)" 
-                   $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
-                   New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                   New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa'
+                   #$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
+                   #New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
                     #Write-Output "Operation Id $($operationId)"
-                    #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
+                     
                    # New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
 
                   <#  try {
