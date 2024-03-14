@@ -294,7 +294,7 @@ function New-GetApplicationInstallStatus {
             "ContentType" = "application/json"
         }   
         try {
-           $packageSTatus  Invoke-RestMethod @GetParameters  
+           $packageSTatus = Invoke-RestMethod @GetParameters  
             Write-Host ($packageSTatus | Format-List | Out-String)
         }
         catch {            
