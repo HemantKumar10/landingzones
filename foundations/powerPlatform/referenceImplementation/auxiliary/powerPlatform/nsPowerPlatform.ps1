@@ -37,8 +37,8 @@ $DeploymentScriptOutputs = @{}
 Install-Module -Name PowerOps -AllowPrerelease -Force   
 
 #Default ALM environment tiers
-$envTiers = 'admin','dev','test','prod'
-#$envTiers = 'admin'
+#$envTiers = 'admin','dev','test','prod'
+$envTiers = 'admin'
 
 $Global:envAdminName = ''
 
@@ -320,7 +320,7 @@ function New-CreateDeploymentEnvrionmentRecord {
             "OData-Version" = 4.0
             "Accept" = "application/json"
             "Content-Type" = "application/json; charset=utf-8"
-            "Prefer" = "odata.include-annotations='*'',return=representation"
+            "Prefer" = "odata.include-annotations='*',return=representation"
         }
         # Declaring the HTTP Post request
         $PostParameters = @{
