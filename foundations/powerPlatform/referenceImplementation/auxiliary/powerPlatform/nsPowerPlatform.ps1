@@ -226,53 +226,7 @@ function New-InstallPackaggeToEnvironment {
 }
 
 
-function New-CreateDeploymentEnvrionmentRecord {
-    param (      
-        [Parameter(Mandatory = $true)][string]$EnvironmentURL,
-        [Parameter(Mandatory = $true)][string]$EnvironmentName,
-        [Parameter(Mandatory = $true)][string]$EnvironmentId,
-        [Parameter(Mandatory = $true)][string]$EnvironmentType
-    ) 
-        # Code Begins
-        # Get token to authenticate to Power Platform
-        
-        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-        # Power Platform HTTP Post Environment Uri
-        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
-        
-        Write-Output " Envrionment URL $($PostEnvironment)"
-        # Declare Rest headers
-        $PostBody = @{
-           
-            "name" = "$($EnvironmentName)"
-            "environmenttype"   = $($EnvironmentType)
-            "environmentid"    =  "$($EnvironmentId)" 
-                           
-        }
 
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
-        # Declaring the HTTP Post request
-        $PostParameters = @{
-            "Uri"         = "$($PostEnvironment)"
-            "Method"      = "Post"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-            "Body"        = $postBody | ConvertTo-json -Depth 100
-        }   
-        try {
-            $outputDeploymentEnvironment = Invoke-RestMethod @PostParameters  
-            Write-Output "Deployment Envrionment Created $($EnvironmentName)"
-            Write-Host ($outputDeploymentEnvironment | Format-List | Out-String)
-       
-        }
-        catch {            
-            Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
-        }          
-}
 
 function New-GetApplicationInstallStatus {
     param (      
@@ -314,8 +268,18 @@ function New-GetApplicationInstallStatus {
                 Start-Sleep -Seconds 15
             } 
             if($packageSTatus.status -eq 'Succeeded'){
-                New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType 
-                New-CreateDeploymentPipeline -Name "Landing Zones Pipeline" -Token $Token
+                <#foreach ($envTier in $envTiers) 
+                {  
+                    if($envTier -eq 'dev')
+                    {                  
+                      New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType
+                    }
+                    else {
+                      New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType '200000001'
+                    }
+                }#>
+                New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType
+                New-CreateDeploymentPipeline -Name "Landing Zones Pipeline" -EnvironmentURL $EnvironmentURL 
             }
            #Write-Host ($packageSTatus | Format-List | Out-String)
         }
@@ -326,15 +290,65 @@ function New-GetApplicationInstallStatus {
      } until ($packageSTatus.status -eq 'Succeeded' -or $packageSTatus.status -eq 'Canceled' -or $packageSTatus.status -eq 'Failed' -or $getApplicationAttempt -eq 15)
 }
 
+function New-CreateDeploymentEnvrionmentRecord {
+    param (      
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL,
+        [Parameter(Mandatory = $true)][string]$EnvironmentName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentId,
+        [Parameter(Mandatory = $true)][string]$EnvironmentType
+    ) 
+        # Code Begins
+        # Get token to authenticate to Power Platform
+        
+        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+        # Power Platform HTTP Post Environment Uri
+        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
+        
+        Write-Output "Token $($Token)"
+        Write-Output " Envrionment URL $($PostEnvironment)"
+        # Declare Rest headers
+        $PostBody = @{
+           
+            "name" = "$($EnvironmentName)"
+            "environmenttype"   = $($EnvironmentType)
+            "environmentid"    =  "$($EnvironmentId)" 
+                           
+        }
+
+        # Declare Rest headers
+        $Headers = @{
+            "Content-Type"  = "application/json"
+            "Authorization" = "Bearer $($Token)"
+        }
+        # Declaring the HTTP Post request
+        $PostParameters = @{
+            "Uri"         = "$($PostEnvironment)"
+            "Method"      = "Post"
+            "Headers"     = $headers
+            "ContentType" = "application/json"
+            "Body"        = $postBody | ConvertTo-json -Depth 100
+        }   
+        try {
+            $outputDeploymentEnvironment = Invoke-RestMethod @PostParameters  
+            Write-Output "Deployment Envrionment Created $($EnvironmentName)"
+            Write-Host ($outputDeploymentEnvironment | Format-List | Out-String)
+       
+        }
+        catch {            
+            Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
+        }          
+}
+
 function New-CreateDeploymentPipeline {
     param (      
-        [Parameter(Mandatory = $true)][string]$Name,
-        [Parameter(Mandatory = $true)][string]$Token
+        [Parameter(Mandatory = $true)][string]$Name,       
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
         # Code Begins
         # Power Platform HTTP Post Environment Uri
         $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines"     
         
+        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
         $PostBody = @{
                     "name" = "$($Name)"
         }
@@ -356,6 +370,7 @@ function New-CreateDeploymentPipeline {
             $outputDeploymentPipeline = Invoke-RestMethod @PostParameters  
             Write-Output "Deployment Pipeline record created: $($Name)"
             Write-Host ($outputDeploymentPipeline | Format-List | Out-String)
+            #New-CreateDeploymentStages -Name 'Prodcution - Deployment Statge' -DeploymentPipeline '' -PreviousStage '' -TargetDeploymentEnvironment '' -EnvironmentURL '' -Token $Token 
         }
         catch {            
             Write-Error "Deployment Pipeline record creation: $($Name) failed`r`n$_"               
@@ -400,6 +415,7 @@ function New-CreateDeploymentStages {
         [Parameter(Mandatory = $true)][string]$DeploymentPipeline,
         [Parameter(Mandatory = $true)][string]$PreviousStage,
         [Parameter(Mandatory = $true)][string]$TargetDeploymentEnvironment,
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL,
         [Parameter(Mandatory = $true)][string]$Token
     ) 
         # Code Begins
@@ -407,8 +423,11 @@ function New-CreateDeploymentStages {
         # Power Platform HTTP Post Environment Uri
         $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages"           
         
-        $PostBody = @{
+           $PostBody = @{
             "name" = "$($Name)"
+            "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
+            "previousdeploymentstageid@odata.bind" = "/deploymentstages($PreviousStage)"
+            "deploymentpipelineid@odata.bind" = "/deploymentpipelines($DeploymentPipeline)"
             }
 
             # Declare Rest headers
