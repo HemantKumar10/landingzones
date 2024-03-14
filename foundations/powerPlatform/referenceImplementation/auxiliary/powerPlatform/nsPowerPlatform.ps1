@@ -210,11 +210,11 @@ function New-InstallPackaggeToEnvironment {
         }  
         try {
             $outputPackage = Invoke-RestMethod @PostParameters 
-            $operationId =  $outputPackage.lastOperation.operationId
-            Write-Output "Application Installation $($PackageName) in progress"      
+            $operationId =  $outputPackage.lastOperation.operationId          
             #Write-Host ($outputPackage | Format-List | Out-String)
-            New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
-            #return $operationId
+            #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
+            #Write-Output "Application Installation $($PackageName) in progress"    
+            return $operationId
         }
         catch {            
             Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
@@ -296,7 +296,7 @@ function New-GetApplicationInstallStatus {
         }   
         try {
            $packageSTatus = Invoke-RestMethod @GetParameters  
-            Write-Host ($packageSTatus | Format-List | Out-String)
+           Write-Host ($packageSTatus | Format-List | Out-String)
         }
         catch {            
             Write-Error "Failed gettting package status`r`n$_"               
@@ -598,7 +598,9 @@ if ($PPCitizen -in "yes")
         {
             try {          
                     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
-                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                    $operationId = New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                    Write-Output "Operation Id $($operationId)"
+                    New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
                    # New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
 
                   <#  try {
