@@ -209,8 +209,10 @@ function New-InstallPackaggeToEnvironment {
             "ContentType" = "application/json"
         }  
         try {
-            Invoke-RestMethod @PostParameters  
+            $outputPackage = Invoke-RestMethod @PostParameters  
             Write-Output "Application Installation $($PackageName) in progress"
+            Write-Host ($outputPackage | Format-Table | Out-String)
+            Write-Host ($outputPackage | Format-List | Out-String)
         }
         catch {            
             Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
@@ -232,6 +234,7 @@ function New-CreateDeploymentEnvrionmentRecord {
         # Power Platform HTTP Post Environment Uri
         $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
         
+        Write-Output " Envrionment URL $($PostEnvironment)"
         # Declare Rest headers
         $PostBody = @{
            
@@ -570,7 +573,7 @@ if ($PPCitizen -in "yes")
                     catch {
                         Write-Warning "Failed to enable managed environment for Admin environment"
                     } #>
-                    New-CreateDeploymentEnvrionmentRecord -EnvironmentURL 'https://graph-admin.api.crm11.dynamics.com' -EnvironmentName 'Graph-admin' -EnvironmentId '9733c9e8-04e2-e65e-9829-1188d7c308aa' -EnvironmentType '200000000' 
+                    #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL 'https://graph-admin.api.crm11.dynamics.com' -EnvironmentName 'Graph-admin' -EnvironmentId '9733c9e8-04e2-e65e-9829-1188d7c308aa' -EnvironmentType '200000000' 
                     Start-Sleep -Seconds 120  
                     #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $adminEnvironment.properties.linkedEnvironmentMetadata.friendlyName -EnvironmentId $adminEnvironment.name -EnvironmentType '200000000' 
                     New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $adminEnvironment.properties.linkedEnvironmentMetadata.friendlyName -EnvironmentId $adminEnvironment.name -EnvironmentType '200000000' 
