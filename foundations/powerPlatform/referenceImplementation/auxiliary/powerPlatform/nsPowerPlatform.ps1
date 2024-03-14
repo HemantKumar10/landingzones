@@ -210,11 +210,12 @@ function New-InstallPackaggeToEnvironment {
         }  
         try {
             $outputPackage = Invoke-RestMethod @PostParameters 
-            $operationId =  $outputPackage.lastOperation.operationId          
+            $operationId =  $outputPackage.lastOperation.operationId  
+            Write-Output "Application Installation $($PackageName) $($operationId) in progress"            
             #Write-Host ($outputPackage | Format-List | Out-String)
             #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
             #Write-Output "Application Installation $($PackageName) in progress"    
-            return $operationId
+            #return $operationId
         }
         catch {            
             Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
@@ -598,9 +599,9 @@ if ($PPCitizen -in "yes")
         {
             try {          
                     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
-                    $operationId = New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
-                    Write-Output "Operation Id $($operationId)"
-                    New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
+                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                    #Write-Output "Operation Id $($operationId)"
+                    #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
                    # New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
 
                   <#  try {
