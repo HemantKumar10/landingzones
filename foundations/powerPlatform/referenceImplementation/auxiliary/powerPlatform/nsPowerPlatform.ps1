@@ -316,9 +316,9 @@ function New-CreateDeploymentEnvrionmentRecord {
         # Declare Rest headers
         $Headers = @{            
             "Authorization" = "Bearer $($Token)"
-            "OData-MaxVersion" =4.0
-            "OData-Version" =4.0
-            "Accept"= "application/json"
+            "OData-MaxVersion" = 4.0
+            "OData-Version" = 4.0
+            "Accept" = "application/json"
             "Content-Type" = "application/json; charset=utf-8"
             "Prefer" = "odata.include-annotations='*'',return=representation"
         }
