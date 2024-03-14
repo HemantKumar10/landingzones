@@ -188,7 +188,8 @@ function New-CreateSecurityGroup {
 function New-InstallPackaggeToEnvironment {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentId,
-        [Parameter(Mandatory = $true)][string]$PackageName
+        [Parameter(Mandatory = $true)][string]$PackageName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
         # Code Begins
         # Get token to authenticate to Power Platform
@@ -212,7 +213,8 @@ function New-InstallPackaggeToEnvironment {
         try {
             $outputPackage = Invoke-RestMethod @PostParameters 
             $operationId =  $outputPackage.lastOperation.operationId  
-            Write-Output "Application Installation $($PackageName) $($operationId) in progress"            
+            Write-Output "Application Installation $($PackageName) $($operationId) in progress"   
+            New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'         
             #Write-Host ($outputPackage | Format-List | Out-String)
             #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
             #Write-Output "Application Installation $($PackageName) in progress"    
@@ -273,9 +275,17 @@ function New-CreateDeploymentEnvrionmentRecord {
 function New-GetApplicationInstallStatus {
     param (      
         [Parameter(Mandatory = $true)][string]$OperationId,
-        [Parameter(Mandatory = $true)][string]$EnvironmentId
+        [Parameter(Mandatory = $true)][string]$EnvironmentId,
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL,
+        [Parameter(Mandatory = $true)][string]$EnvironmentName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentType
+        
     ) 
-        # Code Begins
+
+       $getApplicationAttempt = 0
+     do{
+        $getApplicationAttempt++
+          # Code Begins
         # Get token to authenticate to Power Platform
         
         $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
@@ -297,12 +307,20 @@ function New-GetApplicationInstallStatus {
             "ContentType" = "application/json"
         }   
         try {
-           $packageSTatus = Invoke-RestMethod @GetParameters  
-           Write-Host ($packageSTatus | Format-List | Out-String)
+            $packageSTatus = Invoke-RestMethod @GetParameters 
+            if ($packageSTatus.status -ne 'Succeeded' -or $packageSTatus.status -ne 'Canceled' -or $packageSTatus.status -ne 'Failed') {            
+                Start-Sleep -Seconds 15
+            } 
+            if($packageSTatus.status -eq 'Succeeded'){
+                New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType 
+            }
+           #Write-Host ($packageSTatus | Format-List | Out-String)
         }
         catch {            
             Write-Error "Failed gettting package status`r`n$_"               
-        }          
+        } 
+
+     } until ($packageSTatus.status -eq 'Succeeded' -or $packageSTatus.status -eq 'Canceled' -or $packageSTatus.status -eq 'Failed' -or $getApplicationAttempt -eq 15)
 }
 
 function New-DLPAssignmentFromEnv {
@@ -602,9 +620,12 @@ if ($PPCitizen -in "yes")
 
                    Write-Output "Admin Name: $($Global:envAdminName)" 
                    Write-Output "Admin Name: $($envAdminName)" 
-                   New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa'
-                   #$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
-                   #New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                   #New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa'
+                   $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
+                    Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
+                   New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl
+
+                  # New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa' -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'
                     #Write-Output "Operation Id $($operationId)"
                      
                    # New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
