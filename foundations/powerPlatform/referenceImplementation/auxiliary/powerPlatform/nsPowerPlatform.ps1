@@ -212,8 +212,9 @@ function New-InstallPackaggeToEnvironment {
             $outputPackage = Invoke-RestMethod @PostParameters 
             $operationId =  $outputPackage.lastOperation.operationId
             Write-Output "Application Installation $($PackageName) in progress"      
-            Write-Host ($outputPackage | Format-List | Out-String)
-            return $operationId
+            #Write-Host ($outputPackage | Format-List | Out-String)
+            New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
+            #return $operationId
         }
         catch {            
             Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
@@ -597,10 +598,8 @@ if ($PPCitizen -in "yes")
         {
             try {          
                     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
-                    $operationId = New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'    
-                    Write-Output "Operation Id $($operationId)"               
-                    Write-Host ($adminEnvironment | Format-List | Out-String)
-                    New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
+                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                   # New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
 
                   <#  try {
                         Write-Output "Enabling managed environment for the Admin environment"
