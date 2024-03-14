@@ -37,8 +37,8 @@ $DeploymentScriptOutputs = @{}
 Install-Module -Name PowerOps -AllowPrerelease -Force   
 
 #Default ALM environment tiers
-#$envTiers = 'admin','dev','test','prod'
-$envTiers = 'admin'
+$envTiers = 'admin','dev','test','prod'
+#$envTiers = 'admin'
 
 $Global:envAdminName = ''
 
@@ -758,11 +758,10 @@ if ($PPCitizen -in "yes")
         #{
             try {          
 
-                   Write-Output "Admin Name: $($Global:envAdminName)" 
-                   Write-Output "Admin Name: $($envAdminName)" 
+                   Write-Output "Admin Name: $($Global:envAdminName)"                   
                    #New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa'
                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
-                    Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
+                   Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl
 
                   # New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa' -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'
@@ -776,11 +775,7 @@ if ($PPCitizen -in "yes")
                     }
                     catch {
                         Write-Warning "Failed to enable managed environment for Admin environment"
-                    } #>
-                    #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL 'https://graph-admin.api.crm11.dynamics.com' -EnvironmentName 'Graph-admin' -EnvironmentId '9733c9e8-04e2-e65e-9829-1188d7c308aa' -EnvironmentType '200000000' 
-                    #Start-Sleep -Seconds 120  
-                    #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $adminEnvironment.properties.linkedEnvironmentMetadata.friendlyName -EnvironmentId $adminEnvironment.name -EnvironmentType '200000000' 
-                   
+                    } #>  
                     
             }
             catch {
