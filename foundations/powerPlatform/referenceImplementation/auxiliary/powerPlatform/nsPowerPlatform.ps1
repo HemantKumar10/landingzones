@@ -482,11 +482,7 @@ if ($PPCitizen -in "yes")
             Write-Output "Create Environment: $($envCreationHt.Name)" 
                                    
             # Get token to authenticate to Power Platform
-            $Token = (Get-AzAccessToken).Token            
-        
-
-            $envTkn = (Get-AzAccessToken -ResourceUrl "https://powerplatform-dev.crm11.dynamics.com").Token
-            Write-Output "TOken- $envTkn"  
+            $Token = (Get-AzAccessToken).Token   
 
             # Power Platform API base Uri
             $BaseUri = "https://api.bap.microsoft.com"            
@@ -564,8 +560,11 @@ if ($PPCitizen -in "yes")
         if($envTier -eq 'dev')
         {
             try {          
-                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $envAdminName }
+                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
                     New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+
+                    Write-Host ($adminEnvironment | Format-Table | Out-String)
+                    Write-Host ($adminEnvironment | Format-List | Out-String)
                   <#  try {
                         Write-Output "Enabling managed environment for the Admin environment"
                         Enable-PowerOpsManagedEnvironment -EnvironmentName $adminEnvironment.name -GroupSharingDisabled $true
@@ -574,9 +573,9 @@ if ($PPCitizen -in "yes")
                         Write-Warning "Failed to enable managed environment for Admin environment"
                     } #>
                     #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL 'https://graph-admin.api.crm11.dynamics.com' -EnvironmentName 'Graph-admin' -EnvironmentId '9733c9e8-04e2-e65e-9829-1188d7c308aa' -EnvironmentType '200000000' 
-                    Start-Sleep -Seconds 120  
+                    #Start-Sleep -Seconds 120  
                     #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $adminEnvironment.properties.linkedEnvironmentMetadata.friendlyName -EnvironmentId $adminEnvironment.name -EnvironmentType '200000000' 
-                    New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $adminEnvironment.properties.linkedEnvironmentMetadata.friendlyName -EnvironmentId $adminEnvironment.name -EnvironmentType '200000000' 
+                   
                     
             }
             catch {
