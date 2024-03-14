@@ -209,10 +209,11 @@ function New-InstallPackaggeToEnvironment {
             "ContentType" = "application/json"
         }  
         try {
-            $outputPackage = Invoke-RestMethod @PostParameters  
-            Write-Output "Application Installation $($PackageName) in progress"
-            Write-Host ($outputPackage | Format-Table | Out-String)
+            $outputPackage = Invoke-RestMethod @PostParameters 
+            $operationId =  $outputPackage.lastOperation.operationId
+            Write-Output "Application Installation $($PackageName) in progress"      
             Write-Host ($outputPackage | Format-List | Out-String)
+            return $operationId
         }
         catch {            
             Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
@@ -263,6 +264,41 @@ function New-CreateDeploymentEnvrionmentRecord {
         }
         catch {            
             Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
+        }          
+}
+
+function New-GetApplicationInstallStatus {
+    param (      
+        [Parameter(Mandatory = $true)][string]$OperationId,
+        [Parameter(Mandatory = $true)][string]$EnvironmentId
+    ) 
+        # Code Begins
+        # Get token to authenticate to Power Platform
+        
+        $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
+        # Power Platform HTTP Post Environment Uri
+        $GetPackages = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/operations/$($OperationId)?api-version=2022-03-01-preview"    
+
+        # Declare Rest headers      
+
+        # Declare Rest headers
+        $Headers = @{
+            "Content-Type"  = "application/json"
+            "Authorization" = "Bearer $($Token)"
+        }
+        # Declaring the HTTP Post request
+        $GetParameters = @{
+            "Uri"         = "$($GetPackages)"
+            "Method"      = "Get"
+            "Headers"     = $headers
+            "ContentType" = "application/json"
+        }   
+        try {
+           $packageSTatus  Invoke-RestMethod @GetParameters  
+            Write-Host ($packageSTatus | Format-List | Out-String)
+        }
+        catch {            
+            Write-Error "Failed gettting package status`r`n$_"               
         }          
 }
 
@@ -561,10 +597,11 @@ if ($PPCitizen -in "yes")
         {
             try {          
                     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
-                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
-
-                    Write-Host ($adminEnvironment | Format-Table | Out-String)
+                    $operationId = New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'    
+                    Write-Output "Operation Id $($operationId)"               
                     Write-Host ($adminEnvironment | Format-List | Out-String)
+                    New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
+
                   <#  try {
                         Write-Output "Enabling managed environment for the Admin environment"
                         Enable-PowerOpsManagedEnvironment -EnvironmentName $adminEnvironment.name -GroupSharingDisabled $true
