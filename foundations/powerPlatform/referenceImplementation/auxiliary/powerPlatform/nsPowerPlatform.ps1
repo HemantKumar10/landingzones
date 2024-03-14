@@ -597,13 +597,13 @@ if ($PPCitizen -in "yes")
     foreach ($envTier in $envTiers) 
     {
         #if($envTier -eq 'dev')
-        {
+        #{
             try {          
 
                    Write-Output "Admin Name: $($Global:envAdminName)" 
                    Write-Output "Admin Name: $($envAdminName)" 
-                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
-                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
+                   $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }
+                   New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor'
                     #Write-Output "Operation Id $($operationId)"
                     #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
                    # New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
@@ -624,7 +624,7 @@ if ($PPCitizen -in "yes")
             catch {
                 Write-Warning "Error installing App`r`n$_"
             }
-        }
+        #}
     }    
     #endregion Install Power Platform Pipeline App in Admin Envrionemnt   
 }
