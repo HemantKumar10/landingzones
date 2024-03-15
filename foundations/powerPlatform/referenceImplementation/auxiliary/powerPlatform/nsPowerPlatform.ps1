@@ -276,29 +276,16 @@ function New-GetApplicationInstallStatus {
                 Start-Sleep -Seconds 15
             } 
             if($packageSTatus.status -eq 'Succeeded'){
-                Write-Output "Application Status Succeeded"   
-                <#foreach ($envTier in $envTiers) 
-                {  
-                    if($envTier -eq 'dev')
-                    {                  
-                      New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType
-                    }
-                    else {
-                      New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType '200000001'
-                    }
-                }#>
+                Write-Output "Application Status Succeeded" 
                
-                 Get-PowerOpsEnvironment | ForEach-Object -Process {
+                Get-PowerOpsEnvironment | Where-Object {$_.name -eq $Global:envAdminName -or $_.name -eq $Global:envTestName -or $_.name -eq $Global:envDevName -or $_.name -eq $Global:envProdName} | ForEach-Object -Process {
                     $envType = '200000001' #Taregt
                     if($_.name -eq $Global:envDevName){
                         $envType = '200000000' #Development 
                     }                    
                     New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $($_.properties.linkedEnvironmentMetadata.instanceApiUrl) -EnvironmentName $($_.properties.displayName) -EnvironmentId $($_.name) -EnvironmentType $envType 
-
-                }                 
-
-
-                #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType         
+                } 
+                      
                 New-CreateDeploymentPipeline -Name "Power Platform Pipeline" -EnvironmentURL $EnvironmentURL 
                 Start-Sleep -Seconds 5
                 $listDeploymentEnvironments =  New-GetDeploymentEnvrionmentRecords -EnvironmentURL $EnvironmentURL
@@ -310,10 +297,12 @@ function New-GetApplicationInstallStatus {
                         New-AssociateDeploymentEnvironmentWithPipeline -DeploymentPipelineId $pipeline.deploymentpipelineid -DeploymentEnvrionmentId $_.deploymentenvironmentid -EnvironmentURL $EnvironmentURL  
                     }
                 }
+                
                 $testEnvrionmentName = $Global:envTestName
                 $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $testEnvrionmentName} | ForEach-Object -Process {
                 New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
                 }
+
                 Start-Sleep -Seconds 5
                 $listDeploymentStages = New-GetDeploymentStageRecords -EnvironmentURL $EnvironmentURL 
                 $prodEnvrionmentName = $Global:envProdName
@@ -927,22 +916,14 @@ if ($PPCitizen -in "yes")
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
     Start-Sleep -Seconds 90           
-    foreach ($envTier in $envTiers) 
-    {
-        #if($envTier -eq 'dev')
-        #{
-            try {          
-
-                   Write-Output "Admin Name: $($Global:envAdminName)"                   
-                   #New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa'
+    
+    If($PPCitizenAlm -eq 'Yes'){
+            try {             
+            
                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
                    Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
-                  # New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa' -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'
-                    #Write-Output "Operation Id $($operationId)"
-                     
-                   # New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $adminEnvironment.name
 
                   <#  try {
                         Write-Output "Enabling managed environment for the Admin environment"
@@ -956,8 +937,8 @@ if ($PPCitizen -in "yes")
             catch {
                 Write-Warning "Error installing App`r`n$_"
             }
-        #}
-    }    
+        }
+     
     #endregion Install Power Platform Pipeline App in Admin Envrionemnt   
 }
 #endregion create landing zones for citizen devs
