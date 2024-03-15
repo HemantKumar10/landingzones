@@ -272,7 +272,8 @@ function New-GetApplicationInstallStatus {
         }   
         try {
             $packageSTatus = Invoke-RestMethod @GetParameters 
-            if ($packageSTatus.status -ne 'Succeeded' -or $packageSTatus.status -ne 'Canceled' -or $packageSTatus.status -ne 'Failed') {            
+            if ($packageSTatus.status -ne 'Succeeded' -or $packageSTatus.status -ne 'Canceled' -or $packageSTatus.status -ne 'Failed') {  
+                Write-Output "Application Status $($packageSTatus.status)"           
                 Start-Sleep -Seconds 15
             } 
             if($packageSTatus.status -eq 'Succeeded'){
@@ -297,7 +298,7 @@ function New-GetApplicationInstallStatus {
                         New-AssociateDeploymentEnvironmentWithPipeline -DeploymentPipelineId $pipeline.deploymentpipelineid -DeploymentEnvrionmentId $_.deploymentenvironmentid -EnvironmentURL $EnvironmentURL  
                     }
                 }
-                
+
                 $testEnvrionmentName = $Global:envTestName
                 $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $testEnvrionmentName} | ForEach-Object -Process {
                 New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
