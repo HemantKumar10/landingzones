@@ -917,12 +917,21 @@ if ($PPCitizen -in "yes")
     }
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
-    Start-Sleep -Seconds 90         
+    #Start-Sleep -Seconds 90         
     
     If($PPCitizenAlm -eq 'Yes'){
-            try {             
+            try { 
+                $adminEnvAttempts = 0
+                do {
+                    $adminEnvAttempts++
+                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
+                    if (-not ($adminEnvironment)) {
+                        Write-Output "Getting Admin environment - attempt $adminEnvAttempts"
+                        Start-Sleep -Seconds 15
+                    }
+                } until ($adminEnvironment -or $adminEnvAttempts -eq 15)
             
-                   $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
+                   #$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
                    Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
@@ -939,8 +948,7 @@ if ($PPCitizen -in "yes")
             catch {
                 Write-Warning "Error installing App`r`n$_"
             }
-        }
-     
+        }     
     #endregion Install Power Platform Pipeline App in Admin Envrionemnt   
 }
 #endregion create landing zones for citizen devs
