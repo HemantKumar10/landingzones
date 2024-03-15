@@ -279,9 +279,9 @@ function New-GetApplicationInstallStatus {
             if($packageSTatus.status -eq 'Succeeded'){
                 Write-Output "Application Status Succeeded" 
                
-                Get-PowerOpsEnvironment | Where-Object {$_.name -eq $Global:envAdminName -or $_.name -eq $Global:envTestName -or $_.name -eq $Global:envDevName -or $_.name -eq $Global:envProdName} | ForEach-Object -Process {
+                Get-PowerOpsEnvironment | Where-Object {$_.properties.displayName -eq $Global:envAdminName -or $_.properties.displayName -eq $Global:envTestName -or $_.properties.displayName -eq $Global:envDevName -or $_.properties.displayName -eq $Global:envProdName} | ForEach-Object -Process {
                     $envType = '200000001' #Taregt
-                    if($_.name -eq $Global:envDevName){
+                    if($_.properties.displayName-eq $Global:envDevName){
                         $envType = '200000000' #Development 
                     }                    
                     New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $($_.properties.linkedEnvironmentMetadata.instanceApiUrl) -EnvironmentName $($_.properties.displayName) -EnvironmentId $($_.name) -EnvironmentType $envType 
@@ -300,16 +300,16 @@ function New-GetApplicationInstallStatus {
                 }
 
                 $testEnvrionmentName = $Global:envTestName
-                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $testEnvrionmentName} | ForEach-Object -Process {
+                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.properties.displayName -eq $testEnvrionmentName} | ForEach-Object -Process {
                 New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
                 }
 
                 Start-Sleep -Seconds 5
                 $listDeploymentStages = New-GetDeploymentStageRecords -EnvironmentURL $EnvironmentURL 
                 $prodEnvrionmentName = $Global:envProdName
-                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $prodEnvrionmentName} | ForEach-Object -Process {
+                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.properties.displayName -eq $prodEnvrionmentName} | ForEach-Object -Process {
                     $previousStage = $listDeploymentStages.value[0].deploymentstageid 
-                    New-CreateDeploymentStages -Name "Deploy to $($_.name)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage $previousStage -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
+                    New-CreateDeploymentStages -Name "Deploy to $($prodEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage $previousStage -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
                 }               
                
 
