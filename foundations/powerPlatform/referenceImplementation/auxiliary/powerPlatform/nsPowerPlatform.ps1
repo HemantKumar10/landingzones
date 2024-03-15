@@ -430,7 +430,7 @@ function New-GetDeploymentEnvrionmentRecords {
         # Declaring the HTTP Post request
         $GetParameters = @{
             "Uri"         = "$($GetEnvironment)"
-            "Method"      = "Get"
+            "Method"      = "GET"
             "Headers"     = $headers
             "ContentType" = "application/json"
         }   
@@ -470,7 +470,7 @@ function New-GetDeploymentPipelineRecords {
         # Declaring the HTTP Post request
         $GetParameters = @{
             "Uri"         = "$($GetEnvironment)"
-            "Method"      = "Post"
+            "Method"      = "GET"
             "Headers"     = $headers
             "ContentType" = "application/json"
         }   
