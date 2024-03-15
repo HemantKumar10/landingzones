@@ -280,7 +280,26 @@ function New-GetApplicationInstallStatus {
                     }
                 }#>
                 New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType
+                Start-Sleep -Seconds 5
                 New-CreateDeploymentPipeline -Name "Landing Zones Pipeline" -EnvironmentURL $EnvironmentURL 
+                Start-Sleep -Seconds 10
+                $listDeploymentEnvironments =  New-GetDeploymentEnvrionmentRecords -EnvironmentURL $EnvironmentURL
+                Start-Sleep -Seconds 10
+                $listDeploymentPipelines = New-GetDeploymentPipelineRecords -EnvironmentURL $EnvironmentURL 
+
+                foreach($pipeline in $listDeploymentPipelines.value){
+                    $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000000} | ForEach-Object -Process {
+                        New-AssociateDeploymentEnvironmentWithPipeline -DeploymentPipelineId $pipeline.deploymentpipelineid -DeploymentEnvrionmentId $_.deploymentenvironmentid -EnvironmentURL $EnvironmentURL  
+                    }
+                }
+                $testEnvrionmentName = $Global:envAdminName
+                $listDeploymentEnvironments.value | Where-Object {$_.name -eq $testEnvrionmentName} | ForEach-Object -Process {
+                New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
+                }
+
+                
+               
+
             }
            #Write-Host ($packageSTatus | Format-List | Out-String)
         }
@@ -338,13 +357,15 @@ function New-CreateDeploymentEnvrionmentRecord {
         try {
             $outputDeploymentEnvironment = Invoke-RestMethod @PostParameters  
             Write-Output "Deployment Envrionment Created $($EnvironmentName)"
-            Write-Host ($outputDeploymentEnvironment | Format-List | Out-String)
+            #Write-Host ($outputDeploymentEnvironment | Format-List | Out-String)
        
         }
         catch {            
             Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
         }          
 }
+
+
 
 function New-CreateDeploymentPipeline {
     param (      
@@ -374,13 +395,92 @@ function New-CreateDeploymentPipeline {
             "Body"        = $postBody | ConvertTo-json -Depth 100
         }  
         try {
-            $outputDeploymentPipeline = Invoke-RestMethod @PostParameters  
-            Write-Output "Deployment Pipeline record created: $($Name)"
-            Write-Host ($outputDeploymentPipeline | Format-List | Out-String)
+            Invoke-RestMethod @PostParameters  
+            Write-Output "Deployment Pipeline record created: $($Name)"        
             #New-CreateDeploymentStages -Name 'Prodcution - Deployment Statge' -DeploymentPipeline '' -PreviousStage '' -TargetDeploymentEnvironment '' -EnvironmentURL '' -Token $Token 
         }
         catch {            
             Write-Error "Deployment Pipeline record creation: $($Name) failed`r`n$_"               
+        }          
+}
+
+function New-GetDeploymentEnvrionmentRecords {
+    param (      
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL      
+        
+    ) 
+        # Code Begins
+     
+        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+        # Power Platform HTTP Post Environment Uri
+        $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"   
+        # Declare Rest headers
+        $Headers = @{
+            "Content-Type"  = "application/json"
+            "Authorization" = "Bearer $($Token)"
+        }
+       <# $Headers = @{            
+            "Authorization" = "Bearer $($Token)"
+            "OData-MaxVersion" = 4.0
+            "OData-Version" = 4.0
+            "Accept" = "application/json"
+            "Content-Type" = "application/json; charset=utf-8"
+            "Prefer" = "odata.include-annotations='*',return=representation"
+        } #>
+        # Declaring the HTTP Post request
+        $GetParameters = @{
+            "Uri"         = "$($GetEnvironment)"
+            "Method"      = "Get"
+            "Headers"     = $headers
+            "ContentType" = "application/json"
+        }   
+        try {
+            $outputDeploymentEnvironments = Invoke-RestMethod @GetParameters 
+            return $outputDeploymentEnvironments          
+       
+        }
+        catch {            
+            Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
+        }          
+}
+
+function New-GetDeploymentPipelineRecords {
+    param (      
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
+    ) 
+        # Code Begins    
+        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+        # Power Platform HTTP Post Environment Uri
+        $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines" 
+
+        # Declare Rest headers
+        # Declare Rest headers
+        $Headers = @{
+            "Content-Type"  = "application/json"
+            "Authorization" = "Bearer $($Token)"
+        }
+       <# $Headers = @{            
+            "Authorization" = "Bearer $($Token)"
+            "OData-MaxVersion" = 4.0
+            "OData-Version" = 4.0
+            "Accept" = "application/json"
+            "Content-Type" = "application/json; charset=utf-8"
+            "Prefer" = "odata.include-annotations='*',return=representation"
+        } #>
+        # Declaring the HTTP Post request
+        $GetParameters = @{
+            "Uri"         = "$($GetEnvironment)"
+            "Method"      = "Post"
+            "Headers"     = $headers
+            "ContentType" = "application/json"
+        }   
+        try {
+            $outputDeploymentPipelines = Invoke-RestMethod @GetParameters  
+            return $outputDeploymentPipelines
+       
+        }
+        catch {            
+            Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
         }          
 }
 
@@ -429,19 +529,33 @@ function New-CreateDeploymentStages {
         [Parameter(Mandatory = $true)][string]$DeploymentPipeline,
         [Parameter(Mandatory = $true)][string]$PreviousStage,
         [Parameter(Mandatory = $true)][string]$TargetDeploymentEnvironment,
-        [Parameter(Mandatory = $true)][string]$EnvironmentURL,
-        [Parameter(Mandatory = $true)][string]$Token
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
         # Code Begins
         # Get token to authenticate to Power Platform
         # Power Platform HTTP Post Environment Uri
-        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages"           
-        
+          $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+           $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages"    
+         
            $PostBody = @{
             "name" = "$($Name)"
             "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
-            "previousdeploymentstageid@odata.bind" = "/deploymentstages($PreviousStage)"
             "deploymentpipelineid@odata.bind" = "/deploymentpipelines($DeploymentPipeline)"
+            }
+            if($PreviousStage -eq 'Null'){
+                $PostBody = @{
+                    "name" = "$($Name)"
+                    "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
+                    "deploymentpipelineid@odata.bind" = "/deploymentpipelines($DeploymentPipeline)"
+                    }
+            }
+            else {
+                $PostBody = @{
+                    "name" = "$($Name)"
+                    "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
+                    "previousdeploymentstageid@odata.bind" = "/deploymentstages($PreviousStage)"
+                    "deploymentpipelineid@odata.bind" = "/deploymentpipelines($DeploymentPipeline)"
+                    }
             }
 
             # Declare Rest headers
