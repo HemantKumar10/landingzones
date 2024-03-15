@@ -38,9 +38,12 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
-$envTiers = 'admin'
+$envTiers = 'admin','dev','test','prod'
 
 $Global:envAdminName = ''
+$Global:envTestName = ''
+$Global:envDevName = ''
+$Global:envProdName = ''
 
 #region supporting functions
 function New-EnvironmentCreationObject {
@@ -64,18 +67,21 @@ function New-EnvironmentCreationObject {
                 $securityGroupId = $createdSecurityGroup
                 $envSku = 'Sandbox'  
                 $envDescription = 'Environment used for development purposes'
+                $Global:envDevName =  "{0}-{1}" -f $environmentName, $envTier    
             }
             if ( $envTier -eq 'test' ){
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType test
                 $securityGroupId = $createdSecurityGroup
                 $envSku = 'Sandbox'  
                 $envDescription = 'Environment used for testing purposes'
+                $Global:envTestName =  "{0}-{1}" -f $environmentName, $envTier      
             }
             if ( $envTier -eq 'prod' ){
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType prod
                 $securityGroupId = $createdSecurityGroup
                 $envSku ='Production'      
-                $envDescription = 'Environment used for production purposes'               
+                $envDescription = 'Environment used for production purposes' 
+                $Global:envProdName =  "{0}-{1}" -f $environmentName, $envTier                  
             }
             if ( $envTier -eq 'admin' ){
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType admin
@@ -281,8 +287,19 @@ function New-GetApplicationInstallStatus {
                       New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType '200000001'
                     }
                 }#>
-                New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType         
-                New-CreateDeploymentPipeline -Name "Landing Zones Pipeline" -EnvironmentURL $EnvironmentURL 
+               
+                 Get-PowerOpsEnvironment | ForEach-Object -Process {
+                    $envType = '200000001' #Taregt
+                    if($_.name -eq $Global:envDevName){
+                        $envType = '200000000' #Development 
+                    }                    
+                    New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $($_.properties.linkedEnvironmentMetadata.instanceApiUrl) -EnvironmentName $($_.properties.displayName) -EnvironmentId $($_.name) -EnvironmentType $envType 
+
+                }                 
+
+
+                #New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType         
+                New-CreateDeploymentPipeline -Name "Power Platform Pipeline" -EnvironmentURL $EnvironmentURL 
                 Start-Sleep -Seconds 5
                 $listDeploymentEnvironments =  New-GetDeploymentEnvrionmentRecords -EnvironmentURL $EnvironmentURL
                 Start-Sleep -Seconds 5
@@ -293,12 +310,17 @@ function New-GetApplicationInstallStatus {
                         New-AssociateDeploymentEnvironmentWithPipeline -DeploymentPipelineId $pipeline.deploymentpipelineid -DeploymentEnvrionmentId $_.deploymentenvironmentid -EnvironmentURL $EnvironmentURL  
                     }
                 }
-                $testEnvrionmentName = $Global:envAdminName
-                $listDeploymentEnvironments.value | Where-Object {$_.name -eq $testEnvrionmentName} | ForEach-Object -Process {
+                $testEnvrionmentName = $Global:envTestName
+                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $testEnvrionmentName} | ForEach-Object -Process {
                 New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
                 }
-
-                
+                Start-Sleep -Seconds 5
+                $listDeploymentStages = New-GetDeploymentStageRecords -EnvironmentURL $EnvironmentURL 
+                $prodEnvrionmentName = $Global:envProdName
+                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $prodEnvrionmentName} | ForEach-Object -Process {
+                    $previousStage = $listDeploymentStages.value[0].deploymentstageid 
+                    New-CreateDeploymentStages -Name "Deploy to $($_.name)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage $previousStage -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
+                }               
                
 
             }
@@ -356,7 +378,7 @@ function New-CreateDeploymentEnvrionmentRecord {
             "Body"        = $postBody | ConvertTo-json -Depth 100
         }   
         try {
-            $outputDeploymentEnvironment = Invoke-RestMethod @PostParameters  
+            Invoke-RestMethod @PostParameters  
             Write-Output "Deployment Envrionment Created $($EnvironmentName)"
             #Write-Host ($outputDeploymentEnvironment | Format-List | Out-String)
        
@@ -441,7 +463,7 @@ function New-GetDeploymentEnvrionmentRecords {
        
         }
         catch {            
-            Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
+            Write-Error "Get Deployment Envrionment $($EnvironmentName) failed`r`n$_"               
         }          
 }
 
@@ -481,7 +503,40 @@ function New-GetDeploymentPipelineRecords {
        
         }
         catch {            
-            Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
+            Write-Error "Get Deployment Pipeline $($EnvironmentName) failed`r`n$_"               
+        }          
+}
+
+function New-GetDeploymentStageRecords {
+    param (      
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
+    ) 
+        # Code Begins    
+        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+        # Power Platform HTTP Post Environment Uri
+        $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages" 
+
+        # Declare Rest headers
+        # Declare Rest headers
+        $Headers = @{
+            "Content-Type"  = "application/json"
+            "Authorization" = "Bearer $($Token)"
+        }
+     
+        # Declaring the HTTP Post request
+        $GetParameters = @{
+            "Uri"         = "$($GetEnvironment)"
+            "Method"      = "GET"
+            "Headers"     = $headers
+            "ContentType" = "application/json"
+        }   
+        try {
+            $outputDeploymentStages = Invoke-RestMethod @GetParameters  
+            return $outputDeploymentStages
+       
+        }
+        catch {            
+            Write-Error "Get Deployment Stage $($EnvironmentName) failed`r`n$_"               
         }          
 }
 
