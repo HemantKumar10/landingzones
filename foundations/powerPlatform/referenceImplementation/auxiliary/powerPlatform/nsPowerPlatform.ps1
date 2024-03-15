@@ -219,7 +219,8 @@ function New-InstallPackaggeToEnvironment {
         try {
             $outputPackage = Invoke-RestMethod @PostParameters 
             $operationId =  $outputPackage.lastOperation.operationId  
-            Write-Output "Application Installation $($PackageName) in progress"   
+            Write-Output "Application Installation $($PackageName) in progress"  
+            Start-Sleep -Seconds 30   
             New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'         
             #Write-Host ($outputPackage | Format-List | Out-String)
             #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
@@ -320,7 +321,7 @@ function New-GetApplicationInstallStatus {
             Write-Error "Failed gettting package status`r`n$_"               
         } 
 
-     } until ($packageSTatus.status -eq 'Succeeded' -or $packageSTatus.status -eq 'Canceled' -or $packageSTatus.status -eq 'Failed' -or $getApplicationAttempt -eq 15)
+     } until ($packageSTatus.status -eq 'Succeeded' -or $packageSTatus.status -eq 'Canceled' -or $packageSTatus.status -eq 'Failed' -or $getApplicationAttempt -eq 20)
 }
 
 function New-CreateDeploymentEnvrionmentRecord {
@@ -916,7 +917,7 @@ if ($PPCitizen -in "yes")
     }
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
-    Start-Sleep -Seconds 90           
+    Start-Sleep -Seconds 70          
     
     If($PPCitizenAlm -eq 'Yes'){
             try {             
