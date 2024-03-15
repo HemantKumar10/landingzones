@@ -213,7 +213,7 @@ function New-InstallPackaggeToEnvironment {
         try {
             $outputPackage = Invoke-RestMethod @PostParameters 
             $operationId =  $outputPackage.lastOperation.operationId  
-            Write-Output "Application Installation $($PackageName) $($operationId) in progress"   
+            Write-Output "Application Installation $($PackageName) in progress"   
             New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'         
             #Write-Host ($outputPackage | Format-List | Out-String)
             #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
@@ -268,6 +268,7 @@ function New-GetApplicationInstallStatus {
                 Start-Sleep -Seconds 15
             } 
             if($packageSTatus.status -eq 'Succeeded'){
+                Write-Output "Application Status Succeeded"   
                 <#foreach ($envTier in $envTiers) 
                 {  
                     if($envTier -eq 'dev')
@@ -766,7 +767,7 @@ if ($PPCitizen -in "yes")
                    #New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa'
                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
                    Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
-                   New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl
+                   New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
                   # New-GetApplicationInstallStatus -OperationId 'bade46d3-f1e6-412a-a049-db6ba5edb363' -EnvironmentId 'f37a43d6-3977-e37a-a788-589eb9da7baa' -EnvironmentURL $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'
                     #Write-Output "Operation Id $($operationId)"
