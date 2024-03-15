@@ -239,6 +239,8 @@ function New-GetApplicationInstallStatus {
     ) 
 
        $getApplicationAttempt = 0
+
+       Write-Output "Checking Application Status"   
      do{
         $getApplicationAttempt++
           # Code Begins
@@ -279,12 +281,11 @@ function New-GetApplicationInstallStatus {
                       New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType '200000001'
                     }
                 }#>
-                New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType
-                Start-Sleep -Seconds 5
+                New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $EnvironmentName -EnvironmentId $EnvironmentId -EnvironmentType $EnvironmentType         
                 New-CreateDeploymentPipeline -Name "Landing Zones Pipeline" -EnvironmentURL $EnvironmentURL 
-                Start-Sleep -Seconds 10
+                Start-Sleep -Seconds 5
                 $listDeploymentEnvironments =  New-GetDeploymentEnvrionmentRecords -EnvironmentURL $EnvironmentURL
-                Start-Sleep -Seconds 10
+                Start-Sleep -Seconds 5
                 $listDeploymentPipelines = New-GetDeploymentPipelineRecords -EnvironmentURL $EnvironmentURL 
 
                 foreach($pipeline in $listDeploymentPipelines.value){
