@@ -220,7 +220,7 @@ function New-InstallPackaggeToEnvironment {
             $outputPackage = Invoke-RestMethod @PostParameters 
             $operationId =  $outputPackage.lastOperation.operationId  
             Write-Output "Application Installation $($PackageName) in progress"  
-            Start-Sleep -Seconds 30   
+            Start-Sleep -Seconds 15   
             New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'         
             #Write-Host ($outputPackage | Format-List | Out-String)
             #New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId
@@ -917,7 +917,7 @@ if ($PPCitizen -in "yes")
     }
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
-    Start-Sleep -Seconds 70          
+    Start-Sleep -Seconds 90         
     
     If($PPCitizenAlm -eq 'Yes'){
             try {             
