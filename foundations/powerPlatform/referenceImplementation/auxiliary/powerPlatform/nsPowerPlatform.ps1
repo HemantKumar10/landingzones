@@ -38,7 +38,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
-$envTiers = 'admin','dev','test','prod'
+$envTiers = 'admin','dev'
 
 $Global:envAdminName = ''
 $Global:envTestName = ''
@@ -926,7 +926,7 @@ if ($PPCitizen -in "yes")
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
-                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  |  Select-Object -Property $_.Properties.linkedEnvironmentMetadata,$_.Properties.name
+                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName } 
                     if (-not ($adminEnvironment)) {
                         Write-Output "Getting Admin environment - attempt $adminEnvAttempts"
                         Start-Sleep -Seconds 15
