@@ -926,7 +926,7 @@ if ($PPCitizen -in "yes")
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
-                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName } 
+                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq 'Graph-admin' } 
                     if (-not ($adminEnvironment) -or $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '') {
                         Write-Output "Getting Admin environment - attempt $adminEnvAttempts"
                         Start-Sleep -Seconds 15
