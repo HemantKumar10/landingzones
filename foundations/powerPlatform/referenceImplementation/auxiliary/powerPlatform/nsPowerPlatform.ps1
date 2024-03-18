@@ -314,7 +314,7 @@ function New-GetApplicationInstallStatus {
                     }
                   } until ( $fetchTestEnv.properties.provisioningState -eq 'Succeeded' -or $getTestEnvAttempts -eq 20)
                  #End Region Check the test Environment is Successfully created or not
-
+ 
 
                    #Region Check the Prod Environment is Successfully created or not
                    $getProdEnvAttempts =0
@@ -334,6 +334,10 @@ function New-GetApplicationInstallStatus {
 
 
 
+                #Create Deployment Environment Record for Admin
+                $adminEnvDetails = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envAdminName }     
+                $envType = '200000001' #Taregt 
+                New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($adminEnvDetails.properties.displayName) -EnvironmentId $($adminEnvDetails.name) -EnvironmentType $envType 
 
                <# Get-PowerOpsEnvironment | Where-Object {$_.properties.displayName -eq $Global:envAdminName -or $_.properties.displayName -eq $Global:envTestName -or $_.properties.displayName -eq $Global:envDevName -or $_.properties.displayName -eq $Global:envProdName} | ForEach-Object -Process {
                     $envType = '200000001' #Taregt
@@ -355,18 +359,26 @@ function New-GetApplicationInstallStatus {
                     }
                 }
 
+                Write-Host ($listDeploymentEnvironments | Format-List | Out-String)
+
                 $testEnvrionmentName = $Global:envTestName
+                foreach($pipeline in $listDeploymentPipelines.value){
                 $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.properties.displayName -eq $testEnvrionmentName} | ForEach-Object -Process {
+                    Write-Output "Deployment Statge data found"
                 New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
                 }
+            }
 
                 Start-Sleep -Seconds 5
+                foreach($pipeline in $listDeploymentPipelines.value){
                 $listDeploymentStages = New-GetDeploymentStageRecords -EnvironmentURL $EnvironmentURL 
                 $prodEnvrionmentName = $Global:envProdName
                 $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.properties.displayName -eq $prodEnvrionmentName} | ForEach-Object -Process {
+                    Write-Output "Deployment Statge prev found"
                     $previousStage = $listDeploymentStages.value[0].deploymentstageid 
                     New-CreateDeploymentStages -Name "Deploy to $($prodEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage $previousStage -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
-                }               
+                }  
+            }             
                
 
             }
