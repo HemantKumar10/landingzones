@@ -285,7 +285,7 @@ function New-GetApplicationInstallStatus {
                     if($_.properties.displayName-eq $Global:envDevName){
                         $envType = '200000000' #Development 
                     }                    
-                    New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $($_.properties.linkedEnvironmentMetadata.instanceApiUrl) -EnvironmentName $($_.properties.displayName) -EnvironmentId $($_.name) -EnvironmentType $envType 
+                    New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($_.properties.displayName) -EnvironmentId $($_.name) -EnvironmentType $envType 
                 } 
                       
                 New-CreateDeploymentPipeline -Name "Power Platform Pipeline" -EnvironmentURL $EnvironmentURL 
