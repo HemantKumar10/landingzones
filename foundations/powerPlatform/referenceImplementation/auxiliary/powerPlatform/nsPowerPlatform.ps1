@@ -921,6 +921,8 @@ if ($PPCitizen -in "yes")
     
     If($PPCitizenAlm -eq 'Yes'){
             try { 
+                Write-Output "Admin: $Global:envAdminName"  
+                Write-Output "Admin: $envAdminName"  
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
@@ -929,7 +931,11 @@ if ($PPCitizen -in "yes")
                         Write-Output "Getting Admin environment - attempt $adminEnvAttempts"
                         Start-Sleep -Seconds 15
                     }
+                    else {
+                        Write-Output "Admin Id: $adminEnvironment.name   attempt $($adminEnvAttempts)"  
+                    }
                 } until ($adminEnvironment -or $adminEnvAttempts -eq 15)
+                 Write-Output "Admin Name: $Global:envAdminName"  
             
                    #$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
                    Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
