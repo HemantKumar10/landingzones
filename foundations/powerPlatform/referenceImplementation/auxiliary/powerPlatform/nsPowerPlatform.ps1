@@ -280,13 +280,68 @@ function New-GetApplicationInstallStatus {
             if($packageSTatus.status -eq 'Succeeded'){
                 Write-Output "Application Status Succeeded" 
                 Start-Sleep -Seconds 5
-                Get-PowerOpsEnvironment | Where-Object {$_.properties.displayName -eq $Global:envAdminName -or $_.properties.displayName -eq $Global:envTestName -or $_.properties.displayName -eq $Global:envDevName -or $_.properties.displayName -eq $Global:envProdName} | ForEach-Object -Process {
+
+
+
+                #Region Check the Dev Environment is Successfully created or not
+                 $getdevEnvAttempts =0
+                 do {
+                    $getdevEnvAttempts++
+                   $fetchDevEnv =  Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envDevName} 
+                   if ($fetchDevEnv.properties.provisioningState -ne 'Succeeded' ) {
+                       Write-Output "Getting Dev environment - attempt $getdevEnvAttempts"
+                       Start-Sleep -Seconds 15
+                   }
+                   else {
+                    $envType = '200000000' #Development 
+                    New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchDevEnv.properties.displayName) -EnvironmentId $($fetchDevEnv.name) -EnvironmentType $envType 
+                   }
+                 } until ( $fetchDevEnv.properties.provisioningState -eq 'Succeeded' -or $getdevEnvAttempts -eq 20)
+                #End Region Check the Dev Environment is Successfully created or not
+
+                #Region Check the test Environment is Successfully created or not
+                  $getTestEnvAttempts =0
+                  do {
+                     $getTestEnvAttempts++
+                    $fetchTestEnv =  Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envTestName} 
+                    if ($fetchTestEnv.properties.provisioningState -ne 'Succeeded' ) {
+                        Write-Output "Getting Test environment - attempt $getTestEnvAttempts"
+                        Start-Sleep -Seconds 15
+                    }
+                    else {
+                     $envType = '200000001' #Taregt 
+                     New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchTestEnv.properties.displayName) -EnvironmentId $($fetchTestEnv.name) -EnvironmentType $envType 
+                    }
+                  } until ( $fetchTestEnv.properties.provisioningState -eq 'Succeeded' -or $getTestEnvAttempts -eq 20)
+                 #End Region Check the test Environment is Successfully created or not
+
+
+                   #Region Check the Prod Environment is Successfully created or not
+                   $getProdEnvAttempts =0
+                   do {
+                      $getProdEnvAttempts++
+                     $fetchProdEnv =  Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envProdName} 
+                     if ($fetchProdEnv.properties.provisioningState -ne 'Succeeded' ) {
+                         Write-Output "Getting Production environment - attempt $getProdEnvAttempts"
+                         Start-Sleep -Seconds 15
+                     }
+                     else {
+                      $envType = '200000001' #Taregt 
+                      New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchProdEnv.properties.displayName) -EnvironmentId $($fetchProdEnv.name) -EnvironmentType $envType 
+                     }
+                   } until ( $fetchProdEnv.properties.provisioningState -eq 'Succeeded' -or $getProdEnvAttempts -eq 20)
+                  #End Region Check the Prod Environment is Successfully created or not
+
+
+
+
+               <# Get-PowerOpsEnvironment | Where-Object {$_.properties.displayName -eq $Global:envAdminName -or $_.properties.displayName -eq $Global:envTestName -or $_.properties.displayName -eq $Global:envDevName -or $_.properties.displayName -eq $Global:envProdName} | ForEach-Object -Process {
                     $envType = '200000001' #Taregt
                     if($_.properties.displayName-eq $Global:envDevName){
                         $envType = '200000000' #Development 
                     }                    
                     New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($_.properties.displayName) -EnvironmentId $($_.name) -EnvironmentType $envType 
-                } 
+                } #>
                       
                 New-CreateDeploymentPipeline -Name "Power Platform Pipeline" -EnvironmentURL $EnvironmentURL 
                 Start-Sleep -Seconds 5
@@ -338,7 +393,7 @@ function New-CreateDeploymentEnvrionmentRecord {
         # Power Platform HTTP Post Environment Uri
         $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
         
-        Write-Output "Token $($Token)"
+        #Write-Output "Token $($Token)"
         Write-Output " Envrionment URL $($PostEnvironment)"
         # Declare Rest headers
         $PostBody = @{           
@@ -940,7 +995,10 @@ if ($PPCitizen -in "yes")
                    Write-Output "Admin Url: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"   
                    if ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                     New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                   }               
+                   }  
+                   else {
+                    Write-Output "Admin Environment is not ready or URL is empty"   
+                   }             
                 
 
 
