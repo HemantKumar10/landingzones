@@ -38,7 +38,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
-$envTiers = 'admin','dev'
+$envTiers = 'admin','dev','test','prod'
 
 $Global:envAdminName = ''
 $Global:envTestName = ''
@@ -279,7 +279,7 @@ function New-GetApplicationInstallStatus {
             } 
             if($packageSTatus.status -eq 'Succeeded'){
                 Write-Output "Application Status Succeeded" 
-               
+                Start-Sleep -Seconds 5
                 Get-PowerOpsEnvironment | Where-Object {$_.properties.displayName -eq $Global:envAdminName -or $_.properties.displayName -eq $Global:envTestName -or $_.properties.displayName -eq $Global:envDevName -or $_.properties.displayName -eq $Global:envProdName} | ForEach-Object -Process {
                     $envType = '200000001' #Taregt
                     if($_.properties.displayName-eq $Global:envDevName){
