@@ -927,14 +927,14 @@ if ($PPCitizen -in "yes")
                 do {
                     $adminEnvAttempts++
                     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName } 
-                    if (-not ($adminEnvironment)) {
+                    if (-not ($adminEnvironment) -or $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '') {
                         Write-Output "Getting Admin environment - attempt $adminEnvAttempts"
                         Start-Sleep -Seconds 15
                     }
                     else {
                         Write-Output "Admin Id: $($adminEnvironment.name)   attempt $($adminEnvAttempts)"  
                     }
-                } until ($adminEnvironment -or $adminEnvAttempts -eq 15)
+                } until ( ($adminEnvironment -and $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -ne '') -or $adminEnvAttempts -eq 15)
                     Write-Host ($adminEnvironment | Format-List | Out-String)     
                    #$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
                    Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
