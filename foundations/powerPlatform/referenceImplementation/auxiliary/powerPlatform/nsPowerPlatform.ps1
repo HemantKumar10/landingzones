@@ -920,25 +920,28 @@ if ($PPCitizen -in "yes")
     #Start-Sleep -Seconds 90         
     
     If($PPCitizenAlm -eq 'Yes'){
-            try { 
-                Write-Output "Admin: $Global:envAdminName"  
+            try {                
                 Write-Output "Admin: $envAdminName"  
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
                     $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }                    
-                    if ($null -eq $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '') {
+                    if ($null -eq $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
+                    $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '' -or 
+                    $adminEnvironment.properties.provisioningState -ne 'Succeeded' ) {
                         Write-Output "Getting Admin environment - attempt $adminEnvAttempts"
                         Start-Sleep -Seconds 15
                     }
                     else {
                         Write-Output "Admin Id: $($adminEnvironment.name)   attempt $($adminEnvAttempts)"  
                     }
-                  } until ( $null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or $adminEnvAttempts -eq 15)
-                   Write-Host ($adminEnvironment | Format-List | Out-String)     
-                   #$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
-                   Write-Output "Admin Url: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
-                   New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                  } until ( ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $adminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 15)
+                   Write-Host ($adminEnvironment | Format-List | Out-String)  
+                   Write-Output "Admin Url: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"   
+                   if ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
+                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                   }               
+                
 
 
                   <#  try {
