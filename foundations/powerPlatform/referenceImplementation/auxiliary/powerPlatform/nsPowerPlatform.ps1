@@ -935,8 +935,7 @@ if ($PPCitizen -in "yes")
                         Write-Output "Admin Id: $adminEnvironment.name   attempt $($adminEnvAttempts)"  
                     }
                 } until ($adminEnvironment -or $adminEnvAttempts -eq 15)
-                 Write-Output "Admin Name: $Global:envAdminName"  
-            
+                    Write-Host ($adminEnvironment | Format-List | Out-String)     
                    #$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
                    Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
