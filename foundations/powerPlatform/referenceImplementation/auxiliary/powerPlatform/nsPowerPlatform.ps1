@@ -358,12 +358,11 @@ function New-GetApplicationInstallStatus {
                         New-AssociateDeploymentEnvironmentWithPipeline -DeploymentPipelineId $pipeline.deploymentpipelineid -DeploymentEnvrionmentId $_.deploymentenvironmentid -EnvironmentURL $EnvironmentURL  
                     }
                 }
-
-                Write-Host ($listDeploymentEnvironments | Format-List | Out-String)
+                
 
                 $testEnvrionmentName = $Global:envTestName
                 foreach($pipeline in $listDeploymentPipelines.value){
-                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.properties.displayName -eq $testEnvrionmentName} | ForEach-Object -Process {
+                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $testEnvrionmentName} | ForEach-Object -Process {
                     Write-Output "Deployment Statge data found"
                 New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
                 }
@@ -373,7 +372,7 @@ function New-GetApplicationInstallStatus {
                 foreach($pipeline in $listDeploymentPipelines.value){
                 $listDeploymentStages = New-GetDeploymentStageRecords -EnvironmentURL $EnvironmentURL 
                 $prodEnvrionmentName = $Global:envProdName
-                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.properties.displayName -eq $prodEnvrionmentName} | ForEach-Object -Process {
+                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $prodEnvrionmentName} | ForEach-Object -Process {
                     Write-Output "Deployment Statge prev found"
                     $previousStage = $listDeploymentStages.value[0].deploymentstageid 
                     New-CreateDeploymentStages -Name "Deploy to $($prodEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage $previousStage -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
@@ -686,9 +685,8 @@ function New-CreateDeploymentStages {
                 "Body"        = $postBody | ConvertTo-json -Depth 100
             }  
             try {
-                $outputDeploymentPipeline = Invoke-RestMethod @PostParameters  
+                Invoke-RestMethod @PostParameters  
                 Write-Output "Deployment Statge record created: $($Name)"
-                Write-Host ($outputDeploymentPipeline | Format-List | Out-String)
             }
             catch {            
                 Write-Error "Deployment Statge record creation: $($Name) failed`r`n$_"               
@@ -967,7 +965,7 @@ if ($PPCitizen -in "yes")
         
             try {
                 $response = Invoke-RestMethod @PostParameters   
-                Write-Host ($response | Format-List | Out-String)                            
+                #Write-Host ($response | Format-List | Out-String)                            
             }
             catch {
                 Write-Error "Creation of citizen Environment $($envCreationHt.Name) failed`r`n$_"
@@ -1003,7 +1001,7 @@ if ($PPCitizen -in "yes")
                         Write-Output "Admin Id: $($adminEnvironment.name)   attempt $($adminEnvAttempts)"  
                     }
                   } until ( ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $adminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 20)
-                   Write-Host ($adminEnvironment | Format-List | Out-String)  
+                  # Write-Host ($adminEnvironment | Format-List | Out-String)  
                    Write-Output "Admin Url: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"   
                    if ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                     New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
