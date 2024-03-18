@@ -926,18 +926,18 @@ if ($PPCitizen -in "yes")
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
-                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq 'Graph-admin' } 
-                    if (-not ($adminEnvironment) -or $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '') {
+                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }                    
+                    if ($null -eq $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '') {
                         Write-Output "Getting Admin environment - attempt $adminEnvAttempts"
                         Start-Sleep -Seconds 15
                     }
                     else {
                         Write-Output "Admin Id: $($adminEnvironment.name)   attempt $($adminEnvAttempts)"  
                     }
-                } until ( ($adminEnvironment -and $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -ne '') -or $adminEnvAttempts -eq 15)
-                    Write-Host ($adminEnvironment | Format-List | Out-String)     
+                  } until ( $null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or $adminEnvAttempts -eq 15)
+                   Write-Host ($adminEnvironment | Format-List | Out-String)     
                    #$adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }  
-                   Write-Output "Admin Name: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
+                   Write-Output "Admin Url: $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)"                  
                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
 
