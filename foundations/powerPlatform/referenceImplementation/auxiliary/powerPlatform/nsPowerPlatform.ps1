@@ -38,7 +38,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
-$envTiers = 'admin'
+$envTiers = 'admin','dev'
 
 $Global:envAdminName = ''
 $Global:envTestName = ''
@@ -201,6 +201,9 @@ function New-InstallPackaggeToEnvironment {
         # Code Begins
         # Get token to authenticate to Power Platform
         
+        $EnvToken = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+        Write-Output "Env TOken $($EnvToken)"
+
         $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
         # Power Platform HTTP Post Environment Uri
         $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
@@ -893,22 +896,31 @@ if ($PPCitizen -in "yes")
                 EnvSku             = $environment.envSKu                                           
             }  
 
-
-           try {
-            $User = Get-AzADuser    
+           <#
+            try {
+            $User = Get-AzADuser | Where-Object {$_.DisplayName -eq 'PowerPlatform Admin' }  
             Write-Host ($User | Format-List | Out-String) 
+
+           # $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName } 
+
             foreach($u in $User){
-            Add-AdminPowerAppsSyncUser -EnvironmentName 'e2342bc1-3545-e79d-88d4-7d862ad674a0' -PrincipalObjectId $u.ObjectId
+            Add-AdminPowerAppsSyncUser -EnvironmentName 'e2342bc1-3545-e79d-88d4-7d862ad674a0' -PrincipalObjectId $u.ObjectId 
             }
            }
            catch {
             Write-Output "'`r`n$_'"  
            }
+           #>
+          
 
+
+            Set-AdminPowerAppEnvironmentBackupRetentionPeriod -EnvironmentName 'e2342bc1-3545-e79d-88d4-7d862ad674a0' NewBackupRetentionPeriodInDays 28
             Write-Output "Create Environment: $($envCreationHt.Name)" 
                                    
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token   
+
+            Write-Output "TOken $($Token)"
 
             # Power Platform API base Uri
             $BaseUri = "https://api.bap.microsoft.com"            
