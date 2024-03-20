@@ -910,12 +910,11 @@ if ($PPCitizen -in "yes")
            catch {
             Write-Output "'`r`n$_'"  
            }
-           #>
-          
+           #>          
 
 
-            Set-AdminPowerAppEnvironmentBackupRetentionPeriod -EnvironmentName 'e2342bc1-3545-e79d-88d4-7d862ad674a0' NewBackupRetentionPeriodInDays 28
-            Write-Output "Create Environment: $($envCreationHt.Name)" 
+            #Set-AdminPowerAppEnvironmentBackupRetentionPeriod -EnvironmentName 'e2342bc1-3545-e79d-88d4-7d862ad674a0' NewBackupRetentionPeriodInDays 28
+            #Write-Output "Create Environment: $($envCreationHt.Name)" 
                                    
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token   
