@@ -895,10 +895,10 @@ if ($PPCitizen -in "yes")
 
 
            try {
-            $User = Get-AzureADuser    
+            $User = Get-AzADuser    
             Write-Host ($User | Format-List | Out-String) 
             foreach($u in $User){
-            Add-AdminPowerAppsSyncUser -EnvironmentName '2fc307af-b677-e264-b055-3f88582302a3' -PrincipalObjectId $u.ObjectId
+            Add-AdminPowerAppsSyncUser -EnvironmentName 'e2342bc1-3545-e79d-88d4-7d862ad674a0' -PrincipalObjectId $u.ObjectId
             }
            }
            catch {
