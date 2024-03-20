@@ -38,7 +38,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
-$envTiers = 'admin','dev','test','prod'
+$envTiers = 'admin'
 
 $Global:envAdminName = ''
 $Global:envTestName = ''
@@ -893,6 +893,18 @@ if ($PPCitizen -in "yes")
                 EnvSku             = $environment.envSKu                                           
             }  
 
+
+           try {
+            $User = Get-AzureADuser    
+            Write-Host ($User | Format-List | Out-String) 
+            foreach($u in $User){
+            Add-AdminPowerAppsSyncUser -EnvironmentName '2fc307af-b677-e264-b055-3f88582302a3' -PrincipalObjectId $u.ObjectId
+            }
+           }
+           catch {
+            Write-Output "'`r`n$_'"  
+           }
+
             Write-Output "Create Environment: $($envCreationHt.Name)" 
                                    
             # Get token to authenticate to Power Platform
@@ -972,7 +984,11 @@ if ($PPCitizen -in "yes")
     Start-Sleep -Seconds 10         
     
     If($PPCitizenAlm -eq 'Yes'){
-            try {                
+            try { 
+                 
+
+                
+
                 Write-Output "Admin: $envAdminName"  
                 $adminEnvAttempts = 0
                 do {
@@ -994,6 +1010,8 @@ if ($PPCitizen -in "yes")
                    else {
                     Write-Output "Admin Environment is not ready or URL is empty"   
                    } 
+                   
+              
                     
             }
             catch {
