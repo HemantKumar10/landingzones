@@ -524,14 +524,7 @@ function New-GetDeploymentPipelineRecords {
             "Content-Type"  = "application/json"
             "Authorization" = "Bearer $($Token)"
         }
-       <# $Headers = @{            
-            "Authorization" = "Bearer $($Token)"
-            "OData-MaxVersion" = 4.0
-            "OData-Version" = 4.0
-            "Accept" = "application/json"
-            "Content-Type" = "application/json; charset=utf-8"
-            "Prefer" = "odata.include-annotations='*',return=representation"
-        } #>
+      
         # Declaring the HTTP Post request
         $GetParameters = @{
             "Uri"         = "$($GetEnvironment)"
@@ -910,12 +903,8 @@ if ($PPCitizen -in "yes")
            catch {
             Write-Output "'`r`n$_'"  
            }
-           #>          
+           #>    
 
-
-            #Set-AdminPowerAppEnvironmentBackupRetentionPeriod -EnvironmentName 'e2342bc1-3545-e79d-88d4-7d862ad674a0' NewBackupRetentionPeriodInDays 28
-            #Write-Output "Create Environment: $($envCreationHt.Name)" 
-                                   
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token   
 
@@ -996,11 +985,7 @@ if ($PPCitizen -in "yes")
     
     If($PPCitizenAlm -eq 'Yes'){
             try { 
-                 
-
-                
-
-                Write-Output "Admin: $envAdminName"  
+          
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
@@ -1013,8 +998,9 @@ if ($PPCitizen -in "yes")
                     else {
                         Write-Output "Admin Id: $($adminEnvironment.name)   attempt $($adminEnvAttempts)"  
                     }
-                  } until ( ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $adminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 20)
+                  } until ( ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $adminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 25)
                   
+                   Write-Output "Get Admin Env attempt $($adminEnvAttempts)"  
                    if ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                     New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                    }  
