@@ -202,7 +202,7 @@ function New-InstallPackaggeToEnvironment {
         # Get token to authenticate to Power Platform
         
         $EnvToken = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-        Write-Output "Env TOken $($EnvToken)"
+       
 
         $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
         # Power Platform HTTP Post Environment Uri
@@ -907,8 +907,6 @@ if ($PPCitizen -in "yes")
 
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token   
-
-            Write-Output "TOken $($Token)"
 
             # Power Platform API base Uri
             $BaseUri = "https://api.bap.microsoft.com"            
