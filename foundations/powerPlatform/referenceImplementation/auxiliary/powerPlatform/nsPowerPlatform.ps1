@@ -18,13 +18,11 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultRenameText,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultDLP,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultManagedEnv,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultManagedSharing,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizen,    
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPDefaultManagedSharing,      
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenNaming,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenRegion,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenDlp,    
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenManagedEnv,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenAlm,    
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenManagedEnv,        
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenCurrency,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,     
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
@@ -37,13 +35,15 @@ $DeploymentScriptOutputs = @{}
 Install-Module -Name PowerOps -AllowPrerelease -Force   
 
 #Default ALM environment tiers
-#$envTiers = 'admin','dev','test','prod'
 $envTiers = 'admin','dev','test','prod'
 
 $Global:envAdminName = ''
 $Global:envTestName = ''
 $Global:envDevName = ''
 $Global:envProdName = ''
+
+$PPCitizen = 'yes'
+$PPCitizenAlm = 'Yes'
 
 #region supporting functions
 function New-EnvironmentCreationObject {
@@ -201,9 +201,6 @@ function New-InstallPackaggeToEnvironment {
         # Code Begins
         # Get token to authenticate to Power Platform
         
-        $EnvToken = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-       
-
         $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
         # Power Platform HTTP Post Environment Uri
         $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
@@ -524,7 +521,14 @@ function New-GetDeploymentPipelineRecords {
             "Content-Type"  = "application/json"
             "Authorization" = "Bearer $($Token)"
         }
-      
+       <# $Headers = @{            
+            "Authorization" = "Bearer $($Token)"
+            "OData-MaxVersion" = 4.0
+            "OData-Version" = 4.0
+            "Accept" = "application/json"
+            "Content-Type" = "application/json; charset=utf-8"
+            "Prefer" = "odata.include-annotations='*',return=representation"
+        } #>
         # Declaring the HTTP Post request
         $GetParameters = @{
             "Uri"         = "$($GetEnvironment)"
@@ -683,7 +687,7 @@ function New-DLPAssignmentFromEnv {
     )
     #DLP Template references
     $dlpPolicies = @{
-        baseUri          = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/'
+        baseUri          = 'https://raw.githubusercontent.com/BogdanCiobanu1982/industry/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/'
         tenant           = @{
             low    = 'lowTenantDlpPolicy.json'
             medium = 'mediumTenantDlpPolicy.json'
@@ -889,22 +893,8 @@ if ($PPCitizen -in "yes")
                 EnvSku             = $environment.envSKu                                           
             }  
 
-           <#
-            try {
-            $User = Get-AzADuser | Where-Object {$_.DisplayName -eq 'PowerPlatform Admin' }  
-            Write-Host ($User | Format-List | Out-String) 
-
-           # $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName } 
-
-            foreach($u in $User){
-            Add-AdminPowerAppsSyncUser -EnvironmentName 'e2342bc1-3545-e79d-88d4-7d862ad674a0' -PrincipalObjectId $u.ObjectId 
-            }
-           }
-           catch {
-            Write-Output "'`r`n$_'"  
-           }
-           #>    
-
+            Write-Output "Create Environment: $($envCreationHt.Name)" 
+                                   
             # Get token to authenticate to Power Platform
             $Token = (Get-AzAccessToken).Token   
 
@@ -982,8 +972,8 @@ if ($PPCitizen -in "yes")
     Start-Sleep -Seconds 10         
     
     If($PPCitizenAlm -eq 'Yes'){
-            try { 
-          
+            try {                
+                Write-Output "Admin: $envAdminName"  
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
@@ -996,17 +986,14 @@ if ($PPCitizen -in "yes")
                     else {
                         Write-Output "Admin Id: $($adminEnvironment.name)   attempt $($adminEnvAttempts)"  
                     }
-                  } until ( ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $adminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 25)
+                  } until ( ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $adminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 20)
                   
-                   Write-Output "Get Admin Env attempt $($adminEnvAttempts)"  
                    if ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                     New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                    }  
                    else {
                     Write-Output "Admin Environment is not ready or URL is empty"   
                    } 
-                   
-              
                     
             }
             catch {
