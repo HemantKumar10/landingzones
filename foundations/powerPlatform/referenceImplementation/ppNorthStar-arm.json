@@ -405,9 +405,6 @@
                     "ppD365FieldServiceApp": {
                         "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
                     },
-
-
-
                      "devEnvironment": {
                         "value": "[if(parameters('devEnvironment'), 'True', 'False')]"
                     },
@@ -438,7 +435,6 @@
                      "integrationEnvironment": {
                         "value": "[if(parameters('integrationEnvironment'), 'True', 'False')]"
                     },
-
                       "customEnvironments": {
                         "value": "[if(empty(parameters('customEnvironments')), variables('emptyString'), parameters('customEnvironments'))]"
                     }                          
