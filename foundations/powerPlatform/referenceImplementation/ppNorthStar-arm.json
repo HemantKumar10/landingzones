@@ -227,8 +227,6 @@
                 "description": "Dynamics 365 Field Service"
             }
         },
-
-
      "devEnvironment": {
             "type": "bool",
             "defaultValue": "",
@@ -440,7 +438,7 @@
                      "integrationEnvironment": {
                         "value": "[if(parameters('integrationEnvironment'), 'True', 'False')]"
                     },
-                    
+
                       "customEnvironments": {
                         "value": "[if(empty(parameters('customEnvironments')), variables('emptyString'), parameters('customEnvironments'))]"
                     }                          
