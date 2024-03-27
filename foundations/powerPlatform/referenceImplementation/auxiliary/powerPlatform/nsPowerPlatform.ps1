@@ -39,8 +39,7 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$stagingEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$trainingEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$dataEnvironment ,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$integrationEnvironment,       
-    
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$integrationEnvironment,  
     [Parameter(Mandatory = $false)]$customEnvironments
     
     
@@ -89,7 +88,6 @@ if ($dataEnvironment -eq 'true'  ) {
 if ($integrationEnvironment -eq 'true'  ) {          
     $envTiers += 'integration'   
 }
-
 if ($customEnvironments -ne 'null') {
    
 }
