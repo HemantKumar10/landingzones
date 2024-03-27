@@ -237,8 +237,7 @@
             }
         } , 
 
-
-"devEnvironment": {
+      "devEnvironment": {
             "type": "string",
             "defaultValue": "false",
             "metadata": {
@@ -382,18 +381,17 @@
                                                     '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',                                                                                                   
                                                     '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',                                                    
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
-                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ',  
-
-                                                     '-devEnvironment', ' ', parameters('devEnvironment'), ' ',
-                                                     '-testEnvironment', ' ', parameters('testEnvironment'), ' ',
-                                                     '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ',
-                                                     '-adminEnvironment', ' ', parameters('adminEnvironment'), ' ',
-                                                     '-qaEnvironment', ' ', parameters('qaEnvironment'), ' ',
-                                                     '-uatEnvironment', ' ', parameters('uatEnvironment'), ' ',
-                                                     '-stagingEnvironment', ' ', parameters('stagingEnvironment'), ' ',
-                                                     '-trainingEnvironment', ' ', parameters('trainingEnvironment'), ' ',
+                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ', 
+                                                    '-devEnvironment', ' ', parameters('devEnvironment'), ' ',
+                                                    '-testEnvironment', ' ', parameters('testEnvironment'), ' ',
+                                                    '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ',
+                                                    '-adminEnvironment', ' ', parameters('adminEnvironment'), ' ',
+                                                    '-qaEnvironment', ' ', parameters('qaEnvironment'), ' ',
+                                                    '-uatEnvironment', ' ', parameters('uatEnvironment'), ' ',
+                                                    '-stagingEnvironment', ' ', parameters('stagingEnvironment'), ' ',
+                                                    '-trainingEnvironment', ' ', parameters('trainingEnvironment'), ' ',
                                                     '-dataEnvironment', ' ', parameters('dataEnvironment'), ' ',
-                                                     '-integrationEnvironment', ' ', parameters('integrationEnvironment'), ' ',
+                                                    '-integrationEnvironment', ' ', parameters('integrationEnvironment'), ' ',
                                                     '-customEnvironments', ' ', parameters('customEnvironments'), ' '                                                                                             
                                                     )]",
                                 "azPowerShellVersion": "7.2",
