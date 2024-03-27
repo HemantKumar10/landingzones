@@ -1511,8 +1511,6 @@
                 "ppD365SalesApp": "[steps('landingZones').ppD365SalesApp]",                  
                 "ppD365CustomerServiceApp": "[steps('landingZones').ppD365CustomerServiceApp]",   
                 "ppD365FieldServiceApp": "[steps('landingZones').ppD365FieldServiceApp]",
-
-
                 "devEnvironment": "[steps('landingZones').devEnvironment]",
                 "testEnvironment": "[steps('landingZones').testEnvironment]",
                 "prodEnvironment": "[steps('landingZones').prodEnvironment]",
