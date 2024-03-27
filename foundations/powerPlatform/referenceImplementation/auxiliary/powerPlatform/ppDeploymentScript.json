@@ -235,8 +235,7 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        } , 
-
+        } ,
       "devEnvironment": {
             "type": "string",
             "defaultValue": "false",
@@ -258,8 +257,7 @@
                 "description": "Provide naming convention for the citizen prod environments."
             }
         },
-
-           "adminEnvironment": {
+         "adminEnvironment": {
               "type": "string",
             "defaultValue": "false",
             "metadata": {
@@ -279,8 +277,7 @@
             "metadata": {
                 "description": "Provide naming convention for the citizen uat environments."
             }
-        },
-        
+        },        
         "stagingEnvironment": {
              "type": "string",
             "defaultValue": "false",
@@ -295,7 +292,6 @@
                 "description": "Provide naming convention for the citizen training environments."
             }
         },
-
         "dataEnvironment": {
               "type": "string",
             "defaultValue": "false",
@@ -382,7 +378,7 @@
                                                     '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',                                                    
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
                                                     '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ', 
-                                                    '-devEnvironment', ' ', parameters('devEnvironment'), ' ',
+                                                    '-devEnvironment', ' ', parameters('devEnvironment'), ' ',                                                    
                                                     '-testEnvironment', ' ', parameters('testEnvironment'), ' ',
                                                     '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ',
                                                     '-adminEnvironment', ' ', parameters('adminEnvironment'), ' ',
