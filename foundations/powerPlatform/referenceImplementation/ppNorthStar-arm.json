@@ -133,20 +133,7 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
-        },
-        "ppCitizen": {
-            "type": "string",
-            "allowedValues": [
-                "yes",
-                "half",
-                "no",
-                "custom"
-            ],
-            "defaultValue": "no",
-            "metadata": {
-                "description": "Select environment type. Yes will enable with Dataverse, Half will create without Dataverse."
-            }
-        },      
+        },           
         "ppCitizenNaming": {
             "type": "string",
             "defaultValue": "",
@@ -204,18 +191,7 @@
             "metadata": {
                 "description": "Provide the Azure location for the deployments"
             }
-        },        
-        "ppCitizenAlm": {
-            "type": "string",
-            "allowedValues": [
-                "yes",
-                "no"
-            ],
-            "defaultValue": "no",
-            "metadata": {
-                "description": "Select if dedicated environments for Development, Test, and Production should be created for each landing zone"
-            }
-        },                         
+        },                     
         "ppCitizenLanguage": {
             "type": "string",
             "defaultValue": "",
@@ -234,23 +210,23 @@
             "type": "bool",
             "defaultValue": "",
             "metadata": {
-                "description": "Dynamics 365 for Sales."
+                "description": "Dynamics 365 Sales Enterprise"
             }
-        },
+        },       
         "ppD365CustomerServiceApp": {
             "type": "bool",
             "defaultValue": "",
             "metadata": {
-                "description": "Dynamics 365 for Customer Service."
+                "description": "Dynamics 365 Customer Service"
             }
         },
         "ppD365FieldServiceApp": {
             "type": "bool",
             "defaultValue": "",
             "metadata": {
-                "description": "Dynamics 365 for Field Service."
+                "description": "Dynamics 365 Field Service"
             }
-        }                      
+        }                         
     },
     "variables": {
         "deploymentUris": {           
@@ -297,10 +273,7 @@
                     },
                     "ppTenantIsolationSetting": {
                         "value": "[parameters('ppTenantIsolationSetting')]"
-                    },                      
-                    "ppCitizenAlm": {
-                        "value": "[parameters('ppCitizenAlm')]"
-                    },                                                          
+                    },                                                                                        
                     "ppEnvCapacitySetting": {
                         "value": "[parameters('ppEnvCapacitySetting')]"
                     },                    
@@ -315,10 +288,7 @@
                     },
                     "ppDefaultManagedSharing": {
                         "value": "[parameters('ppDefaultManagedSharing')]"
-                    },
-                    "ppCitizen": {
-                        "value": "[parameters('ppCitizen')]"
-                    },                   
+                    },                               
                     "ppCitizenNaming": {
                         "value": "[if(empty(parameters('ppCitizenNaming')), variables('emptyString'), parameters('ppCitizenNaming'))]"
                     },
@@ -345,13 +315,13 @@
                     },                    
                     "ppD365SalesApp": {
                         "value": "[if(parameters('ppD365SalesApp'), 'True', 'False')]"
-                    },
+                    },                   
                     "ppD365CustomerServiceApp": {
                         "value": "[if(parameters('ppD365CustomerServiceApp'), 'True', 'False')]"
                     },
                     "ppD365FieldServiceApp": {
                         "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
-                    }                    
+                    }                                 
                 }
             }
         }                         
