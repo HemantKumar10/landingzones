@@ -130,20 +130,7 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
-        },
-        "ppCitizen": {
-            "type": "string",
-            "allowedValues": [
-                "yes",
-                "half",
-                "no",
-                "custom"
-            ],
-            "defaultValue": "no",
-            "metadata": {
-                "description": "Select environment type. Yes will enable with Dataverse, Half will create without Dataverse."
-            }            
-        },
+        },       
         "ppCitizenNaming": {
             "type": "string",
             "defaultValue": "''",
@@ -194,18 +181,7 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
-        },           
-        "ppCitizenAlm": {
-            "type": "string",
-            "allowedValues": [
-                "yes",
-                "no"
-            ],
-            "defaultValue": "no",
-            "metadata": {
-                "description": "Select if dedicated environments for Development, Test, and Production should be created for each landing zone"
-            }
-        },       
+        },                  
         "location": {
             "type": "string",
             "metadata": {
@@ -220,7 +196,7 @@
         },
         "scriptUri": {
             "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/nsPowerPlatform.ps1",
+            "defaultValue": "https://raw.githubusercontent.com/BogdanCiobanu1982/industry/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/nsPowerPlatform.ps1",
             "metadata": {
                 "description": "The uri pointing to the PowerShell script used in the deploymentScript"
             }
@@ -243,23 +219,106 @@
             "type": "string",
             "defaultValue": "false",
             "metadata": {
-                "description": "Dynamics 365 for Sales."
+                "description": "Dynamics 365 Sales Enterprise"
             }
-        },
+        },       
         "ppD365CustomerServiceApp": {
             "type": "string",
             "defaultValue": "false",
             "metadata": {
-                "description": "Dynamics 365 for Customer Service."
+                "description": "Dynamics 365 Customer Service"
             }
         },
         "ppD365FieldServiceApp": {
             "type": "string",
             "defaultValue": "false",
             "metadata": {
-                "description": "Dynamics 365 for Field Service."
+                "description": "Dynamics 365 Field Service"
             }
-        }        
+        } , 
+
+
+"devEnvironment": {
+            "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen dev environments."
+            }
+        },       
+        "testEnvironment": {
+              "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description":"Provide naming convention for the citizen test environments."
+            }
+        },
+        "prodEnvironment": {
+             "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen prod environments."
+            }
+        },
+
+           "adminEnvironment": {
+              "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen admin environments."
+            }
+        },       
+        "qaEnvironment": {
+            "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen qa environments."
+            }
+        },
+        "uatEnvironment": {
+             "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen uat environments."
+            }
+        },
+        
+        "stagingEnvironment": {
+             "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen staging environments."
+            }
+        },
+        "trainingEnvironment": {
+             "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen training environments."
+            }
+        },
+
+        "dataEnvironment": {
+              "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen data environments."
+            }
+        },
+         "integrationEnvironment": {
+          "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen integration environments."
+            }
+        },
+        
+          "customEnvironments": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide strings for custom citizen Environment creation."
+            }
+        }                 
     },
     "variables": {
         "deploymentName": "[take(concat(parameters('rgName'), '-initialize', '-', parameters('location')), 64)]"
@@ -314,18 +373,28 @@
                                                     '-PPDefaultRenameText', ' ', parameters('ppDefaultRenameText'), ' ',
                                                     '-PPDefaultDLP', ' ', parameters('ppDefaultDlp'), ' ',
                                                     '-PPDefaultManagedEnv', ' ', parameters('ppDefaultManagedEnv'), ' ',
-                                                    '-PPDefaultManagedSharing', ' ', parameters('ppDefaultManagedSharing'), ' ',
-                                                    '-PPCitizen', ' ', parameters('ppCitizen'), ' ',                                                                                            
+                                                    '-PPDefaultManagedSharing', ' ', parameters('ppDefaultManagedSharing'), ' ',                                                                                                                                               
                                                     '-PPCitizenNaming', ' ', parameters('ppCitizenNaming'), ' ',                                                    
                                                     '-PPCitizenLanguage', ' ', parameters('ppCitizenLanguage'), ' ',
                                                     '-PPCitizenCurrency', ' ', parameters('ppCitizenCurrency'), ' ',
                                                     '-PPCitizenRegion', ' ', parameters('ppCitizenRegion'), ' ',
                                                     '-PPCitizenDlp', ' ', parameters('ppCitizenDlp'), ' ',
-                                                    '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',
-                                                    '-PPCitizenAlm', ' ', parameters('ppCitizenAlm'), ' ',                                                    
-                                                    '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',
+                                                    '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',                                                                                                   
+                                                    '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',                                                    
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
-                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                                                     
+                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ',  
+
+                                                     '-devEnvironment', ' ', parameters('devEnvironment'), ' ',
+                                                     '-testEnvironment', ' ', parameters('testEnvironment'), ' ',
+                                                     '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ',
+                                                     '-adminEnvironment', ' ', parameters('adminEnvironment'), ' ',
+                                                     '-qaEnvironment', ' ', parameters('qaEnvironment'), ' ',
+                                                     '-uatEnvironment', ' ', parameters('uatEnvironment'), ' ',
+                                                     '-stagingEnvironment', ' ', parameters('stagingEnvironment'), ' ',
+                                                     '-trainingEnvironment', ' ', parameters('trainingEnvironment'), ' ',
+                                                    '-dataEnvironment', ' ', parameters('dataEnvironment'), ' ',
+                                                     '-integrationEnvironment', ' ', parameters('integrationEnvironment'), ' ',
+                                                    '-customEnvironments', ' ', parameters('customEnvironments'), ' '                                                                                             
                                                     )]",
                                 "azPowerShellVersion": "7.2",
                                 "timeout": "PT120M",
