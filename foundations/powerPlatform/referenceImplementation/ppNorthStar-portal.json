@@ -1511,6 +1511,16 @@
                 
                 "devEnvironment": "[steps('landingZones').devEnvironment]",
 
+                "testEnvironment": "[steps('landingZones').testEnvironment]",
+                "prodEnvironment": "[steps('landingZones').prodEnvironment]",
+                "adminEnvironment": "[steps('landingZones').adminEnvironment]",
+                "qaEnvironment": "[steps('landingZones').qaEnvironment]",
+                "uatEnvironment": "[steps('landingZones').uatEnvironment]",
+                "stagingEnvironment": "[steps('landingZones').stagingEnvironment]",
+                "trainingEnvironment": "[steps('landingZones').trainingEnvironment]",
+                "dataEnvironment": "[steps('landingZones').dataEnvironment]",
+                "integrationEnvironment": "[steps('landingZones').integrationEnvironment]",
+                "customEnvironments": "[replace(replace(replace(replace(replace(string(steps('landingZones').customEnvironments), '{', ''), '}', ''), '\"', ''), '[', ''), ']', '')]",
 
                 "ppD365SalesApp": "[steps('landingZones').ppD365SalesApp]",                  
                 "ppD365CustomerServiceApp": "[steps('landingZones').ppD365CustomerServiceApp]",   
