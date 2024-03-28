@@ -246,7 +246,7 @@ function New-CreateSecurityGroup {
 
       
     $createSecurityGroup = @{
-        description="Security Group used for Power Platform - $(EnvironmentName) environment"
+        description="Security Group used for Power Platform - $($EnvironmentName) environment"
         displayName= $SecurityGroupName
         mailEnabled=$false
         securityEnabled=$true
