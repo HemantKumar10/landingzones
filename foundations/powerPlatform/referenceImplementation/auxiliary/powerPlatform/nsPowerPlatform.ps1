@@ -28,7 +28,7 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp, 
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppDevEnvironment,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppDevEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$testEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$prodEnvironment  ,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminEnvironment,
@@ -53,7 +53,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #$envTiers = 'admin','dev','test','prod'
 
 
-
+$ppDevEnvironment = 'true'
 #Starts here: Defining Custom EnvTiers
 $envTiers = @()
 if ($ppDevEnvironment -eq 'true'  ) {          
