@@ -1271,7 +1271,7 @@
                         },   
 
                         {
-                            "name": "devEnvironment",
+                            "name": "ppDevEnvironment",
                             "type": "Microsoft.Common.CheckBox",
                             "defaultValue": true,
                             "label": "Development Environment (dev)",
@@ -1511,7 +1511,7 @@
                 "ppD365SalesApp": "[steps('landingZones').ppD365SalesApp]",                  
                 "ppD365CustomerServiceApp": "[steps('landingZones').ppD365CustomerServiceApp]",   
                 "ppD365FieldServiceApp": "[steps('landingZones').ppD365FieldServiceApp]",
-                "devEnvironment": "[steps('landingZones').devEnvironment]",
+                "ppDevEnvironment": "[steps('landingZones').ppDevEnvironment]",
                 "testEnvironment": "[steps('landingZones').testEnvironment]",
                 "prodEnvironment": "[steps('landingZones').prodEnvironment]",
                 "adminEnvironment": "[steps('landingZones').adminEnvironment]",
