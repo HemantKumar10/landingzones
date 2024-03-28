@@ -214,6 +214,81 @@
                 "description":"Provide naming convention for the citizen dev environments."
             }
         },
+          "testEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description":"Provide naming convention for the citizen test environments."
+            }
+        },
+        "prodEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen prod environments."
+            }
+        },
+
+           "adminEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen admin environments."
+            }
+        },       
+        "qaEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen qa environments."
+            }
+        },
+        "uatEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen uat environments."
+            }
+        },
+        
+        "stagingEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen staging environments."
+            }
+        },
+        "trainingEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen training environments."
+            }
+        },
+
+        "dataEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen data environments."
+            }
+        },
+         "integrationEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen integration environments."
+            }
+        },
+
+
+          "customEnvironments": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide strings for custom citizen Environment creation."
+            }
+        },
 
         "ppD365SalesApp": {
             "type": "bool",
@@ -324,7 +399,37 @@
                     }, 
                      "devEnvironment": {
                         "value": "[if(parameters('devEnvironment'), 'True', 'False')]"
-                    },                    
+                    },   
+                        	"testEnvironment": {
+                        "value": "[if(parameters('testEnvironment'), 'True', 'False')]"
+                    },
+                     "prodEnvironment": {
+                        "value": "[if(parameters('prodEnvironment'), 'True', 'False')]"
+                    },
+                     "adminEnvironment": {
+                        "value": "[if(parameters('adminEnvironment'), 'True', 'False')]"
+                    },
+                     "qaEnvironment": {
+                        "value": "[if(parameters('qaEnvironment'), 'True', 'False')]"
+                    },
+                     "uatEnvironment": {
+                        "value": "[if(parameters('uatEnvironment'), 'True', 'False')]"
+                    },
+                     "stagingEnvironment": {
+                        "value": "[if(parameters('stagingEnvironment'), 'True', 'False')]"
+                    },
+                     "trainingEnvironment": {
+                        "value": "[if(parameters('trainingEnvironment'), 'True', 'False')]"
+                    },
+                     "dataEnvironment": {
+                        "value": "[if(parameters('dataEnvironment'), 'True', 'False')]"
+                    },
+                     "integrationEnvironment": {
+                        "value": "[if(parameters('integrationEnvironment'), 'True', 'False')]"
+                    },
+                      "customEnvironments": {
+                        "value": "[if(empty(parameters('customEnvironments')), variables('emptyString'), parameters('customEnvironments'))]"
+                    } ,             
                     "ppD365SalesApp": {
                         "value": "[if(parameters('ppD365SalesApp'), 'True', 'False')]"
                     },                   
