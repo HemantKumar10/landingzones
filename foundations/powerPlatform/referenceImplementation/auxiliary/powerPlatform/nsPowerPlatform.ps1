@@ -24,21 +24,22 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenDlp,    
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenManagedEnv,        
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenCurrency,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,     
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,  
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppDevEnvironment,    
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp, 
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp
     #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppDevEnvironment,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$testEnvironment,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$prodEnvironment  ,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminEnvironment,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$qaEnvironment,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$uatEnvironment ,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$stagingEnvironment,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$trainingEnvironment,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$dataEnvironment ,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$integrationEnvironment,  
-    [Parameter(Mandatory = $false)]$customEnvironments
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$testEnvironment,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$prodEnvironment  ,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminEnvironment,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$qaEnvironment,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$uatEnvironment ,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$stagingEnvironment,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$trainingEnvironment,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$dataEnvironment ,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$integrationEnvironment,  
+    #[Parameter(Mandatory = $false)]$customEnvironments
     
     
 
