@@ -214,7 +214,14 @@
             "metadata": {
                 "description": "Select the currency for the environments."
             }
-        },       
+        },   
+        "ppDevEnvironment": {
+              "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description":"Provide naming convention for the citizen dev environments."
+            }
+        },    
         "ppD365SalesApp": {
             "type": "string",
             "defaultValue": "false",
@@ -235,79 +242,8 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        } ,
-           
-        "testEnvironment": {
-              "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description":"Provide naming convention for the citizen test environments."
-            }
-        },
-        "prodEnvironment": {
-             "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen prod environments."
-            }
-        },
-         "adminEnvironment": {
-              "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen admin environments."
-            }
-        },       
-        "qaEnvironment": {
-            "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen qa environments."
-            }
-        },
-        "uatEnvironment": {
-             "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen uat environments."
-            }
-        },        
-        "stagingEnvironment": {
-             "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen staging environments."
-            }
-        },
-        "trainingEnvironment": {
-             "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen training environments."
-            }
-        },
-        "dataEnvironment": {
-              "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen data environments."
-            }
-        },
-         "integrationEnvironment": {
-          "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen integration environments."
-            }
-        },
-        
-          "customEnvironments": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide strings for custom citizen Environment creation."
-            }
-        }                 
+        }            
+                       
     },
     "variables": {
         "deploymentName": "[take(concat(parameters('rgName'), '-initialize', '-', parameters('location')), 64)]"
@@ -368,20 +304,11 @@
                                                     '-PPCitizenCurrency', ' ', parameters('ppCitizenCurrency'), ' ',
                                                     '-PPCitizenRegion', ' ', parameters('ppCitizenRegion'), ' ',
                                                     '-PPCitizenDlp', ' ', parameters('ppCitizenDlp'), ' ',
-                                                    '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',                                                                                                   
+                                                    '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ', 
+                                                     '-ppDevEnvironment', ' ', parameters('ppDevEnvironment'), ' ',                                                                                                    
                                                     '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',                                                    
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
-                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ',                                                                                                  
-                                                    '-testEnvironment', ' ', parameters('testEnvironment'), ' ',
-                                                    '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ',
-                                                    '-adminEnvironment', ' ', parameters('adminEnvironment'), ' ',
-                                                    '-qaEnvironment', ' ', parameters('qaEnvironment'), ' ',
-                                                    '-uatEnvironment', ' ', parameters('uatEnvironment'), ' ',
-                                                    '-stagingEnvironment', ' ', parameters('stagingEnvironment'), ' ',
-                                                    '-trainingEnvironment', ' ', parameters('trainingEnvironment'), ' ',
-                                                    '-dataEnvironment', ' ', parameters('dataEnvironment'), ' ',
-                                                    '-integrationEnvironment', ' ', parameters('integrationEnvironment'), ' ',
-                                                    '-customEnvironments', ' ', parameters('customEnvironments'), ' '                                                                                             
+                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                   
                                                     )]",
                                 "azPowerShellVersion": "7.2",
                                 "timeout": "PT120M",
