@@ -25,10 +25,28 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenManagedEnv,        
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenCurrency,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$PPCitizenLanguage,  
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$devEnvironment,   
+
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$devEnvironment,    
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$testEnvironment,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$prodEnvironment  ,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminEnvironment,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$qaEnvironment,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$uatEnvironment ,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$stagingEnvironment,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$trainingEnvironment,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$dataEnvironment ,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$integrationEnvironment,  
+    [Parameter(Mandatory = $false)]$customEnvironments,
+    
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp        
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp
+
+    
+    
+    
+
+
 )
 
 $DeploymentScriptOutputs = @{}
@@ -36,7 +54,47 @@ $DeploymentScriptOutputs = @{}
 Install-Module -Name PowerOps -AllowPrerelease -Force   
 
 #Default ALM environment tiers
-$envTiers = 'admin','dev','test','prod'
+#$envTiers = 'admin','dev','test','prod'
+
+
+
+#Starts here: Defining Custom EnvTiers
+$envTiers = @()
+if ($devEnvironment -eq 'true'  ) {          
+    $envTiers += 'dev'   
+}
+if ($testEnvironment -eq 'true'  ) {          
+    $envTiers += 'test'   
+}
+if ($prodEnvironment -eq 'true'  ) {          
+    $envTiers += 'prod'   
+}
+if ($adminEnvironment -eq 'true'  ) {          
+    $envTiers += 'admin'   
+}
+if ($qaEnvironment -eq 'true'  ) {          
+    $envTiers += 'qa'   
+}
+if ($uatEnvironment -eq 'true'  ) {          
+    $envTiers += 'uat'   
+}
+if ($stagingEnvironment -eq 'true'  ) {          
+    $envTiers += 'staging'   
+}
+if ($trainingEnvironment -eq 'true'  ) {          
+    $envTiers += 'training'   
+}
+if ($dataEnvironment -eq 'true'  ) {          
+    $envTiers += 'data'   
+}
+if ($integrationEnvironment -eq 'true'  ) {          
+    $envTiers += 'integration'   
+}
+if ($customEnvironments -ne 'null') {
+   
+}
+
+#Ends Here
 
 $Global:envAdminName = ''
 $Global:envTestName = ''
@@ -91,6 +149,51 @@ function New-EnvironmentCreationObject {
                 $envDescription = 'Environment used for administration purposes'     
                 $Global:envAdminName =  "{0}-{1}" -f $environmentName, $envTier                   
             }
+
+            #Adding conditions for new environment types
+            if ( $envTier -eq 'qa' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType qa
+                $securityGroupId = $createdSecurityGroup                
+                $envSku ='Sandbox'
+                $envDescription = 'Environment used for qa purposes'     
+                           
+            }
+            if ( $envTier -eq 'uat' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType uat
+                $securityGroupId = $createdSecurityGroup                
+                $envSku ='Sandbox'
+                $envDescription = 'Environment used for uat purposes'     
+                         
+            }
+            if ( $envTier -eq 'staging' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType staging
+                $securityGroupId = $createdSecurityGroup                
+                $envSku ='Sandbox'
+                $envDescription = 'Environment used for staging purposes'     
+                           
+            }
+            if ( $envTier -eq 'training' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType training
+                $securityGroupId = $createdSecurityGroup                
+                $envSku ='Sandbox'
+                $envDescription = 'Environment used for training purposes'     
+                          
+            }
+            if ( $envTier -eq 'data' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType 'data'
+                $securityGroupId = $createdSecurityGroup                
+                $envSku ='Sandbox'
+                $envDescription = 'Environment used for data purposes'     
+                  
+            }
+            if ( $envTier -eq 'integration' ){
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentType integration
+                $securityGroupId = $createdSecurityGroup                
+                $envSku ='Sandbox'
+                $envDescription = 'Environment used for integration purposes'     
+                  
+            }
+          
 
             [PSCustomObject]@{
                 envName        = "{0}-{1}" -f $environmentName, $envTier                        
@@ -222,8 +325,11 @@ function New-InstallPackaggeToEnvironment {
             $outputPackage = Invoke-RestMethod @PostParameters 
             $operationId =  $outputPackage.lastOperation.operationId  
             Write-Output "Application Installation $($PackageName) in progress"  
-            Start-Sleep -Seconds 15   
-            New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'         
+
+            if ($devEnvironment -eq 'true' -and $testEnvironment -eq 'true' -and $prodEnvironment -eq 'true' -and $adminEnvironment -eq 'true') {    
+                  Start-Sleep -Seconds 15   
+                  New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'    
+            }     
            
         }
         catch {            
@@ -688,7 +794,7 @@ function New-DLPAssignmentFromEnv {
     )
     #DLP Template references
     $dlpPolicies = @{
-        baseUri          = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/'
+        baseUri          = 	'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/'
         tenant           = @{
             low    = 'lowTenantDlpPolicy.json'
             medium = 'mediumTenantDlpPolicy.json'
@@ -972,25 +1078,25 @@ if ($PPCitizen -in "yes")
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
     Start-Sleep -Seconds 10         
     
-    If($PPCitizenAlm -eq 'Yes'){
+    If($PPCitizenAlm -eq 'Yes' -and $adminEnvironment -eq 'true'){
             try {                
                 Write-Output "Admin: $envAdminName"  
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
-                    $adminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }                    
-                    if ($null -eq $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
-                    $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '' -or 
-                    $adminEnvironment.properties.provisioningState -ne 'Succeeded' ) {                 
+                    $getAdminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }                    
+                    if ($null -eq $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
+                    $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '' -or 
+                    $getAdminEnvironment.properties.provisioningState -ne 'Succeeded' ) {                 
                         Start-Sleep -Seconds 15
                     }
                     else {
-                        Write-Output "Admin Id: $($adminEnvironment.name)   attempt $($adminEnvAttempts)"  
+                        Write-Output "Admin Id: $($getAdminEnvironment.name) attempt $($adminEnvAttempts)"  
                     }
-                  } until ( ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $adminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 20)
+                  } until ( ($null -ne $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 20)
                   
-                   if ($null -ne $adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
-                    New-InstallPackaggeToEnvironment -EnvironmentId $($adminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($adminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                   if ($null -ne $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
+                    New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                    }  
                    else {
                     Write-Output "Admin Environment is not ready or URL is empty"   
