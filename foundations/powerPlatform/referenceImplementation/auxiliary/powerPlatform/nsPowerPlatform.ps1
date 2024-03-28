@@ -220,7 +220,7 @@ function New-CustomEnvironmentCreationObject {
         $customEnv = ($customEnvironments -join ',')
         foreach ($env in ($customEnv -split 'ppEnvName:')) {
             $environment = $env.TrimEnd(',')
-            $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($environment) -SecurityGroupName "entra_powerplatform_$($environment.ToLower())" -SecurityGroupNickName "PowerPlatform$(environment)Group"
+            $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($environment) -SecurityGroupName "entra_powerplatform_$($environment.ToLower())" -SecurityGroupNickName "PowerPlatform$($environment)Group"
             $securityGroupId = $createdSecurityGroup 
             [PSCustomObject]@{
                 envName        = ($environment -split (','))[0]
