@@ -205,14 +205,7 @@
             "metadata": {
                 "description": "Select the currency for the environments."
             }
-        }, 
-            "ppDevEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description":"Provide naming convention for the citizen dev environments."
-            }
-        },  
+        },       
         "ppD365SalesApp": {
             "type": "bool",
             "defaultValue": "",
@@ -233,8 +226,7 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        }
-
+        }                         
     },
     "variables": {
         "deploymentUris": {           
@@ -320,10 +312,7 @@
                     },
                     "ppCitizenCurrency": {
                         "value": "[if(empty(parameters('ppCitizenCurrency')), variables('emptyString'), parameters('ppCitizenCurrency'))]"
-                    },  
-                        "ppDevEnvironment": {
-                        "value": "[if(parameters('ppDevEnvironment'), 'True', 'False')]"
-                    },              
+                    },                    
                     "ppD365SalesApp": {
                         "value": "[if(parameters('ppD365SalesApp'), 'True', 'False')]"
                     },                   
@@ -332,8 +321,7 @@
                     },
                     "ppD365FieldServiceApp": {
                         "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
-                    }                   
-                                            
+                    }                                 
                 }
             }
         }                         
