@@ -226,14 +226,7 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        },
-     "ppDevEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen dev environments."
-            }
-        },       
+        },           
         "testEnvironment": {
             "type": "bool",
             "defaultValue": "",
@@ -405,9 +398,7 @@
                     "ppD365FieldServiceApp": {
                         "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
                     },
-                     "ppDevEnvironment": {
-                        "value": "[if(parameters('ppDevEnvironment'), 'True', 'False')]"
-                    },
+                    
                      "testEnvironment": {
                         "value": "[if(parameters('testEnvironment'), 'True', 'False')]"
                     },
