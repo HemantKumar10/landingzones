@@ -30,7 +30,7 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp,   
     
     
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$devEnvironment,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppDevEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$testEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$prodEnvironment  ,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminEnvironment,
@@ -58,7 +58,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Starts here: Defining Custom EnvTiers
 $envTiers = @()
-if ($devEnvironment -eq 'true'  ) {          
+if ($ppDevEnvironment -eq 'true'  ) {          
     $envTiers += 'dev'   
 }
 if ($testEnvironment -eq 'true'  ) {          
@@ -324,7 +324,7 @@ function New-InstallPackaggeToEnvironment {
             $operationId =  $outputPackage.lastOperation.operationId  
             Write-Output "Application Installation $($PackageName) in progress"  
 
-            if ($devEnvironment -eq 'true' -and $testEnvironment -eq 'true' -and $prodEnvironment -eq 'true' -and $adminEnvironment -eq 'true') {    
+            if ($ppDevEnvironment -eq 'true' -and $testEnvironment -eq 'true' -and $prodEnvironment -eq 'true' -and $adminEnvironment -eq 'true') {    
                   Start-Sleep -Seconds 15   
                   New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'    
             }     
