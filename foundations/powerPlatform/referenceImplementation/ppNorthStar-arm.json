@@ -227,7 +227,7 @@
                 "description": "Dynamics 365 Field Service"
             }
         },
-     "devEnvironment": {
+     "ppDevEnvironment": {
             "type": "bool",
             "defaultValue": "",
             "metadata": {
@@ -405,8 +405,8 @@
                     "ppD365FieldServiceApp": {
                         "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
                     },
-                     "devEnvironment": {
-                        "value": "[if(parameters('devEnvironment'), 'True', 'False')]"
+                     "ppDevEnvironment": {
+                        "value": "[if(parameters('ppDevEnvironment'), 'True', 'False')]"
                     },
                      "testEnvironment": {
                         "value": "[if(parameters('testEnvironment'), 'True', 'False')]"
