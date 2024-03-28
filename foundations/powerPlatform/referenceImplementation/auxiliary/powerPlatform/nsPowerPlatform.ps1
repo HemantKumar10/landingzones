@@ -216,23 +216,30 @@ function New-EnvironmentCreationObject {
 function New-CustomEnvironmentCreationObject {
     if (-not [string]::IsNullOrEmpty($customEnvironments)) 
     {
-         
-        $customEnv = ($customEnvironments -join ',')
-        foreach ($env in ($customEnv -split 'ppEnvName:')) {
-            $environment = $env.TrimEnd(',')
-            $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($environment) -SecurityGroupName "entra_powerplatform_$($environment.ToLower())" -SecurityGroupNickName "PowerPlatform$($environment)Group"
-            $securityGroupId = $createdSecurityGroup 
-            [PSCustomObject]@{
-                envName        = ($environment -split (','))[0]
-                envRegion      = $PPCitizenRegion
-                envDataverse   = $true
-                envLanguage    = $PPCitizenLanguage
-                envCurrency    = $PPCitizenCurrency
-                envDescription = ($environment -split (','))[1].Split(':')[1]
-                envRbac        = $securityGroupId
-                envSku         = $envSku
+         try {
+            $customEnv = ($customEnvironments -join ',')
+           
+            foreach ($env in ($customEnv -split 'ppEnvName:')) {
+                $environment = $env.TrimEnd(',')
+                $envNameTemp = ($environment -split (','))[0]
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($envNameTemp) -SecurityGroupName "entra_powerplatform_$($envNameTemp.ToLower())" -SecurityGroupNickName "PowerPlatform$($envNameTemp)Group"
+                $securityGroupId = $createdSecurityGroup 
+                [PSCustomObject]@{
+                    envName        = ($environment -split (','))[0]
+                    envRegion      = $PPCitizenRegion
+                    envDataverse   = $true
+                    envLanguage    = $PPCitizenLanguage
+                    envCurrency    = $PPCitizenCurrency
+                    envDescription = ($environment -split (','))[1].Split(':')[1]
+                    envRbac        = $securityGroupId
+                    envSku         = $envSku
+                }
             }
-        }
+         }
+         catch {
+            Write-Output "Custom Env $($customEnvironments) failed`r`n$_" 
+         }
+       
     }
 }
 
