@@ -1271,7 +1271,7 @@
                         },   
 
                         {
-                            "name": "ppDevEnvironment",
+                            "name": "devEnvironment",
                             "type": "Microsoft.Common.CheckBox",
                             "defaultValue": true,
                             "label": "Development Environment (dev)",
@@ -1507,8 +1507,7 @@
                 "ppCitizenCurrency": "[steps('landingZones').ppCitizenCurrency]",
                 "ppCitizenRegion": "[steps('landingZones').ppCitizenRegion]",
                 "ppCitizenDlp": "[steps('landingZones').ppCitizenDlp]",
-                "ppCitizenManagedEnv": "[steps('landingZones').ppCitizenManagedEnv]",   
-                "ppDevEnvironment": "[steps('landingZones').ppDevEnvironment]",                              
+                "ppCitizenManagedEnv": "[steps('landingZones').ppCitizenManagedEnv]",                                    
                 "ppD365SalesApp": "[steps('landingZones').ppD365SalesApp]",                  
                 "ppD365CustomerServiceApp": "[steps('landingZones').ppD365CustomerServiceApp]",   
                 "ppD365FieldServiceApp": "[steps('landingZones').ppD365FieldServiceApp]"
