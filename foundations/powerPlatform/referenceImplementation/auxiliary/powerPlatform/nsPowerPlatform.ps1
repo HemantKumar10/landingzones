@@ -217,8 +217,8 @@ function New-CustomEnvironmentCreationObject {
     if (-not [string]::IsNullOrEmpty($customEnvironments)) 
     {
          try {
-            $customEnv = ($customEnvironments -join ',')
-           
+            Write-Output "Custom Env: $($customEnvironments)"
+            $customEnv = ($customEnvironments -join ',')           
             foreach ($env in ($customEnv -split 'ppEnvName:')) {
                 $environment = $env.TrimEnd(',')
                 $envNameTemp = ($environment -split (','))[0]
@@ -1041,7 +1041,8 @@ if ($PPCitizen -in "yes")
         $environmentsToCreate = New-EnvironmentCreationObject @envHt
         if (-not [string]::IsNullOrEmpty($customEnvironments)) 
         {
-            $customEnvironmentsToCreate = New-CustomEnvironmentCreationObject 
+            $customEnvironmentsToCreate = New-CustomEnvironmentCreationObject  
+            Write-Host ($customEnvironmentsToCreate | Format-List | Out-String)   
             $environmentsToCreate += $customEnvironmentsToCreate
         }
 
