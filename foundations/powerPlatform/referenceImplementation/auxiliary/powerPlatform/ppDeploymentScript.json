@@ -214,7 +214,16 @@
             "metadata": {
                 "description": "Select the currency for the environments."
             }
-        },       
+        },   
+ "devEnvironment": {
+            "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description":"Provide naming convention for the citizen dev environments."
+            }
+        },
+
+
         "ppD365SalesApp": {
             "type": "string",
             "defaultValue": "false",
@@ -296,7 +305,8 @@
                                                     '-PPCitizenCurrency', ' ', parameters('ppCitizenCurrency'), ' ',
                                                     '-PPCitizenRegion', ' ', parameters('ppCitizenRegion'), ' ',
                                                     '-PPCitizenDlp', ' ', parameters('ppCitizenDlp'), ' ',
-                                                    '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',                                                                                                   
+                                                    '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ', 
+                                                    '-devEnvironment', ' ', parameters('devEnvironment'), ' ',                                                                                                    
                                                     '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',                                                    
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
                                                     '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                                                                                                
