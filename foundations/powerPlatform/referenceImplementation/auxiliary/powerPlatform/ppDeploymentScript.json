@@ -236,13 +236,7 @@
                 "description": "Dynamics 365 Field Service"
             }
         } ,
-      "ppDevEnvironment": {
-            "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Provide naming convention for the citizen dev environments."
-            }
-        },       
+           
         "testEnvironment": {
               "type": "string",
             "defaultValue": "false",
@@ -377,8 +371,7 @@
                                                     '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',                                                                                                   
                                                     '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',                                                    
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
-                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ', 
-                                                    '-ppDevEnvironment', ' ', parameters('ppDevEnvironment'), ' ',                                                    
+                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ',                                                                                                  
                                                     '-testEnvironment', ' ', parameters('testEnvironment'), ' ',
                                                     '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ',
                                                     '-adminEnvironment', ' ', parameters('adminEnvironment'), ' ',
