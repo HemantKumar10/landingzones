@@ -205,7 +205,16 @@
             "metadata": {
                 "description": "Select the currency for the environments."
             }
-        },       
+        }, 
+
+         "devEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description":"Provide naming convention for the citizen dev environments."
+            }
+        },
+
         "ppD365SalesApp": {
             "type": "bool",
             "defaultValue": "",
@@ -312,6 +321,9 @@
                     },
                     "ppCitizenCurrency": {
                         "value": "[if(empty(parameters('ppCitizenCurrency')), variables('emptyString'), parameters('ppCitizenCurrency'))]"
+                    }, 
+                     "devEnvironment": {
+                        "value": "[if(parameters('devEnvironment'), 'True', 'False')]"
                     },                    
                     "ppD365SalesApp": {
                         "value": "[if(parameters('ppD365SalesApp'), 'True', 'False')]"
