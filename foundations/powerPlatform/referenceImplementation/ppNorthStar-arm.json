@@ -205,7 +205,14 @@
             "metadata": {
                 "description": "Select the currency for the environments."
             }
-        },       
+        }, 
+            "ppDevEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description":"Provide naming convention for the citizen dev environments."
+            }
+        },  
         "ppD365SalesApp": {
             "type": "bool",
             "defaultValue": "",
@@ -225,81 +232,6 @@
             "defaultValue": "",
             "metadata": {
                 "description": "Dynamics 365 Field Service"
-            }
-        },           
-        "testEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description":"Provide naming convention for the citizen test environments."
-            }
-        },
-        "prodEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen prod environments."
-            }
-        },
-
-           "adminEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen admin environments."
-            }
-        },       
-        "qaEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen qa environments."
-            }
-        },
-        "uatEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen uat environments."
-            }
-        },
-        
-        "stagingEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen staging environments."
-            }
-        },
-        "trainingEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen training environments."
-            }
-        },
-
-        "dataEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen data environments."
-            }
-        },
-         "integrationEnvironment": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide naming convention for the citizen integration environments."
-            }
-        },
-
-
-          "customEnvironments": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Provide strings for custom citizen Environment creation."
             }
         }
 
@@ -388,7 +320,10 @@
                     },
                     "ppCitizenCurrency": {
                         "value": "[if(empty(parameters('ppCitizenCurrency')), variables('emptyString'), parameters('ppCitizenCurrency'))]"
-                    },                    
+                    },  
+                        "ppDevEnvironment": {
+                        "value": "[if(parameters('ppDevEnvironment'), 'True', 'False')]"
+                    },              
                     "ppD365SalesApp": {
                         "value": "[if(parameters('ppD365SalesApp'), 'True', 'False')]"
                     },                   
@@ -397,38 +332,8 @@
                     },
                     "ppD365FieldServiceApp": {
                         "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
-                    },
-                    
-                     "testEnvironment": {
-                        "value": "[if(parameters('testEnvironment'), 'True', 'False')]"
-                    },
-                     "prodEnvironment": {
-                        "value": "[if(parameters('prodEnvironment'), 'True', 'False')]"
-                    },
-                     "adminEnvironment": {
-                        "value": "[if(parameters('adminEnvironment'), 'True', 'False')]"
-                    },
-                     "qaEnvironment": {
-                        "value": "[if(parameters('qaEnvironment'), 'True', 'False')]"
-                    },
-                     "uatEnvironment": {
-                        "value": "[if(parameters('uatEnvironment'), 'True', 'False')]"
-                    },
-                     "stagingEnvironment": {
-                        "value": "[if(parameters('stagingEnvironment'), 'True', 'False')]"
-                    },
-                     "trainingEnvironment": {
-                        "value": "[if(parameters('trainingEnvironment'), 'True', 'False')]"
-                    },
-                     "dataEnvironment": {
-                        "value": "[if(parameters('dataEnvironment'), 'True', 'False')]"
-                    },
-                     "integrationEnvironment": {
-                        "value": "[if(parameters('integrationEnvironment'), 'True', 'False')]"
-                    },
-                      "customEnvironments": {
-                        "value": "[if(empty(parameters('customEnvironments')), variables('emptyString'), parameters('customEnvironments'))]"
-                    }                          
+                    }                   
+                                            
                 }
             }
         }                         
