@@ -214,14 +214,7 @@
             "metadata": {
                 "description": "Select the currency for the environments."
             }
-        },   
-        "ppDevEnvironment": {
-              "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description":"Provide naming convention for the citizen dev environments."
-            }
-        },    
+        },       
         "ppD365SalesApp": {
             "type": "string",
             "defaultValue": "false",
@@ -242,8 +235,7 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        }            
-                       
+        }                    
     },
     "variables": {
         "deploymentName": "[take(concat(parameters('rgName'), '-initialize', '-', parameters('location')), 64)]"
@@ -304,11 +296,10 @@
                                                     '-PPCitizenCurrency', ' ', parameters('ppCitizenCurrency'), ' ',
                                                     '-PPCitizenRegion', ' ', parameters('ppCitizenRegion'), ' ',
                                                     '-PPCitizenDlp', ' ', parameters('ppCitizenDlp'), ' ',
-                                                    '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ', 
-                                                     '-ppDevEnvironment', ' ', parameters('ppDevEnvironment'), ' ',                                                                                                    
+                                                    '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ',                                                                                                   
                                                     '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',                                                    
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
-                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                   
+                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                                                                                                
                                                     )]",
                                 "azPowerShellVersion": "7.2",
                                 "timeout": "PT120M",
