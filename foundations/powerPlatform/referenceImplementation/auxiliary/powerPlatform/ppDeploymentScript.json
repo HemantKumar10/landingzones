@@ -236,7 +236,7 @@
                 "description": "Dynamics 365 Field Service"
             }
         } ,
-      "devEnvironment": {
+      "ppDevEnvironment": {
             "type": "string",
             "defaultValue": "false",
             "metadata": {
@@ -378,7 +378,7 @@
                                                     '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ',                                                    
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
                                                     '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ', 
-                                                    '-devEnvironment', ' ', parameters('devEnvironment'), ' ',                                                    
+                                                    '-ppDevEnvironment', ' ', parameters('ppDevEnvironment'), ' ',                                                    
                                                     '-testEnvironment', ' ', parameters('testEnvironment'), ' ',
                                                     '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ',
                                                     '-adminEnvironment', ' ', parameters('adminEnvironment'), ' ',
