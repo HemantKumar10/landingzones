@@ -218,16 +218,14 @@ function New-CustomEnvironmentCreationObject {
     {
          try {
             Write-Output "Custom Env: $($customEnvironments)"
-            $customEnv = ($customEnvironments -join ',')     
-            
+            $customEnv = ($customEnvironments -join ',') 
             #Write-Output "Custom Env: $($customEnv)"
             foreach ($env in ($customEnv -split 'ppEnvName:')) {
                 $environment = $env.TrimEnd(',')
-
                 Write-Output "Ev1 : $($environment)"
                 $envNameTemp = ($environment -split (','))[0]
                 Write-Output "Ev2 : $($envNameTemp)"
-                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($envNameTemp) -SecurityGroupName "entra_powerplatform_$($envNameTemp.ToLower())" -SecurityGroupNickName "PowerPlatform$($envNameTemp)Group"
+               <# $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($envNameTemp) -SecurityGroupName "entra_powerplatform_$($envNameTemp.ToLower())" -SecurityGroupNickName "PowerPlatform$($envNameTemp)Group"
                 $securityGroupId = $createdSecurityGroup 
                 [PSCustomObject]@{
                     envName        = ($environment -split (','))[0]
@@ -238,7 +236,7 @@ function New-CustomEnvironmentCreationObject {
                     envDescription = ($environment -split (','))[1].Split(':')[1]
                     envRbac        = $securityGroupId
                     envSku         = $envSku
-                }
+                }#>
             }
          }
          catch {
@@ -1046,9 +1044,10 @@ if ($PPCitizen -in "yes")
         $environmentsToCreate = New-EnvironmentCreationObject @envHt
         if (-not [string]::IsNullOrEmpty($customEnvironments)) 
         {
-            $customEnvironmentsToCreate = New-CustomEnvironmentCreationObject  
-            Write-Host ($customEnvironmentsToCreate | Format-List | Out-String)   
-            $environmentsToCreate += $customEnvironmentsToCreate
+            New-CustomEnvironmentCreationObject  
+           # $customEnvironmentsToCreate = New-CustomEnvironmentCreationObject  
+            #Write-Host ($customEnvironmentsToCreate | Format-List | Out-String)   
+           # $environmentsToCreate += $customEnvironmentsToCreate
         }
 
     }
