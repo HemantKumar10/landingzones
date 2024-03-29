@@ -1053,20 +1053,9 @@ if ($PPCitizen -in "yes")
             $customEnvironmentsToCreate = New-CustomEnvironmentCreationObject  
             Write-Output "Response:"
             Write-Host ($customEnvironmentsToCreate | Format-List | Out-String)  
+            [array]
            if ($customEnvironmentsToCreate) {
-             $environmentsToCreate += $customEnvironmentsToCreate |ForEach-Object {
-                            [PSCustomObject]@{
-                            envName        = $_.envName
-                            envRegion      = $_.envRegion
-                            envDataverse   = $_.envDataverse
-                            envLanguage    = $_.envLanguage
-                            envCurrency    = $_.envCurrency
-                            envDescription = $_.envDescription
-                            envRbac        = $_.envRbac
-                            envSku         = $_.envSku
-                            }
-
-              }
+            [array] $environmentsToCreate += $customEnvironmentsToCreate 
           }     
           Write-Output "Final List:"
           Write-Host ($environmentsToCreate | Format-List | Out-String)  
