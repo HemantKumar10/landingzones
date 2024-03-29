@@ -220,7 +220,7 @@ function New-CustomEnvironmentCreationObject {
             Write-Output "Custom Env: $($customEnvironments)"
             $customEnv = ($customEnvironments -join ',')     
             
-            Write-Output "Custom Env: $($customEnv)"
+            #Write-Output "Custom Env: $($customEnv)"
             foreach ($env in ($customEnv -split 'ppEnvName:')) {
                 $environment = $env.TrimEnd(',')
 
