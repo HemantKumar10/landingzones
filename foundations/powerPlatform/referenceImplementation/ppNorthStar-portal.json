@@ -1430,7 +1430,13 @@
                                             "type": "Microsoft.Common.TextBox",
                                             "placeholder": "",
                                             "constraints": {
-                                                "required": true                                                
+                                                "required": true,
+                                                "validations": [
+                                                    {
+                                                        "regex": "^[a-z0-9A-Z]{1,30}$",
+                                                        "message": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                                                    }
+                                                ]                                               
                                             }
                                         }
                                     }
