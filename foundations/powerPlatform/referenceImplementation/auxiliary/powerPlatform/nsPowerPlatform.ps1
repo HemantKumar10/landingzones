@@ -387,7 +387,8 @@ function New-InstallPackaggeToEnvironment {
             $envTiers.contains('staging') -eq $false -and
             $envTiers.contains('training') -eq $false -and
             $envTiers.contains('data') -eq $false -and
-            $envTiers.contains('integration') -eq $false
+            $envTiers.contains('integration') -eq $false -and
+            ([string]::IsNullOrEmpty($PPCitizenConfiguration))
             ) {    
                   Start-Sleep -Seconds 15   
                   New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'    
