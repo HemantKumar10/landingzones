@@ -231,7 +231,7 @@ function New-CustomEnvironmentCreationObject {
                     envDataverse   = $true
                     envLanguage    = $PPCitizenLanguage
                     envCurrency    = $PPCitizenCurrency
-                    envDescription = ($environment -split (','))[1].Split(':')[1]
+                    envDescription = $(($environment -split (','))[1].Split(':')[1])
                     envRbac        = $securityGroupId
                     envSku         = 'Sandbox'
                 }
