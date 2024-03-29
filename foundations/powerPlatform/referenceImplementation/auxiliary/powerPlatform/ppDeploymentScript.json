@@ -387,7 +387,7 @@
                                                     '-trainingEnvironment', ' ', parameters('trainingEnvironment'), ' ',   
                                                     '-dataEnvironment', ' ', parameters('dataEnvironment'), ' ',   
                                                     '-integrationEnvironment', ' ', parameters('integrationEnvironment'), ' ',   
-                                                    '-customEnvironments', ' ', parameters('customEnvironments'), ' ', 
+                                                    '-customEnvironments', ' ', 'xyshs', ' ', 
                                                      '-ppD365SalesApp', ' ', parameters('ppD365SalesApp'), ' ', 
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
                                                     '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                                                                                                
