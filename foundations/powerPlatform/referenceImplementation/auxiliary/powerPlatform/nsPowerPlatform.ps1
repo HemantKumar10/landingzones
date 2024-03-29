@@ -238,7 +238,7 @@ function New-CustomEnvironmentCreationObject {
                     envCurrency    = $PPCitizenCurrency
                     envDescription = ($environment -split (','))[1].Split(':')[1]
                     envRbac        = $securityGroupId
-                    envSku         = $envSku
+                    envSku         = 'Sandbox'
                 }
                 }
               
@@ -1052,6 +1052,7 @@ if ($PPCitizen -in "yes")
             
             $customEnvironmentsToCreate = New-CustomEnvironmentCreationObject  
             Write-Output "Response:"
+            Write-Host ($customEnvironmentsToCreate | Format-List | Out-String)  
             $environmentsToCreate += $customEnvironmentsToCreate
             Write-Output "Final List:"
             Write-Host ($environmentsToCreate | Format-List | Out-String)  
@@ -1061,7 +1062,9 @@ if ($PPCitizen -in "yes")
     catch {
         throw "Failed to create environment object. Input data is malformed. '`r`n$_'"
     }
-    
+
+    Write-Output "List:"
+    Write-Host ($environmentsToCreate | Format-List | Out-String)  
     foreach ($environment in $environmentsToCreate) 
     {             
         try {
