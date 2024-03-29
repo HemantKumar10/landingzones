@@ -225,7 +225,9 @@ function New-CustomEnvironmentCreationObject {
                 Write-Output "Ev1 : $($environment)"
                 $envNameTemp = ($environment -split (','))[0]
                 Write-Output "Ev2 : $($envNameTemp)"
-                if( $environment -ne 'null'){
+
+                Write-Output (-not [string]::IsNullOrEmpty($envNameTemp))
+                if(-not [string]::IsNullOrEmpty($envNameTemp)){
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($envNameTemp) -SecurityGroupName "entra_powerplatform_$($envNameTemp.ToLower())" -SecurityGroupNickName "PowerPlatform$($envNameTemp)Group"
                 $securityGroupId = $createdSecurityGroup 
                 [PSCustomObject]@{
