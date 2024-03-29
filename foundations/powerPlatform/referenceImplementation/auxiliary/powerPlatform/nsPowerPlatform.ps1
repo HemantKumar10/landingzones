@@ -1052,8 +1052,7 @@ if ($PPCitizen -in "yes")
             
             $customEnvironmentsToCreate = New-CustomEnvironmentCreationObject  
             Write-Output "Response:"
-            Write-Host ($customEnvironmentsToCreate | Format-List | Out-String)  
-            [array]
+            Write-Host ($customEnvironmentsToCreate | Format-List | Out-String) 
            if ($customEnvironmentsToCreate) {
             [array] $environmentsToCreate += $customEnvironmentsToCreate 
           }     
