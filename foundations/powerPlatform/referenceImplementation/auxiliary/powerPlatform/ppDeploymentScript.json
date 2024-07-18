@@ -196,7 +196,7 @@
         },
         "scriptUri": {
             "type": "string",          
-            "defaultValue": "https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/nsPowerPlatform.ps1",
+            "defaultValue":"https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/nsPowerPlatform.ps1",
             "metadata": {
                 "description": "The uri pointing to the PowerShell script used in the deploymentScript"
             }
