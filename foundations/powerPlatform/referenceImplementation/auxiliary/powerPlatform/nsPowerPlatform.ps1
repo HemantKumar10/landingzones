@@ -1156,6 +1156,7 @@ if ($PPCitizen -in "yes")
                 $adminEnvAttempts = 0
                 do {
                     $adminEnvAttempts++
+                    Write-Output "Admin attempt: $(adminEnvAttempts)"   
                     $getAdminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }                    
                     if ($null -eq $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
                     $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '' -or 
