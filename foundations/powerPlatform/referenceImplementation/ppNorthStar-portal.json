@@ -340,7 +340,7 @@
                             "name": "ppDefaultRename",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Rename the default environment",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "multiSelect": true,
                             "toolTip": "If 'Yes' is selected, the setup will rename the environment",
                             "constraints": {
@@ -375,7 +375,7 @@
                             "name": "ppDefaultDlp",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Assign recommended Data-loss prevention policies to the Default Environment",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "multiSelect": true,
                             "toolTip": "If 'Yes' is selected, the setup will enable this",
                             "constraints": {
@@ -408,7 +408,7 @@
                             "name": "ppDefaultManagedEnv",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Enable Managed Environments (Preview) for the Default Environment",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "toolTip": "Managed Environments is a suite of capabilities that allows admins to manage Power Platform at scale with more control, less effort, and more insights",
                             "constraints": {
                                 "allowedValues": [
@@ -429,7 +429,7 @@
                             "name": "ppDefaultManagedSharing",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Exclude sharing with security groups",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "toolTip": "Help reduce risk by limiting how widely canvas apps can be shared.",
                             "constraints": {
                                 "allowedValues": [
@@ -1239,7 +1239,7 @@
                             "name": "ppCitizenManagedEnv",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Enable Managed Environments (Preview) for the Environments.",
-                            "defaultValue": "Yes (recommended)",
+                            "defaultValue": "No",
                             "toolTip": "Managed Environments is a suite of capabilities that allows admins to manage Power Platform at scale with more control, less effort, and more insights",
                             "constraints": {
                                 "allowedValues": [
