@@ -91,12 +91,7 @@
             "id": "/providers/Microsoft.PowerApps/apis/shared_teams",
             "name": "Microsoft Teams",
             "type": "Microsoft.PowerApps/apis"
-          },
-          {
-            "id": "/providers/Microsoft.PowerApps/apis/shared_webcontents",
-            "name": "HTTP with Azure AD",
-            "type": "Microsoft.PowerApps/apis"
-          },
+          },         
           {
             "id": "Http",
             "name": "HTTP",
