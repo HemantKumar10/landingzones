@@ -1134,7 +1134,7 @@ if ($PPCitizen -in "yes")
                 $response = Invoke-RestMethod @PostParameters   
                 Write-Output "Create Environment: $($envCreationHt.Name) Completed" 
                 #Code to apply Admin DLP Policy for Admin Env#
-                If($envCreationHt.Name -eq $Global:envAdminName){
+                If($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes"){
                   Write-Output "Assign Dlp : $($envCreationHt.Name) Started..." 
                   New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'
                   Write-Output "Assign Dlp : $($envCreationHt.Name) Completed..." 
