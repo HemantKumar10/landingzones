@@ -96,12 +96,8 @@
             "id": "Http",
             "name": "HTTP",
             "type": "Microsoft.PowerApps/apis"
-          }
-        ]
-      },
-      {
-        "classification": "General",
-        "connectors": [
+          },
+          /*General Things*/
 
              {
             "id": "/providers/Microsoft.PowerApps/apis/shared_arm",
@@ -177,7 +173,13 @@
             "name": "Microsoft To-Do (Business)",
             "type": "Microsoft.PowerApps/apis"
           }
+
+
         ]
+      },
+      {
+        "classification": "General",
+        "connectors": []
       },
       {
         "classification": "Blocked",
