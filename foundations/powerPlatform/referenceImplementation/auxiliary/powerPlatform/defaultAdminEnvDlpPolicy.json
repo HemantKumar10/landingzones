@@ -2385,11 +2385,11 @@
             "type": "Microsoft.PowerApps/apis"
           },
 		  
-          {
+         /* {
             "id": "/providers/Microsoft.PowerApps/apis/shared_powerbi",
             "name": "Power BI",
             "type": "Microsoft.PowerApps/apis"
-          },
+          },*/
           {
             "id": "/providers/Microsoft.PowerApps/apis/shared_powerform7",
             "name": "Power Form 7",
@@ -3153,11 +3153,11 @@
             "name": "Xpertdoc",
             "type": "Microsoft.PowerApps/apis"
           },
-          {
+          /*{
             "id": "/providers/Microsoft.PowerApps/apis/shared_yammer",
             "name": "Yammer",
             "type": "Microsoft.PowerApps/apis"
-          },
+          },*/
           {
             "id": "/providers/Microsoft.PowerApps/apis/shared_yeeflow",
             "name": "Yeeflow",
