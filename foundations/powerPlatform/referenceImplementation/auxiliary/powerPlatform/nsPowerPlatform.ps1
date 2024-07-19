@@ -864,9 +864,11 @@ function New-DLPAssignmentFromEnv {
             high   = 'highTenantDlpPolicy.json'
         }
         defaultEnv       = 'defaultEnvDlpPolicy.json'
-        adminEnv         = 'adminEnvDlpPolicy.json'
+        #adminEnv         = 'adminEnvDlpPolicy.json'
+        adminEnv ='defaultAdminEnvDlpPolicy.json'
         citizenDlpPolicy = 'citizenDlpPolicy.json'
         proDlpPolicy     = 'proDlpPolicy.json'
+
     }
 
     # Get base template from repo
@@ -1131,6 +1133,13 @@ if ($PPCitizen -in "yes")
             try {
                 $response = Invoke-RestMethod @PostParameters   
                 Write-Output "Create Environment: $($envCreationHt.Name) Completed" 
+                #Code to apply Admin DLP Policy for Admin Env#
+                If($envCreationHt.Name -eq $Global:envAdminName){
+                  Write-Output "Assign Dlp : $($envCreationHt.Name) Started..." 
+                  New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'
+                  Write-Output "Assign Dlp : $($envCreationHt.Name) Completed..." 
+                }
+                
                 #Write-Host ($response | Format-List | Out-String)                            
             }
             catch {
