@@ -1,6 +1,6 @@
 {
     "displayName": "ANS Default Admin Environment DLP Policy",
-    "defaultConnectorsClassification": "General",
+    "defaultConnectorsClassification": "Blocked",
     "connectorGroups": [
       {
         "classification": "Confidential",
