@@ -26,7 +26,11 @@
                 "name": "Power Automate Management",
                 "type": "Microsoft.PowerApps/apis"
               },
-            
+              {
+                "id": "/providers/Microsoft.PowerApps/apis/shared_cardsforpowerapps",
+                "name": "Cards for Power Apps",
+                "type": "Microsoft.PowerApps/apis"
+              },
               {
                 "id": "/providers/Microsoft.PowerApps/apis/shared_office365",
                 "name": "Office 365 Outlook",
