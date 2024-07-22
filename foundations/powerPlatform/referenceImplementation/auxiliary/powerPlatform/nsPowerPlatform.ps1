@@ -120,78 +120,78 @@ function New-EnvironmentCreationObject {
     $envSku = 'Sandbox'                 
     if ($true -eq $EnvALM) {                
         foreach ($envTier in $envTiers) {                 
-            if($envTier -eq 'dev' -and $devEnvironment -eq 'true'){      
-                $Global:envDevName =  "{0}-{1}" -f $environmentName, $envTier 
+            if ($envTier -eq 'dev' -and $devEnvironment -eq 'true') {      
+                $Global:envDevName = "{0}-{1}" -f $environmentName, $envTier 
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Development' -SecurityGroupName "entra_powerplatform_development" -SecurityGroupNickName "PowerPlatformDevelopmentGroup"                                
                 $securityGroupId = $createdSecurityGroup
                 $envSku = 'Sandbox'  
                 $envDescription = 'Environment used for development purposes'
                    
             }
-            if ( $envTier -eq 'test' -and $testEnvironment -eq 'true' ){
-                $Global:envTestName =  "{0}-{1}" -f $environmentName, $envTier  
+            if ( $envTier -eq 'test' -and $testEnvironment -eq 'true' ) {
+                $Global:envTestName = "{0}-{1}" -f $environmentName, $envTier  
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Test' -SecurityGroupName "entra_powerplatform_test" -SecurityGroupNickName "PowerPlatformTestGroup"    
                 $securityGroupId = $createdSecurityGroup
                 $envSku = 'Sandbox'  
                 $envDescription = 'Environment used for testing purposes'
                 
             }
-            if ( $envTier -eq 'prod'  -and $prodEnvironment -eq 'true' ){
-                $Global:envProdName =  "{0}-{1}" -f $environmentName, $envTier  
+            if ( $envTier -eq 'prod' -and $prodEnvironment -eq 'true' ) {
+                $Global:envProdName = "{0}-{1}" -f $environmentName, $envTier  
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Production' -SecurityGroupName "entra_powerplatform_production" -SecurityGroupNickName "PowerPlatformProductionGroup" 
                 $securityGroupId = $createdSecurityGroup
-                $envSku ='Production'      
+                $envSku = 'Production'      
                 $envDescription = 'Environment used for production purposes' 
                              
             }
-            if ( $envTier -eq 'admin'  -and $adminEnvironment -eq 'true' ){
+            if ( $envTier -eq 'admin' -and $adminEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Admin' -SecurityGroupName "entra_powerplatform_admin" -SecurityGroupNickName "PowerPlatformAdminGroup" 
                 $securityGroupId = $createdSecurityGroup                
-                $envSku ='Production'
+                $envSku = 'Production'
                 $envDescription = 'Environment used for administration purposes'     
-                $Global:envAdminName =  "{0}-{1}" -f $environmentName, $envTier                   
+                $Global:envAdminName = "{0}-{1}" -f $environmentName, $envTier                   
             }
 
             #Adding conditions for new environment types
-            if ( $envTier -eq 'qa'  -and $qaEnvironment -eq 'true' ){
+            if ( $envTier -eq 'qa' -and $qaEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'QA' -SecurityGroupName "entra_powerplatform_qa" -SecurityGroupNickName "PowerPlatformQAGroup" 
                 $securityGroupId = $createdSecurityGroup                
-                $envSku ='Sandbox'
+                $envSku = 'Sandbox'
                 $envDescription = 'Environment used for qa purposes'     
                            
             }
-            if ( $envTier -eq 'uat'  -and $uatEnvironment -eq 'true' ){
+            if ( $envTier -eq 'uat' -and $uatEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'UAT' -SecurityGroupName "entra_powerplatform_uat" -SecurityGroupNickName "PowerPlatformUATGroup" 
                 $securityGroupId = $createdSecurityGroup                
-                $envSku ='Sandbox'
+                $envSku = 'Sandbox'
                 $envDescription = 'Environment used for uat purposes'     
                          
             }
-            if ( $envTier -eq 'staging'  -and $stagingEnvironment -eq 'true' ){
+            if ( $envTier -eq 'staging' -and $stagingEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Staging' -SecurityGroupName "entra_powerplatform_staging" -SecurityGroupNickName "PowerPlatformStagingGroup" 
                 $securityGroupId = $createdSecurityGroup                
-                $envSku ='Sandbox'
+                $envSku = 'Sandbox'
                 $envDescription = 'Environment used for staging purposes'     
                            
             }
-            if ( $envTier -eq 'training'  -and $trainingEnvironment -eq 'true' ){
+            if ( $envTier -eq 'training' -and $trainingEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Training' -SecurityGroupName "entra_powerplatform_training" -SecurityGroupNickName "PowerPlatformTrainingGroup" 
                 $securityGroupId = $createdSecurityGroup                
-                $envSku ='Sandbox'
+                $envSku = 'Sandbox'
                 $envDescription = 'Environment used for training purposes'     
                           
             }
-            if ( $envTier -eq 'data' -and $dataEnvironment -eq 'true' ){
+            if ( $envTier -eq 'data' -and $dataEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Data' -SecurityGroupName "entra_powerplatform_data" -SecurityGroupNickName "PowerPlatformDataGroup" 
                 $securityGroupId = $createdSecurityGroup                
-                $envSku ='Sandbox'
+                $envSku = 'Sandbox'
                 $envDescription = 'Environment used for data purposes'     
                   
             }
-            if ( $envTier -eq 'integration' -and $integrationEnvironment -eq 'true' ){
+            if ( $envTier -eq 'integration' -and $integrationEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Integration' -SecurityGroupName "entra_powerplatform_integration" -SecurityGroupNickName "PowerPlatformIntegrationGroup" 
                 $securityGroupId = $createdSecurityGroup                
-                $envSku ='Sandbox'
+                $envSku = 'Sandbox'
                 $envDescription = 'Environment used for integration purposes'     
                   
             }
@@ -214,34 +214,33 @@ function New-EnvironmentCreationObject {
 
 #New Custom Environment Creation Object
 function New-CustomEnvironmentCreationObject {
-    if (-not [string]::IsNullOrEmpty($customEnvironments)) 
-    {
-         try {
+    if (-not [string]::IsNullOrEmpty($customEnvironments)) {
+        try {
             $customEnv = ($customEnvironments -join ',') 
             #Write-Output "Custom Env: $($customEnv)"
             foreach ($env in ($customEnv -split 'ppEnvName:')) {
                 $environment = $env.TrimEnd(',')
                 $envNameTemp = ($environment -split (','))[0]
-                if(-not [string]::IsNullOrEmpty($envNameTemp)){
-                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($envNameTemp) -SecurityGroupName "entra_powerplatform_$($envNameTemp.ToLower())" -SecurityGroupNickName "PowerPlatform$($envNameTemp)Group"
-                $securityGroupId = $createdSecurityGroup 
-                [PSCustomObject]@{
-                    envName        = ($environment -split (','))[0]
-                    envRegion      = $PPCitizenRegion
-                    envDataverse   = $true
-                    envLanguage    = $PPCitizenLanguage
-                    envCurrency    = $PPCitizenCurrency
-                    envDescription = $(($environment -split (','))[1].Split(':')[1])
-                    envRbac        = $securityGroupId
-                    envSku         = 'Sandbox'
+                if (-not [string]::IsNullOrEmpty($envNameTemp)) {
+                    $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName $($envNameTemp) -SecurityGroupName "entra_powerplatform_$($envNameTemp.ToLower())" -SecurityGroupNickName "PowerPlatform$($envNameTemp)Group"
+                    $securityGroupId = $createdSecurityGroup 
+                    [PSCustomObject]@{
+                        envName        = ($environment -split (','))[0]
+                        envRegion      = $PPCitizenRegion
+                        envDataverse   = $true
+                        envLanguage    = $PPCitizenLanguage
+                        envCurrency    = $PPCitizenCurrency
+                        envDescription = $(($environment -split (','))[1].Split(':')[1])
+                        envRbac        = $securityGroupId
+                        envSku         = 'Sandbox'
+                    }
                 }
-             }
               
             }
-         }
-         catch {
+        }
+        catch {
             Write-Output "Custom Env $($customEnvironments) failed`r`n$_" 
-         }
+        }
        
     }
 }
@@ -256,14 +255,14 @@ function New-CreateSecurityGroup {
 
       
     $createSecurityGroup = @{
-        description="Security Group used for Power Platform - $($EnvironmentName) environment"
-        displayName= $SecurityGroupName
-        mailEnabled=$false
-        securityEnabled=$true
-        mailNickname= $SecurityGroupNickName
-       }
+        description     = "Security Group used for Power Platform - $($EnvironmentName) environment"
+        displayName     = $SecurityGroupName
+        mailEnabled     = $false
+        securityEnabled = $true
+        mailNickname    = $SecurityGroupNickName
+    }
 
-       <# $devSecurityGroup = @{
+    <# $devSecurityGroup = @{
             description="Security Group used for Power Platform - Development environment"
             displayName="entra_powerplatform_development"
             mailEnabled=$false
@@ -295,21 +294,21 @@ function New-CreateSecurityGroup {
              mailNickname="PowerPlatformAdminGroup"
             }#>
                 
-            $Value =''
-            # Code Begins
-            # Get token to authenticate to Power Platform                       
-            $Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default").Token            
+    $Value = ''
+    # Code Begins
+    # Get token to authenticate to Power Platform                       
+    $Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default").Token            
             
-            # Power Platform HTTP Post Group Uri
-            $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
+    # Power Platform HTTP Post Group Uri
+    $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
             
-            # Declare Rest headers
-            $Headers = @{
-                "Content-Type"  = "application/json"
-                "Authorization" = "Bearer $($Token)"
-            }
-           # Declaring the HTTP Post request
-           <# $PostBody = @{             
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    <# $PostBody = @{             
             }
             if ($EnvironmentType -eq "dev") {          
                 $PostBody = $devSecurityGroup   
@@ -326,25 +325,25 @@ function New-CreateSecurityGroup {
             #>
             
 
-            $PostBody = $createSecurityGroup   
-            $PostParameters = @{
-                "Uri"         = "$($PostGroups)"
-                "Method"      = "Post"
-                "Headers"     = $headers
-                "Body"        = $postBody | ConvertTo-json -Depth 100
-                "ContentType" = "application/json"
-            }        
+    $PostBody = $createSecurityGroup   
+    $PostParameters = @{
+        "Uri"         = "$($PostGroups)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+        "ContentType" = "application/json"
+    }        
             
-            try {
-                $response = Invoke-RestMethod @PostParameters               
-                $Value  = $response.id                                
-            }
-            catch {           
+    try {
+        $response = Invoke-RestMethod @PostParameters               
+        $Value = $response.id                                
+    }
+    catch {           
              
-                throw "REST API call failed drastically"
-            }  
+        throw "REST API call failed drastically"
+    }  
 
-            return $Value
+    return $Value
 }
 
 #Install a package or App to environment
@@ -354,31 +353,31 @@ function New-InstallPackaggeToEnvironment {
         [Parameter(Mandatory = $true)][string]$PackageName,
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
-        # Code Begins
-        # Get token to authenticate to Power Platform
+    # Code Begins
+    # Get token to authenticate to Power Platform
         
-        $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
-        # Power Platform HTTP Post Environment Uri
-        $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
+    $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
+    # Power Platform HTTP Post Environment Uri
+    $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
         
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
-        # Declaring the HTTP Post request
-        $PostParameters = @{
-            "Uri"         = "$($PostEnvironment)"
-            "Method"      = "Post"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-        }  
-        try {
-            $outputPackage = Invoke-RestMethod @PostParameters 
-            $operationId =  $outputPackage.lastOperation.operationId  
-            Write-Output "Application Installation $($PackageName) in progress"  
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+    }  
+    try {
+        $outputPackage = Invoke-RestMethod @PostParameters 
+        $operationId = $outputPackage.lastOperation.operationId  
+        Write-Output "Application Installation $($PackageName) in progress"  
 
-            if ($devEnvironment -eq 'true' -and 
+        if ($devEnvironment -eq 'true' -and 
             $testEnvironment -eq 'true' -and 
             $prodEnvironment -eq 'true' -and 
             $adminEnvironment -eq 'true' -and
@@ -389,15 +388,15 @@ function New-InstallPackaggeToEnvironment {
             $envTiers.contains('data') -eq $false -and
             $envTiers.contains('integration') -eq $false -and
             ([string]::IsNullOrEmpty($PPCitizenConfiguration))
-            ) {    
-                  Start-Sleep -Seconds 15   
-                  New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'    
-            }     
+        ) {    
+            Start-Sleep -Seconds 15   
+            New-GetApplicationInstallStatus -OperationId $operationId -EnvironmentId $EnvironmentId -EnvironmentURL $EnvironmentURL -EnvironmentName $Global:envAdminName -EnvironmentType '200000000'    
+        }     
            
-        }
-        catch {            
-            Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
-        }          
+    }
+    catch {            
+        Write-Error "$($PackageName) Installation EnvironmentId $($EnvironmentId) failed`r`n$_"               
+    }          
 }
 
 
@@ -413,12 +412,12 @@ function New-GetApplicationInstallStatus {
         
     ) 
 
-       $getApplicationAttempt = 0
+    $getApplicationAttempt = 0
 
-       Write-Output "Checking Application Status"   
-     do{
+    Write-Output "Checking Application Status"   
+    do {
         $getApplicationAttempt++
-          # Code Begins
+        # Code Begins
         # Get token to authenticate to Power Platform
         
         $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
@@ -444,65 +443,65 @@ function New-GetApplicationInstallStatus {
             if ($packageSTatus.status -ne 'Succeeded' -or $packageSTatus.status -ne 'Canceled' -or $packageSTatus.status -ne 'Failed') {                      
                 Start-Sleep -Seconds 15
             } 
-            if($packageSTatus.status -eq 'Succeeded'){            
+            if ($packageSTatus.status -eq 'Succeeded') {            
                 Start-Sleep -Seconds 5
                 #Region Check the Dev Environment is Successfully created or not
-                 $getdevEnvAttempts =0
-                 do {
+                $getdevEnvAttempts = 0
+                do {
                     $getdevEnvAttempts++
-                   $fetchDevEnv =  Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envDevName} 
-                   if ($fetchDevEnv.properties.provisioningState -ne 'Succeeded' ) {
-                       Write-Output "Getting Dev environment - attempt $getdevEnvAttempts"
-                       Start-Sleep -Seconds 15
-                   }
-                   else {
-                    $envType = '200000000' #Development 
-                    New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchDevEnv.properties.displayName) -EnvironmentId $($fetchDevEnv.name) -EnvironmentType $envType 
-                   }
-                 } until ( $fetchDevEnv.properties.provisioningState -eq 'Succeeded' -or $getdevEnvAttempts -eq 20)
+                    $fetchDevEnv = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envDevName } 
+                    if ($fetchDevEnv.properties.provisioningState -ne 'Succeeded' ) {
+                        Write-Output "Getting Dev environment - attempt $getdevEnvAttempts"
+                        Start-Sleep -Seconds 15
+                    }
+                    else {
+                        $envType = '200000000' #Development 
+                        New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchDevEnv.properties.displayName) -EnvironmentId $($fetchDevEnv.name) -EnvironmentType $envType 
+                    }
+                } until ( $fetchDevEnv.properties.provisioningState -eq 'Succeeded' -or $getdevEnvAttempts -eq 20)
                 #End Region Check the Dev Environment is Successfully created or not
 
                 #Region Check the test Environment is Successfully created or not
-                  $getTestEnvAttempts =0
-                  do {
-                     $getTestEnvAttempts++
-                    $fetchTestEnv =  Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envTestName} 
+                $getTestEnvAttempts = 0
+                do {
+                    $getTestEnvAttempts++
+                    $fetchTestEnv = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envTestName } 
                     if ($fetchTestEnv.properties.provisioningState -ne 'Succeeded' ) {
                         Write-Output "Getting Test environment - attempt $getTestEnvAttempts"
                         Start-Sleep -Seconds 15
                     }
                     else {
-                     $envType = '200000001' #Taregt 
-                     New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchTestEnv.properties.displayName) -EnvironmentId $($fetchTestEnv.name) -EnvironmentType $envType 
+                        $envType = '200000001' #Taregt 
+                        New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchTestEnv.properties.displayName) -EnvironmentId $($fetchTestEnv.name) -EnvironmentType $envType 
                     }
-                  } until ( $fetchTestEnv.properties.provisioningState -eq 'Succeeded' -or $getTestEnvAttempts -eq 20)
-                 #End Region Check the test Environment is Successfully created or not
+                } until ( $fetchTestEnv.properties.provisioningState -eq 'Succeeded' -or $getTestEnvAttempts -eq 20)
+                #End Region Check the test Environment is Successfully created or not
  
 
-                   #Region Check the Prod Environment is Successfully created or not
-                   $getProdEnvAttempts =0
-                   do {
-                      $getProdEnvAttempts++
-                     $fetchProdEnv =  Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envProdName} 
-                     if ($fetchProdEnv.properties.provisioningState -ne 'Succeeded' ) {
-                         Write-Output "Getting Production environment - attempt $getProdEnvAttempts"
-                         Start-Sleep -Seconds 15
-                     }
-                     else {
-                      $envType = '200000001' #Taregt 
-                      New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchProdEnv.properties.displayName) -EnvironmentId $($fetchProdEnv.name) -EnvironmentType $envType 
-                     }
-                   } until ( $fetchProdEnv.properties.provisioningState -eq 'Succeeded' -or $getProdEnvAttempts -eq 20)
-                  #End Region Check the Prod Environment is Successfully created or not
+                #Region Check the Prod Environment is Successfully created or not
+                $getProdEnvAttempts = 0
+                do {
+                    $getProdEnvAttempts++
+                    $fetchProdEnv = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envProdName } 
+                    if ($fetchProdEnv.properties.provisioningState -ne 'Succeeded' ) {
+                        Write-Output "Getting Production environment - attempt $getProdEnvAttempts"
+                        Start-Sleep -Seconds 15
+                    }
+                    else {
+                        $envType = '200000001' #Taregt 
+                        New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($fetchProdEnv.properties.displayName) -EnvironmentId $($fetchProdEnv.name) -EnvironmentType $envType 
+                    }
+                } until ( $fetchProdEnv.properties.provisioningState -eq 'Succeeded' -or $getProdEnvAttempts -eq 20)
+                #End Region Check the Prod Environment is Successfully created or not
 
 
 
                 #Create Deployment Environment Record for Admin
-               <# $adminEnvDetails = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envAdminName }     
+                <# $adminEnvDetails = Get-PowerOpsEnvironment | Where-Object { $_.properties.displayName -eq $Global:envAdminName }     
                 $envType = '200000001' #Taregt 
                 New-CreateDeploymentEnvrionmentRecord -EnvironmentURL $EnvironmentURL -EnvironmentName $($adminEnvDetails.properties.displayName) -EnvironmentId $($adminEnvDetails.name) -EnvironmentType $envType 
                 #>
-               <# Get-PowerOpsEnvironment | Where-Object {$_.properties.displayName -eq $Global:envAdminName -or $_.properties.displayName -eq $Global:envTestName -or $_.properties.displayName -eq $Global:envDevName -or $_.properties.displayName -eq $Global:envProdName} | ForEach-Object -Process {
+                <# Get-PowerOpsEnvironment | Where-Object {$_.properties.displayName -eq $Global:envAdminName -or $_.properties.displayName -eq $Global:envTestName -or $_.properties.displayName -eq $Global:envDevName -or $_.properties.displayName -eq $Global:envProdName} | ForEach-Object -Process {
                     $envType = '200000001' #Taregt
                     if($_.properties.displayName-eq $Global:envDevName){
                         $envType = '200000000' #Development 
@@ -512,43 +511,43 @@ function New-GetApplicationInstallStatus {
                       
                 New-CreateDeploymentPipeline -Name "Power Platform Pipeline" -EnvironmentURL $EnvironmentURL 
                 Start-Sleep -Seconds 5
-                $listDeploymentEnvironments =  New-GetDeploymentEnvrionmentRecords -EnvironmentURL $EnvironmentURL
+                $listDeploymentEnvironments = New-GetDeploymentEnvrionmentRecords -EnvironmentURL $EnvironmentURL
                 Start-Sleep -Seconds 5
                 $listDeploymentPipelines = New-GetDeploymentPipelineRecords -EnvironmentURL $EnvironmentURL 
 
-                foreach($pipeline in $listDeploymentPipelines.value){
-                    $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000000} | ForEach-Object -Process {
+                foreach ($pipeline in $listDeploymentPipelines.value) {
+                    $listDeploymentEnvironments.value | Where-Object { $_.environmenttype -eq 200000000 } | ForEach-Object -Process {
                         New-AssociateDeploymentEnvironmentWithPipeline -DeploymentPipelineId $pipeline.deploymentpipelineid -DeploymentEnvrionmentId $_.deploymentenvironmentid -EnvironmentURL $EnvironmentURL  
                     }
                 }
                 
 
                 $testEnvrionmentName = $Global:envTestName
-                foreach($pipeline in $listDeploymentPipelines.value){
-                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $testEnvrionmentName} | ForEach-Object -Process {                    
-                New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
+                foreach ($pipeline in $listDeploymentPipelines.value) {
+                    $listDeploymentEnvironments.value | Where-Object { $_.environmenttype -eq 200000001 -and $_.name -eq $testEnvrionmentName } | ForEach-Object -Process {                    
+                        New-CreateDeploymentStages -Name "Deploy to $($testEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage 'Null' -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
+                    }
                 }
-            }
 
                 Start-Sleep -Seconds 5
-                foreach($pipeline in $listDeploymentPipelines.value){
-                $listDeploymentStages = New-GetDeploymentStageRecords -EnvironmentURL $EnvironmentURL 
-                $prodEnvrionmentName = $Global:envProdName
-                $listDeploymentEnvironments.value | Where-Object {$_.environmenttype -eq 200000001 -and $_.name -eq $prodEnvrionmentName} | ForEach-Object -Process {                
-                    $previousStage = $listDeploymentStages.value[0].deploymentstageid 
-                    New-CreateDeploymentStages -Name "Deploy to $($prodEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage $previousStage -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
-                }  
-            }             
+                foreach ($pipeline in $listDeploymentPipelines.value) {
+                    $listDeploymentStages = New-GetDeploymentStageRecords -EnvironmentURL $EnvironmentURL 
+                    $prodEnvrionmentName = $Global:envProdName
+                    $listDeploymentEnvironments.value | Where-Object { $_.environmenttype -eq 200000001 -and $_.name -eq $prodEnvrionmentName } | ForEach-Object -Process {                
+                        $previousStage = $listDeploymentStages.value[0].deploymentstageid 
+                        New-CreateDeploymentStages -Name "Deploy to $($prodEnvrionmentName)" -DeploymentPipeline $pipeline.deploymentpipelineid -PreviousStage $previousStage -TargetDeploymentEnvironment $_.deploymentenvironmentid  -EnvironmentURL $EnvironmentURL 
+                    }  
+                }             
                
 
             }
-           #Write-Host ($packageSTatus | Format-List | Out-String)
+            #Write-Host ($packageSTatus | Format-List | Out-String)
         }
         catch {            
             Write-Error "Failed gettting package status`r`n$_"               
         } 
 
-     } until ($packageSTatus.status -eq 'Succeeded' -or $packageSTatus.status -eq 'Canceled' -or $packageSTatus.status -eq 'Failed' -or $getApplicationAttempt -eq 20)
+    } until ($packageSTatus.status -eq 'Succeeded' -or $packageSTatus.status -eq 'Canceled' -or $packageSTatus.status -eq 'Failed' -or $getApplicationAttempt -eq 20)
 }
 
 #Create a Deployment Environment Record
@@ -559,45 +558,45 @@ function New-CreateDeploymentEnvrionmentRecord {
         [Parameter(Mandatory = $true)][string]$EnvironmentId,
         [Parameter(Mandatory = $true)][string]$EnvironmentType
     ) 
-        # Code Begins
-        # Get token to authenticate to Power Platform
+    # Code Begins
+    # Get token to authenticate to Power Platform
         
-        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-        # Power Platform HTTP Post Environment Uri
-        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    # Power Platform HTTP Post Environment Uri
+    $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
         
-        #Write-Output "Token $($Token)"
-        Write-Output " Envrionment URL $($PostEnvironment)"
-        # Declare Rest headers
-        $PostBody = @{           
-            "name" = "$($EnvironmentName)"
-            "environmenttype"   = $($EnvironmentType)
-            "environmentid"    =  "$($EnvironmentId)" 
-        }
+    #Write-Output "Token $($Token)"
+    Write-Output " Envrionment URL $($PostEnvironment)"
+    # Declare Rest headers
+    $PostBody = @{           
+        "name"            = "$($EnvironmentName)"
+        "environmenttype" = $($EnvironmentType)
+        "environmentid"   = "$($EnvironmentId)" 
+    }
 
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
      
-        # Declaring the HTTP Post request
-        $PostParameters = @{
-            "Uri"         = "$($PostEnvironment)"
-            "Method"      = "Post"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-            "Body"        = $postBody | ConvertTo-json -Depth 100
-        }   
-        try {
-            Invoke-RestMethod @PostParameters  
-            Write-Output "Deployment Envrionment Created $($EnvironmentName)"
-            #Write-Host ($outputDeploymentEnvironment | Format-List | Out-String)
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }   
+    try {
+        Invoke-RestMethod @PostParameters  
+        Write-Output "Deployment Envrionment Created $($EnvironmentName)"
+        #Write-Host ($outputDeploymentEnvironment | Format-List | Out-String)
        
-        }
-        catch {            
-            Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
-        }          
+    }
+    catch {            
+        Write-Error "Deployment Envrionment Creation $($EnvironmentName) failed`r`n$_"               
+    }          
 }
 
 
@@ -607,36 +606,36 @@ function New-CreateDeploymentPipeline {
         [Parameter(Mandatory = $true)][string]$Name,       
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
-        # Code Begins
-        # Power Platform HTTP Post Environment Uri
-        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines"     
+    # Code Begins
+    # Power Platform HTTP Post Environment Uri
+    $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines"     
         
-        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-        $PostBody = @{
-                    "name" = "$($Name)"
-        }
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    $PostBody = @{
+        "name" = "$($Name)"
+    }
         
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
-        # Declaring the HTTP Post request
-        $PostParameters = @{
-            "Uri"         = "$($PostEnvironment)"
-            "Method"      = "Post"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-            "Body"        = $postBody | ConvertTo-json -Depth 100
-        }  
-        try {
-            Invoke-RestMethod @PostParameters  
-            Write-Output "Deployment Pipeline record created: $($Name)"        
-            #New-CreateDeploymentStages -Name 'Prodcution - Deployment Statge' -DeploymentPipeline '' -PreviousStage '' -TargetDeploymentEnvironment '' -EnvironmentURL '' -Token $Token 
-        }
-        catch {            
-            Write-Error "Deployment Pipeline record creation: $($Name) failed`r`n$_"               
-        }          
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }  
+    try {
+        Invoke-RestMethod @PostParameters  
+        Write-Output "Deployment Pipeline record created: $($Name)"        
+        #New-CreateDeploymentStages -Name 'Prodcution - Deployment Statge' -DeploymentPipeline '' -PreviousStage '' -TargetDeploymentEnvironment '' -EnvironmentURL '' -Token $Token 
+    }
+    catch {            
+        Write-Error "Deployment Pipeline record creation: $($Name) failed`r`n$_"               
+    }          
 }
 
 
@@ -646,32 +645,32 @@ function New-GetDeploymentEnvrionmentRecords {
         [Parameter(Mandatory = $true)][string]$EnvironmentURL      
         
     ) 
-        # Code Begins
+    # Code Begins
      
-        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-        # Power Platform HTTP Post Environment Uri
-        $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"   
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    # Power Platform HTTP Post Environment Uri
+    $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"   
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
       
-        # Declaring the HTTP Post request
-        $GetParameters = @{
-            "Uri"         = "$($GetEnvironment)"
-            "Method"      = "GET"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-        }   
-        try {
-            $outputDeploymentEnvironments = Invoke-RestMethod @GetParameters 
-            return $outputDeploymentEnvironments          
+    # Declaring the HTTP Post request
+    $GetParameters = @{
+        "Uri"         = "$($GetEnvironment)"
+        "Method"      = "GET"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+    }   
+    try {
+        $outputDeploymentEnvironments = Invoke-RestMethod @GetParameters 
+        return $outputDeploymentEnvironments          
        
-        }
-        catch {            
-            Write-Error "Get Deployment Envrionment $($EnvironmentName) failed`r`n$_"               
-        }          
+    }
+    catch {            
+        Write-Error "Get Deployment Envrionment $($EnvironmentName) failed`r`n$_"               
+    }          
 }
 
 
@@ -680,18 +679,18 @@ function New-GetDeploymentPipelineRecords {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
-        # Code Begins    
-        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
-        # Power Platform HTTP Post Environment Uri
-        $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines" 
+    # Code Begins    
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+    # Power Platform HTTP Post Environment Uri
+    $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines" 
 
-        # Declare Rest headers
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
-       <# $Headers = @{            
+    # Declare Rest headers
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
+    <# $Headers = @{            
             "Authorization" = "Bearer $($Token)"
             "OData-MaxVersion" = 4.0
             "OData-Version" = 4.0
@@ -699,21 +698,21 @@ function New-GetDeploymentPipelineRecords {
             "Content-Type" = "application/json; charset=utf-8"
             "Prefer" = "odata.include-annotations='*',return=representation"
         } #>
-        # Declaring the HTTP Post request
-        $GetParameters = @{
-            "Uri"         = "$($GetEnvironment)"
-            "Method"      = "GET"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-        }   
-        try {
-            $outputDeploymentPipelines = Invoke-RestMethod @GetParameters  
-            return $outputDeploymentPipelines
+    # Declaring the HTTP Post request
+    $GetParameters = @{
+        "Uri"         = "$($GetEnvironment)"
+        "Method"      = "GET"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+    }   
+    try {
+        $outputDeploymentPipelines = Invoke-RestMethod @GetParameters  
+        return $outputDeploymentPipelines
        
-        }
-        catch {            
-            Write-Error "Get Deployment Pipeline $($EnvironmentName) failed`r`n$_"               
-        }          
+    }
+    catch {            
+        Write-Error "Get Deployment Pipeline $($EnvironmentName) failed`r`n$_"               
+    }          
 }
 
 
@@ -722,33 +721,33 @@ function New-GetDeploymentStageRecords {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
-        # Code Begins    
-        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
-        # Power Platform HTTP Post Environment Uri
-        $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages" 
+    # Code Begins    
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+    # Power Platform HTTP Post Environment Uri
+    $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages" 
 
-        # Declare Rest headers
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
+    # Declare Rest headers
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
      
-        # Declaring the HTTP Post request
-        $GetParameters = @{
-            "Uri"         = "$($GetEnvironment)"
-            "Method"      = "GET"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-        }   
-        try {
-            $outputDeploymentStages = Invoke-RestMethod @GetParameters  
-            return $outputDeploymentStages
+    # Declaring the HTTP Post request
+    $GetParameters = @{
+        "Uri"         = "$($GetEnvironment)"
+        "Method"      = "GET"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+    }   
+    try {
+        $outputDeploymentStages = Invoke-RestMethod @GetParameters  
+        return $outputDeploymentStages
        
-        }
-        catch {            
-            Write-Error "Get Deployment Stage $($EnvironmentName) failed`r`n$_"               
-        }          
+    }
+    catch {            
+        Write-Error "Get Deployment Stage $($EnvironmentName) failed`r`n$_"               
+    }          
 }
 
 #Associate Deployment Envrionment (Development Type) with the Pipeline Record
@@ -759,37 +758,37 @@ function New-AssociateDeploymentEnvironmentWithPipeline {
         [Parameter(Mandatory = $true)][string]$DeploymentEnvrionmentId,
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
-        # Code Begins
-        # Get token to authenticate to Power Platform
+    # Code Begins
+    # Get token to authenticate to Power Platform
         
-        $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-        # Power Platform HTTP Post Environment Uri
-        $refVar = '$ref'
-        $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines($DeploymentPipelineId)/deploymentpipeline_deploymentenvironment/$refVar"           
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    # Power Platform HTTP Post Environment Uri
+    $refVar = '$ref'
+    $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines($DeploymentPipelineId)/deploymentpipeline_deploymentenvironment/$refVar"           
         
-        $PostBody = @{
-            "@odata.id" = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments($DeploymentEnvrionmentId)"
-       }
-        # Declare Rest headers
-        $Headers = @{
-            "Content-Type"  = "application/json"
-            "Authorization" = "Bearer $($Token)"
-        }
-        # Declaring the HTTP Post request
-        $PostParameters = @{
-            "Uri"         = "$($PostEnvironment)"
-            "Method"      = "Post"
-            "Headers"     = $headers
-            "ContentType" = "application/json"
-            "Body"        = $postBody | ConvertTo-json -Depth 100
-        }  
-        try {
-            Invoke-RestMethod @PostParameters  
-            Write-Output "Association of Envrionment and Pipeline completed"
-        }
-        catch {            
-            Write-Error "Association of Envrionment and Pipeline failed`r`n$_"               
-        }          
+    $PostBody = @{
+        "@odata.id" = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments($DeploymentEnvrionmentId)"
+    }
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }  
+    try {
+        Invoke-RestMethod @PostParameters  
+        Write-Output "Association of Envrionment and Pipeline completed"
+    }
+    catch {            
+        Write-Error "Association of Envrionment and Pipeline failed`r`n$_"               
+    }          
 }
 
 #Create Deployment Stage records
@@ -801,53 +800,53 @@ function New-CreateDeploymentStages {
         [Parameter(Mandatory = $true)][string]$TargetDeploymentEnvironment,
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
-        # Code Begins
-        # Get token to authenticate to Power Platform
-        # Power Platform HTTP Post Environment Uri
-          $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
-           $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages"    
+    # Code Begins
+    # Get token to authenticate to Power Platform
+    # Power Platform HTTP Post Environment Uri
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages"    
          
-           $PostBody = @{
-            "name" = "$($Name)"
+    $PostBody = @{
+        "name"                                     = "$($Name)"
+        "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
+        "deploymentpipelineid@odata.bind"          = "/deploymentpipelines($DeploymentPipeline)"
+    }
+    if ($PreviousStage -eq 'Null') {
+        $PostBody = @{
+            "name"                                     = "$($Name)"
             "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
-            "deploymentpipelineid@odata.bind" = "/deploymentpipelines($DeploymentPipeline)"
-            }
-            if($PreviousStage -eq 'Null'){
-                $PostBody = @{
-                    "name" = "$($Name)"
-                    "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
-                    "deploymentpipelineid@odata.bind" = "/deploymentpipelines($DeploymentPipeline)"
-                    }
-            }
-            else {
-                $PostBody = @{
-                    "name" = "$($Name)"
-                    "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
-                    "previousdeploymentstageid@odata.bind" = "/deploymentstages($PreviousStage)"
-                    "deploymentpipelineid@odata.bind" = "/deploymentpipelines($DeploymentPipeline)"
-                    }
-            }
+            "deploymentpipelineid@odata.bind"          = "/deploymentpipelines($DeploymentPipeline)"
+        }
+    }
+    else {
+        $PostBody = @{
+            "name"                                     = "$($Name)"
+            "targetdeploymentenvironmentid@odata.bind" = "/deploymentenvironments($TargetDeploymentEnvironment)"
+            "previousdeploymentstageid@odata.bind"     = "/deploymentstages($PreviousStage)"
+            "deploymentpipelineid@odata.bind"          = "/deploymentpipelines($DeploymentPipeline)"
+        }
+    }
 
-            # Declare Rest headers
-            $Headers = @{
-                "Content-Type"  = "application/json"
-                "Authorization" = "Bearer $($Token)"
-            }
-            # Declaring the HTTP Post request
-            $PostParameters = @{
-                "Uri"         = "$($PostEnvironment)"
-                "Method"      = "Post"
-                "Headers"     = $headers
-                "ContentType" = "application/json"
-                "Body"        = $postBody | ConvertTo-json -Depth 100
-            }  
-            try {
-                Invoke-RestMethod @PostParameters  
-                Write-Output "Deployment Statge record created: $($Name)"
-            }
-            catch {            
-                Write-Error "Deployment Statge record creation: $($Name) failed`r`n$_"               
-            }           
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }  
+    try {
+        Invoke-RestMethod @PostParameters  
+        Write-Output "Deployment Statge record created: $($Name)"
+    }
+    catch {            
+        Write-Error "Deployment Statge record creation: $($Name) failed`r`n$_"               
+    }           
 }
 
 function New-DLPAssignmentFromEnv {
@@ -857,17 +856,19 @@ function New-DLPAssignmentFromEnv {
     )
     #DLP Template references
     $dlpPolicies = @{
-        baseUri          = 	'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/'
-        tenant           = @{
+        baseUri                         = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/'
+        tenant                          = @{
             low    = 'lowTenantDlpPolicy.json'
             medium = 'mediumTenantDlpPolicy.json'
             high   = 'highTenantDlpPolicy.json'
         }
-        defaultEnv       = 'defaultEnvDlpPolicy.json'
+        defaultEnv                      = 'defaultEnvDlpPolicy.json'
         #adminEnv         = 'adminEnvDlpPolicy.json'
-        adminEnv ='defaultAdminEnvDlpPolicy.json'
-        citizenDlpPolicy = 'citizenDlpPolicy.json'
-        proDlpPolicy     = 'proDlpPolicy.json'
+        adminEnv                        = 'defaultAdminEnvDlpPolicy.json'
+        citizenDlpPolicy                = 'citizenDlpPolicy.json'
+        proDlpPolicy                    = 'proDlpPolicy.json'
+        defaultTenantDlpPolicyD365      = 'defaultTenantDlpPolicyD365.json'
+        defaultTenantDlpPolicyPowerApps = 'defaultTenantDlpPolicyPowerApps.json'
 
     }
 
@@ -1032,25 +1033,23 @@ if ($defaultEnvironment.properties.governanceConfiguration.protectionLevel -ne '
 #endregion default environment
 
 #region create landing zones for citizen devs
-if ($PPCitizen -in "yes") 
-{   
+if ($PPCitizen -in "yes") {   
     try {
         $envHt = @{            
-            EnvNaming       = $PPCitizenNaming
-            EnvRegion       = $PPCitizenRegion
-            envLanguage     = $PPCitizenLanguage
-            envCurrency     = $PPCitizenCurrency
-            envDescription  = ''
-            EnvALM          = $PPCitizenAlm -eq 'Yes'
-            EnvDataverse    = $PPCitizen -eq 'Yes'            
+            EnvNaming      = $PPCitizenNaming
+            EnvRegion      = $PPCitizenRegion
+            envLanguage    = $PPCitizenLanguage
+            envCurrency    = $PPCitizenCurrency
+            envDescription = ''
+            EnvALM         = $PPCitizenAlm -eq 'Yes'
+            EnvDataverse   = $PPCitizen -eq 'Yes'            
         }
         $environmentsToCreate = New-EnvironmentCreationObject @envHt
-        if (-not [string]::IsNullOrEmpty($customEnvironments)) 
-        {
+        if (-not [string]::IsNullOrEmpty($customEnvironments)) {
             $customEnvironmentsToCreate = New-CustomEnvironmentCreationObject 
-           if ($customEnvironmentsToCreate) {
-            [array] $environmentsToCreate += $customEnvironmentsToCreate 
-          }  
+            if ($customEnvironmentsToCreate) {
+                [array] $environmentsToCreate += $customEnvironmentsToCreate 
+            }  
     
         }
 
@@ -1058,8 +1057,7 @@ if ($PPCitizen -in "yes")
     catch {
         throw "Failed to create environment object. Input data is malformed. '`r`n$_'"
     }  
-    foreach ($environment in $environmentsToCreate) 
-    {             
+    foreach ($environment in $environmentsToCreate) {             
         try {
             $envCreationHt = @{
                 Name               = $environment.envName
@@ -1105,21 +1103,21 @@ if ($PPCitizen -in "yes")
                 $templates += 'D365_FieldService'   
             }           
             
-        # Declaring the HTTP Post request
+            # Declaring the HTTP Post request
             $PostBody = @{
                 "properties" = @{
                     "linkedEnvironmentMetadata" = @{
-                        "baseLanguage" = "$($envCreationHt.LanguageName)"
-                        "domainName"   = "$($envCreationHt.Name)"
-                        "templates"    =  $templates  
+                        "baseLanguage"    = "$($envCreationHt.LanguageName)"
+                        "domainName"      = "$($envCreationHt.Name)"
+                        "templates"       = $templates  
                         "securityGroupId" = "$($environment.envRbac)"
                     }                    
-                    "databaseType"   = "CommonDataService"
-                    "displayName"    = "$($envCreationHt.Name)"
-                    "description"    = "$($envCreationHt.Description)"
-                    "environmentSku" = "$($envCreationHt.EnvSku)"                                        
+                    "databaseType"              = "CommonDataService"
+                    "displayName"               = "$($envCreationHt.Name)"
+                    "description"               = "$($envCreationHt.Description)"
+                    "environmentSku"            = "$($envCreationHt.EnvSku)"                                        
                 }
-                "location"          = "$($environment.envRegion)"                
+                "location"   = "$($environment.envRegion)"                
             }
         
             $PostParameters = @{
@@ -1134,10 +1132,14 @@ if ($PPCitizen -in "yes")
                 $response = Invoke-RestMethod @PostParameters   
                 Write-Output "Create Environment: $($envCreationHt.Name) Completed" 
                 #Code to apply Admin DLP Policy for Admin Env#
-                If($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes"){
-                  Write-Output "Assign Dlp : $($envCreationHt.Name) Started..." 
-                  New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'
-                  Write-Output "Assign Dlp : $($envCreationHt.Name) Completed..." 
+                If ($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes") {                
+                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
+                }
+                if ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName -and ($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
+                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'defaultTenantDlpPolicyD365'  
+                }
+                elseif ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName ) {
+                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'  
                 }
                 
                 #Write-Host ($response | Format-List | Out-String)                            
@@ -1153,42 +1155,42 @@ if ($PPCitizen -in "yes")
         }
     }
     if ($PPCitizenDlp -eq "Yes") {
-        New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'citizenDlpPolicy'
+        #New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'citizenDlpPolicy'
     }
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
     Start-Sleep -Seconds 10         
     
-    If($PPCitizenAlm -eq 'Yes' -and $adminEnvironment -eq 'true'){
-            try {                
-                Write-Output "Admin: $envAdminName"  
-                $adminEnvAttempts = 0
-                do {
-                    $adminEnvAttempts++
-                    Write-Output "Admin attempt: $($adminEnvAttempts)"   
-                    $getAdminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }                    
-                    if ($null -eq $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
+    If ($PPCitizenAlm -eq 'Yes' -and $adminEnvironment -eq 'true') {
+        try {                
+            Write-Output "Admin: $envAdminName"  
+            $adminEnvAttempts = 0
+            do {
+                $adminEnvAttempts++
+                Write-Output "Admin attempt: $($adminEnvAttempts)"   
+                $getAdminEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminName }                    
+                if ($null -eq $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
                     $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '' -or 
                     $getAdminEnvironment.properties.provisioningState -ne 'Succeeded' ) {                 
-                        Start-Sleep -Seconds 15
-                    }
-                    else {
-                        Write-Output "Admin Id: $($getAdminEnvironment.name) attempt $($adminEnvAttempts)"  
-                    }
-                  } until ( ($null -ne $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 20)
+                    Start-Sleep -Seconds 15
+                }
+                else {
+                    Write-Output "Admin Id: $($getAdminEnvironment.name) attempt $($adminEnvAttempts)"  
+                }
+            } until ( ($null -ne $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminEnvAttempts -eq 20)
                   
-                   if ($null -ne $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
-                    New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                   }  
-                   else {
-                    Write-Output "Admin Environment is not ready or URL is empty"   
-                   } 
+            if ($null -ne $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
+                New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+            }  
+            else {
+                Write-Output "Admin Environment is not ready or URL is empty"   
+            } 
                     
-            }
-            catch {
-                Write-Warning "Error installing App`r`n$_"
-            }
-        }     
+        }
+        catch {
+            Write-Warning "Error installing App`r`n$_"
+        }
+    }     
     #endregion Install Power Platform Pipeline App in Admin Envrionemnt   
 }
 #endregion create landing zones for citizen devs
