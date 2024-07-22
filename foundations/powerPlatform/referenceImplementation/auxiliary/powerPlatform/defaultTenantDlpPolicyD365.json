@@ -1,5 +1,5 @@
 {
-  "displayName": "ANS Default Tenant DLP Policy D365 ",
+  "displayName": "ANS Default Tenant DLP Policy D365",
   "defaultConnectorsClassification": "Blocked",
   "connectorGroups": [
       {
