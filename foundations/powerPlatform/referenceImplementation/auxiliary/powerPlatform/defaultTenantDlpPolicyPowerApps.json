@@ -1439,12 +1439,7 @@
           "id": "/providers/Microsoft.PowerApps/apis/shared_flowforma",
           "name": "FlowForma",
           "type": "Microsoft.PowerApps/apis"
-      },
-      {
-          "id": "/providers/Microsoft.PowerApps/apis/shared_flowmanagement",
-          "name": "Power Automate Management",
-          "type": "Microsoft.PowerApps/apis"
-      },
+      },    
       {
           "id": "/providers/Microsoft.PowerApps/apis/shared_fluidkinnectorzforpr",
           "name": "Fluid Kinnectorz for Procore",
