@@ -915,6 +915,7 @@ function New-DLPAssignmentFromEnv {
     $template | ConvertTo-Json -Depth 100 -EnumsAsStrings | Set-Content -Path $templateFile -Force
     try {
         $null = New-PowerOpsDLPPolicy -TemplateFile $templateFile -Name $template.displayName -ErrorAction Stop
+        
         Write-Output "Created Default $EnvironmentDLP DLP Policy"
     }
     catch {
