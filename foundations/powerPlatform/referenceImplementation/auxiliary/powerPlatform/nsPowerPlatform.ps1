@@ -1136,12 +1136,15 @@ if ($PPCitizen -in "yes") {
                 If ($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes") {                
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 }
-                if ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName -and ($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
+                <#
+                  if ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName -and ($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'defaultTenantDlpPolicyD365'  
                 }
                 elseif ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName ) {
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'  
                 }
+                #>
+              
                 
                 #Write-Host ($response | Format-List | Out-String)                            
             }
@@ -1156,7 +1159,7 @@ if ($PPCitizen -in "yes") {
         }
     }
     if ($PPCitizenDlp -eq "Yes") {
-        #New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'citizenDlpPolicy'
+        New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'
     }
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
