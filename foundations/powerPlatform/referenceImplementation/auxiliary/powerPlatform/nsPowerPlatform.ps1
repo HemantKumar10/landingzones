@@ -1167,14 +1167,7 @@ if ($PPCitizen -in "yes") {
             Write-Output "Failed to create environment citizen.'`r`n$_'"  
         }
     }
-    if ($PPCitizenDlp -eq "Yes") {
-        Write-Output "Assignment" 
-        Write-Host ($environmentsToCreate | Format-List | Out-String)   
-        Write-Host ($environmentsToCreate.envName | Format-List | Out-String)      
-
-        Write-Output "Env List" 
-        Write-Host ($landzingZoneEnvs | Format-List | Out-String)     
-
+    if ($PPCitizenDlp -eq "Yes") {  
         New-DLPAssignmentFromEnv -Environments $landzingZoneEnvs -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'
     }
 
@@ -1192,7 +1185,7 @@ if ($PPCitizen -in "yes") {
                 if ($null -eq $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
                     $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '' -or 
                     $getAdminEnvironment.properties.provisioningState -ne 'Succeeded' ) {                 
-                    Start-Sleep -Seconds 15
+                    Start-Sleep -Seconds 20
                 }
                 else {
                     Write-Output "Admin Id: $($getAdminEnvironment.name) attempt $($adminEnvAttempts)"  
