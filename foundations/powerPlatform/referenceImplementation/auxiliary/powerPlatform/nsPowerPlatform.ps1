@@ -1175,7 +1175,7 @@ if ($PPCitizen -in "yes") {
         Write-Output "Env List" 
         Write-Host ($landzingZoneEnvs | Format-List | Out-String)     
 
-        New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'
+        New-DLPAssignmentFromEnv -Environments $landzingZoneEnvs -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'
     }
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
