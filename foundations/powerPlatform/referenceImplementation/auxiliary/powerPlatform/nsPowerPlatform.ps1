@@ -1058,6 +1058,10 @@ if ($PPCitizen -in "yes") {
     catch {
         throw "Failed to create environment object. Input data is malformed. '`r`n$_'"
     }  
+
+     #Collect Non Admin Environments#
+     $landzingZoneEnvs = @()
+     #Ends#
     foreach ($environment in $environmentsToCreate) {             
         try {
             $envCreationHt = @{
@@ -1127,7 +1131,9 @@ if ($PPCitizen -in "yes") {
                 "Headers"     = $headers
                 "Body"        = $postBody | ConvertTo-json -Depth 100
                 "ContentType" = "application/json"
-            }            
+            }    
+            
+           
         
             try {
                 $response = Invoke-RestMethod @PostParameters   
@@ -1135,6 +1141,9 @@ if ($PPCitizen -in "yes") {
                 #Code to apply Admin DLP Policy for Admin Env#
                 If ($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes") {                
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
+                }
+                if($envCreationHt.Name -ne $Global:envAdminName ) {
+                    $landzingZoneEnvs +=  $envCreationHt.Name 
                 }
                 <#
                   if ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName -and ($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
@@ -1159,6 +1168,13 @@ if ($PPCitizen -in "yes") {
         }
     }
     if ($PPCitizenDlp -eq "Yes") {
+        Write-Output "Assignment" 
+        Write-Host ($environmentsToCreate | Format-List | Out-String)   
+        Write-Host ($environmentsToCreate.envName | Format-List | Out-String)      
+
+        Write-Output "Env List" 
+        Write-Host ($landzingZoneEnvs | Format-List | Out-String)     
+
         New-DLPAssignmentFromEnv -Environments $environmentsToCreate.envName -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'
     }
 
