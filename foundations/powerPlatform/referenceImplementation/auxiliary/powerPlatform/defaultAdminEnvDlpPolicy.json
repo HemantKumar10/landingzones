@@ -3161,6 +3161,7 @@
             "name": "Xooa Blockchain Smart Contract",
             "type": "Microsoft.PowerApps/apis"
           },
+		
           {
             "id": "/providers/Microsoft.PowerApps/apis/shared_xpertdoc",
             "name": "Xpertdoc",
