@@ -1059,9 +1059,9 @@ if ($PPCitizen -in "yes") {
         throw "Failed to create environment object. Input data is malformed. '`r`n$_'"
     }  
 
-     #Collect Non Admin Environments#
-     $landzingZoneEnvs = @()
-     #Ends#
+    #Collect Non Admin Environments#
+    $landzingZoneEnvs = @()
+    #Ends#
     foreach ($environment in $environmentsToCreate) {             
         try {
             $envCreationHt = @{
@@ -1142,8 +1142,8 @@ if ($PPCitizen -in "yes") {
                 If ($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes") {                
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 }
-                if($envCreationHt.Name -ne $Global:envAdminName ) {
-                    $landzingZoneEnvs +=  $envCreationHt.Name 
+                if ($envCreationHt.Name -ne $Global:envAdminName ) {
+                    $landzingZoneEnvs += $envCreationHt.Name 
                 }
                 <#
                   if ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName -and ($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
@@ -1168,7 +1168,13 @@ if ($PPCitizen -in "yes") {
         }
     }
     if ($PPCitizenDlp -eq "Yes") {  
-        New-DLPAssignmentFromEnv -Environments $landzingZoneEnvs -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'
+        if (($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
+            New-DLPAssignmentFromEnv -Environments $landzingZoneEnvs -EnvironmentDLP 'defaultTenantDlpPolicyD365'  
+        }
+        else {
+            New-DLPAssignmentFromEnv -Environments $landzingZoneEnvs -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'
+        }       
+       
     }
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
