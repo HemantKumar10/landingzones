@@ -56,7 +56,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
 
-Update-Module Az
+Update-Module Az -WhatIf
 
 #Starts here: Defining Custom EnvTiers
 $envTiers = @()
@@ -960,7 +960,7 @@ function New-InstallCoESolutions {
         #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
         #$base64 = [System.Convert]::ToBase64String($byte_array)
         
-        Write-Host ($coeSolutionContent | Format-List | Out-String) 
+        #Write-Host ($coeSolutionContent | Format-List | Out-String) 
         #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent.Content)
         $base64 = [System.Convert]::ToBase64String($coeSolutionContent.Content)
         Write-Output "Proccessing CoE Solution $($templateSolution)"
@@ -974,12 +974,14 @@ function New-InstallCoESolutions {
 
     # Power Platform HTTP Post Environment Uri
     $PostEnvironment = "$($EnvironmentURL)/api/data/v9.1/ImportSolution"         
-        
+    
+    $randomGUID = New-Guid
+    Write-Output "Random $($randomGUID)"
     $PostBody = @{
         "CustomizationFile" = $base64
         "PublishWorkflows" = $true
         "OverwriteUnmanagedCustomizations"  = $true
-        "ImportJobId" = New-Guid
+        "ImportJobId" = $($randomGUID)
     }
 
     
