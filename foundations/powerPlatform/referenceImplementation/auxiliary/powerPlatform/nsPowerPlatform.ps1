@@ -952,9 +952,11 @@ function New-InstallCoESolutions {
         $coeSolutionContent = (Invoke-WebRequest -Uri ($coeSolutions['BaseUri'] + $templateSolution)) 
         #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
         #$base64 = [System.Convert]::ToBase64String($byte_array)
-        $base64 =     $coeSolutionContent 
+        
         Write-Host ($coeSolutionContent | Format-List | Out-String) 
-        #Write-Output "Proccessing CoE Solution $base64"
+        $byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
+        $base64 = [System.Convert]::ToBase64String($byte_array)
+        Write-Output "Proccessing CoE Solution $($base64)"
     }
     catch {
         throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
