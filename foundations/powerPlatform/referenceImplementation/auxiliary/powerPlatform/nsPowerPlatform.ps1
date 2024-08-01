@@ -953,7 +953,7 @@ function New-InstallCoESolutions {
         #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
         #$base64 = [System.Convert]::ToBase64String($byte_array)
         $base64 =     $coeSolutionContent 
-        Write-Output "Proccessing CoE Solution $templateSolution"
+        Write-Output "Proccessing CoE Solution $base64"
     }
     catch {
         throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
