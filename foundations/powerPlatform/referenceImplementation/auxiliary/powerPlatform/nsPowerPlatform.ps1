@@ -949,11 +949,12 @@ function New-InstallCoESolutions {
         throw "Cannot find DLP template $SolutionName"
     }
     try {
-        $coeSolutionContent = (Invoke-WebRequest -Uri ($coeSolutions['BaseUri'] + $templateSolution)).Content 
+        $coeSolutionContent = (Invoke-WebRequest -Uri ($coeSolutions['BaseUri'] + $templateSolution)) 
         #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
         #$base64 = [System.Convert]::ToBase64String($byte_array)
         $base64 =     $coeSolutionContent 
-        Write-Output "Proccessing CoE Solution $base64"
+        Write-Host ($coeSolutionContent | Format-List | Out-String) 
+        #Write-Output "Proccessing CoE Solution $base64"
     }
     catch {
         throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
