@@ -923,6 +923,80 @@ function New-DLPAssignmentFromEnv {
     }
 }
 
+
+
+#Install CoE Solutions
+function New-InstallCoESolutions {
+    param (      
+        [Parameter(Mandatory = $true)][string]$SolutionName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
+    ) 
+    # Code Begins
+    # Get token to authenticate to Power Platform
+        
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+
+    $coeSolutions = @{
+        baseUri                         = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
+        CreatorKitCore                  = 'CreatorKitCore.zip'
+    }
+
+
+
+    #Get CoE Solutions from repo
+    $templateSolution = $coeSolutions["$SolutionName"] 
+    if ([string]::IsNullOrEmpty($templateSolution)) {
+        throw "Cannot find DLP template $SolutionName"
+    }
+    try {
+        $coeSolutionContent = (Invoke-WebRequest -Uri ($coeSolutions['BaseUri'] + $templateSolution)).Content 
+        #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
+        #$base64 = [System.Convert]::ToBase64String($byte_array)
+        $base64 =     $coeSolutionContent 
+        Write-Output "Proccessing CoE Solution $templateSolution"
+    }
+    catch {
+        throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
+    }
+    #Ends Get CoE Solutions from repo
+
+
+    # Power Platform HTTP Post Environment Uri
+    $PostEnvironment = "$($EnvironmentURL)/api/data/v9.1/ImportSolution"         
+        
+    $PostBody = @{
+        "CustomizationFile" = $base64
+        "PublishWorkflows" = $true
+        "OverwriteUnmanagedCustomizations"  = $true
+        "ImportJobId" = "c7e544bd-d2ac-438e-87b4-8daea23b54f2"
+    }
+
+    
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json; charset=utf-8"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }  
+    try {
+        Invoke-RestMethod @PostParameters  
+        Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
+    }
+    catch {            
+        Write-Error "Installation of CoE solution $($SolutionName) failed`r`n$_"               
+    }          
+}
+
+#End CoE Solutions
+
+
 #endregion supporting functions
 
 #region set tenant settings
@@ -1200,6 +1274,14 @@ if ($PPCitizen -in "yes") {
                   
             if ($null -ne $getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+
+                 
+                 #CreatorKitCore
+                 New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                #region Install CoE Solutions
+
+
+                #endregion
             }  
             else {
                 Write-Output "Admin Environment is not ready or URL is empty"   
@@ -1211,6 +1293,7 @@ if ($PPCitizen -in "yes") {
         }
     }     
     #endregion Install Power Platform Pipeline App in Admin Envrionemnt   
+   
 }
 #endregion create landing zones for citizen devs
 
