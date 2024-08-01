@@ -939,7 +939,12 @@ function New-InstallCoESolutions {
     $coeSolutions = @{
         baseUri                         = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
         CreatorKitCore                  = 'CreatorKitCore.zip'
-        CenterofExcellenceCoreComponents ='CenterofExcellenceCoreComponents.zip'
+        CreatorKitReferencesCanvas      = 'CreatorKitReferencesCanvas.zip'
+        CreatorKitReferencesMDA         = 'CreatorKitReferencesMDA.zip'
+        CenterofExcellenceCoreComponents = 'CenterofExcellenceCoreComponents.zip'
+        CenterofExcellenceAuditComponents ='CenterofExcellenceAuditComponents.zip'
+        CenterofExcellenceInnovationBacklog ='CenterofExcellenceInnovationBacklog.zip'
+        CenterofExcellenceNurtureComponents ='CenterofExcellenceNurtureComponents.zip'
 
     }
 
@@ -974,7 +979,7 @@ function New-InstallCoESolutions {
         "CustomizationFile" = $base64
         "PublishWorkflows" = $true
         "OverwriteUnmanagedCustomizations"  = $true
-        "ImportJobId" = "c7e544bd-d2ac-438e-87b4-8daea23b54f2"
+        "ImportJobId" = New-Guid
     }
 
     
@@ -1284,9 +1289,12 @@ if ($PPCitizen -in "yes") {
                  
                  #CreatorKitCore
                  New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                  New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                 New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL 'https://lzc-admin.crm11.dynamics.com'
-        
+                 New-InstallCoESolutions -SolutionName 'CenterofExcellenceAuditComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 New-InstallCoESolutions -SolutionName 'CenterofExcellenceNurtureComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)        
                 #region Install CoE Solutions
 
 
