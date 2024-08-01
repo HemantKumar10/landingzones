@@ -56,7 +56,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
 
-
+Update-Module Az
 
 #Starts here: Defining Custom EnvTiers
 $envTiers = @()
@@ -954,7 +954,7 @@ function New-InstallCoESolutions {
         #$base64 = [System.Convert]::ToBase64String($byte_array)
         
         Write-Host ($coeSolutionContent | Format-List | Out-String) 
-        $byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
+        $byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent.Content)
         $base64 = [System.Convert]::ToBase64String($byte_array)
         Write-Output "Proccessing CoE Solution $($templateSolution)"
     }
@@ -962,7 +962,7 @@ function New-InstallCoESolutions {
         throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
     }
     #Ends Get CoE Solutions from repo
-
+ 
 
     # Power Platform HTTP Post Environment Uri
     $PostEnvironment = "$($EnvironmentURL)/api/data/v9.1/ImportSolution"         
