@@ -56,7 +56,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
 
-Update-Module Az -WhatIf
+
 
 #Starts here: Defining Custom EnvTiers
 $envTiers = @()
@@ -980,8 +980,8 @@ function New-InstallCoESolutions {
     $PostBody = @{
         "CustomizationFile" = $base64
         "PublishWorkflows" = $true
-        "OverwriteUnmanagedCustomizations"  = $true
-        "ImportJobId" = $($randomGUID)
+        "OverwriteUnmanagedCustomizations" = $true
+        "ImportJobId" = "$($randomGUID)"
     }
 
     
