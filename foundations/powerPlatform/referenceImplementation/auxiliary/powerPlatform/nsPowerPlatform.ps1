@@ -939,6 +939,8 @@ function New-InstallCoESolutions {
     $coeSolutions = @{
         baseUri                         = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
         CreatorKitCore                  = 'CreatorKitCore.zip'
+        CenterofExcellenceCoreComponents ='CenterofExcellenceCoreComponents.zip'
+
     }
 
 
@@ -1282,6 +1284,9 @@ if ($PPCitizen -in "yes") {
                  
                  #CreatorKitCore
                  New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL 'https://lzc-admin.crm11.dynamics.com'
+        
                 #region Install CoE Solutions
 
 
