@@ -976,7 +976,7 @@ function New-InstallCoESolutions {
     $PostEnvironment = "$($EnvironmentURL)/api/data/v9.1/ImportSolution"         
     
     $randomGUID = New-Guid
-    Write-Output "Random $($randomGUID)"
+
     $PostBody = @{
         "CustomizationFile"                = $base64
         "PublishWorkflows"                 = $true
@@ -1001,7 +1001,7 @@ function New-InstallCoESolutions {
 
    
     try {
-        Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode' 
+        Invoke-RestMethod @PostParameters
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
         New-InstallCoESolutionCreatorKitReferencesMDA -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($EnvironmentURL)
   
@@ -1087,7 +1087,7 @@ function New-InstallCoESolutionCreatorKitReferencesMDA {
 
    
     try {
-        Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode' 
+        Invoke-RestMethod @PostParameters
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
         New-InstallCoESolutionCreatorKitReferencesCanvas -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $($EnvironmentURL)
     }
@@ -1173,7 +1173,7 @@ function New-InstallCoESolutionCreatorKitReferencesCanvas {
 
    
     try {
-        Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode' 
+        Invoke-RestMethod @PostParameters 
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
        
         New-InstallCoESolutionCenterofExcellenceCoreComponents -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $($EnvironmentURL)
@@ -1261,7 +1261,7 @@ function New-InstallCoESolutionCenterofExcellenceCoreComponents {
 
    
     try {
-        Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode' 
+        Invoke-RestMethod @PostParameters
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
     }
     catch {            
@@ -1552,7 +1552,7 @@ if ($PPCitizen -in "yes") {
                  
                 #CreatorKitCore
                 New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                Start-Sleep -Seconds 20
+                
                 <# New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                  Start-Sleep -Seconds 20
                  New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
