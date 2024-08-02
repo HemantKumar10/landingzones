@@ -1002,13 +1002,272 @@ function New-InstallCoESolutions {
    
     try {
         Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode' 
-        Write-Output "Installation of CoE solution $($SolutionName) $($StatusCodeVariable) processed successfully"
+        Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
+        New-InstallCoESolutionCreatorKitReferencesMDA -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($EnvironmentURL)
+  
     }
     catch {            
         Write-Error "Installation of CoE solution $($SolutionName) failed`r`n$_"               
     }      
 }
 
+
+function New-InstallCoESolutionCreatorKitReferencesMDA {
+    param (      
+        [Parameter(Mandatory = $true)][string]$SolutionName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
+    ) 
+    # Code Begins
+    # Get token to authenticate to Power Platform
+        
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+
+    $coeSolutions = @{
+        baseUri                             = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
+        CreatorKitCore                      = 'CreatorKitCore.zip'
+        CreatorKitReferencesCanvas          = 'CreatorKitReferencesCanvas.zip'
+        CreatorKitReferencesMDA             = 'CreatorKitReferencesMDA.zip'
+        CenterofExcellenceCoreComponents    = 'CenterofExcellenceCoreComponents.zip'
+        CenterofExcellenceAuditComponents   = 'CenterofExcellenceAuditComponents.zip'
+        CenterofExcellenceInnovationBacklog = 'CenterofExcellenceInnovationBacklog.zip'
+        CenterofExcellenceNurtureComponents = 'CenterofExcellenceNurtureComponents.zip'
+
+    }
+
+
+
+    #Get CoE Solutions from repo
+    $templateSolution = $coeSolutions["$SolutionName"] 
+    if ([string]::IsNullOrEmpty($templateSolution)) {
+        throw "Cannot find DLP template $SolutionName"
+    }
+    try {
+        $coeSolutionContent = (Invoke-WebRequest -Uri ($coeSolutions['BaseUri'] + $templateSolution)) 
+        #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
+        #$base64 = [System.Convert]::ToBase64String($byte_array)
+        
+        #Write-Host ($coeSolutionContent | Format-List | Out-String) 
+        #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent.Content)
+        $base64 = [System.Convert]::ToBase64String($coeSolutionContent.Content)
+        Write-Output "Proccessing CoE Solution $($templateSolution)"
+        #Write-Output "Byte Array $($coeSolutionContent.Content)"
+    }
+    catch {
+        throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
+    }
+    #Ends Get CoE Solutions from repo
+ 
+
+    # Power Platform HTTP Post Environment Uri
+    $PostEnvironment = "$($EnvironmentURL)/api/data/v9.1/ImportSolution"         
+    
+    $randomGUID = New-Guid
+    Write-Output "Random $($randomGUID)"
+    $PostBody = @{
+        "CustomizationFile"                = $base64
+        "PublishWorkflows"                 = $true
+        "OverwriteUnmanagedCustomizations" = $true
+        "ImportJobId"                      = "$($randomGUID)"
+    }
+
+    
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json; charset=utf-8"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }  
+
+   
+    try {
+        Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode' 
+        Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
+        New-InstallCoESolutionCreatorKitReferencesCanvas -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $($EnvironmentURL)
+    }
+    catch {            
+        Write-Error "Installation of CoE solution $($SolutionName) failed`r`n$_"               
+    }      
+}
+
+
+
+function New-InstallCoESolutionCreatorKitReferencesCanvas {
+    param (      
+        [Parameter(Mandatory = $true)][string]$SolutionName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
+    ) 
+    # Code Begins
+    # Get token to authenticate to Power Platform
+        
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+
+    $coeSolutions = @{
+        baseUri                             = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
+        CreatorKitCore                      = 'CreatorKitCore.zip'
+        CreatorKitReferencesCanvas          = 'CreatorKitReferencesCanvas.zip'
+        CreatorKitReferencesMDA             = 'CreatorKitReferencesMDA.zip'
+        CenterofExcellenceCoreComponents    = 'CenterofExcellenceCoreComponents.zip'
+        CenterofExcellenceAuditComponents   = 'CenterofExcellenceAuditComponents.zip'
+        CenterofExcellenceInnovationBacklog = 'CenterofExcellenceInnovationBacklog.zip'
+        CenterofExcellenceNurtureComponents = 'CenterofExcellenceNurtureComponents.zip'
+
+    }
+
+
+
+    #Get CoE Solutions from repo
+    $templateSolution = $coeSolutions["$SolutionName"] 
+    if ([string]::IsNullOrEmpty($templateSolution)) {
+        throw "Cannot find DLP template $SolutionName"
+    }
+    try {
+        $coeSolutionContent = (Invoke-WebRequest -Uri ($coeSolutions['BaseUri'] + $templateSolution)) 
+        #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
+        #$base64 = [System.Convert]::ToBase64String($byte_array)
+        
+        #Write-Host ($coeSolutionContent | Format-List | Out-String) 
+        #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent.Content)
+        $base64 = [System.Convert]::ToBase64String($coeSolutionContent.Content)
+        Write-Output "Proccessing CoE Solution $($templateSolution)"
+        #Write-Output "Byte Array $($coeSolutionContent.Content)"
+    }
+    catch {
+        throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
+    }
+    #Ends Get CoE Solutions from repo
+ 
+
+    # Power Platform HTTP Post Environment Uri
+    $PostEnvironment = "$($EnvironmentURL)/api/data/v9.1/ImportSolution"         
+    
+    $randomGUID = New-Guid
+    Write-Output "Random $($randomGUID)"
+    $PostBody = @{
+        "CustomizationFile"                = $base64
+        "PublishWorkflows"                 = $true
+        "OverwriteUnmanagedCustomizations" = $true
+        "ImportJobId"                      = "$($randomGUID)"
+    }
+
+    
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json; charset=utf-8"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }  
+
+   
+    try {
+        Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode' 
+        Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
+       
+        New-InstallCoESolutionCenterofExcellenceCoreComponents -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $($EnvironmentURL)
+    }
+    catch {            
+        Write-Error "Installation of CoE solution $($SolutionName) failed`r`n$_"               
+    }      
+}
+
+
+
+
+function New-InstallCoESolutionCenterofExcellenceCoreComponents {
+    param (      
+        [Parameter(Mandatory = $true)][string]$SolutionName,
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
+    ) 
+    # Code Begins
+    # Get token to authenticate to Power Platform
+        
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+
+    $coeSolutions = @{
+        baseUri                             = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
+        CreatorKitCore                      = 'CreatorKitCore.zip'
+        CreatorKitReferencesCanvas          = 'CreatorKitReferencesCanvas.zip'
+        CreatorKitReferencesMDA             = 'CreatorKitReferencesMDA.zip'
+        CenterofExcellenceCoreComponents    = 'CenterofExcellenceCoreComponents.zip'
+        CenterofExcellenceAuditComponents   = 'CenterofExcellenceAuditComponents.zip'
+        CenterofExcellenceInnovationBacklog = 'CenterofExcellenceInnovationBacklog.zip'
+        CenterofExcellenceNurtureComponents = 'CenterofExcellenceNurtureComponents.zip'
+
+    }
+
+
+
+    #Get CoE Solutions from repo
+    $templateSolution = $coeSolutions["$SolutionName"] 
+    if ([string]::IsNullOrEmpty($templateSolution)) {
+        throw "Cannot find DLP template $SolutionName"
+    }
+    try {
+        $coeSolutionContent = (Invoke-WebRequest -Uri ($coeSolutions['BaseUri'] + $templateSolution)) 
+        #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent)
+        #$base64 = [System.Convert]::ToBase64String($byte_array)
+        
+        #Write-Host ($coeSolutionContent | Format-List | Out-String) 
+        #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent.Content)
+        $base64 = [System.Convert]::ToBase64String($coeSolutionContent.Content)
+        Write-Output "Proccessing CoE Solution $($templateSolution)"
+        #Write-Output "Byte Array $($coeSolutionContent.Content)"
+    }
+    catch {
+        throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
+    }
+    #Ends Get CoE Solutions from repo
+ 
+
+    # Power Platform HTTP Post Environment Uri
+    $PostEnvironment = "$($EnvironmentURL)/api/data/v9.1/ImportSolution"         
+    
+    $randomGUID = New-Guid
+    Write-Output "Random $($randomGUID)"
+    $PostBody = @{
+        "CustomizationFile"                = $base64
+        "PublishWorkflows"                 = $true
+        "OverwriteUnmanagedCustomizations" = $true
+        "ImportJobId"                      = "$($randomGUID)"
+    }
+
+    
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json; charset=utf-8"
+        "Authorization" = "Bearer $($Token)"
+    }
+    # Declaring the HTTP Post request
+    $PostParameters = @{
+        "Uri"         = "$($PostEnvironment)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }  
+
+   
+    try {
+        Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode' 
+        Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
+    }
+    catch {            
+        Write-Error "Installation of CoE solution $($SolutionName) failed`r`n$_"               
+    }      
+}
 #End CoE Solutions
 
 
