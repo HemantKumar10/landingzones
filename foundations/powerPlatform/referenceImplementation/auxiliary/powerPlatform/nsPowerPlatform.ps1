@@ -1002,21 +1002,13 @@ function New-InstallCoESolutions {
    
     try {
         $importResponse = Invoke-WebRequest @PostParameters      
-        Write-Output $importResponse  
-        Write-Host ($importResponse | Format-List | Out-String)      
-        Write-Host ($importResponse | Format-Table  | Out-String)          
+        Write-Output $importResponse 
+              
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
     }
     catch {            
         Write-Error "Installation of CoE solution $($SolutionName) failed`r`n$_"               
-    }  
-    
-    
-
-
-   
-     
-    
+    }      
 }
 
 #End CoE Solutions
