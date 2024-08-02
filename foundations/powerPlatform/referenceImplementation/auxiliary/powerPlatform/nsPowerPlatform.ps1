@@ -1291,11 +1291,17 @@ if ($PPCitizen -in "yes") {
                  
                  #CreatorKitCore
                  New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 Start-Sleep -Seconds 20
                  New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 Start-Sleep -Seconds 20
                  New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 Start-Sleep -Seconds 30
                  New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 Start-Sleep -Seconds 30
                  New-InstallCoESolutions -SolutionName 'CenterofExcellenceAuditComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 Start-Sleep -Seconds 30
                  New-InstallCoESolutions -SolutionName 'CenterofExcellenceNurtureComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                 Start-Sleep -Seconds 30
                  New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)        
                 #region Install CoE Solutions
 
