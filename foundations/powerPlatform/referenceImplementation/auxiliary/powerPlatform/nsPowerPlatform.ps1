@@ -999,14 +999,8 @@ function New-InstallCoESolutions {
         "Body"        = $postBody | ConvertTo-json -Depth 100
     }  
     try {
-        $importResponse = Invoke-RestMethod @PostParameters  
-        Write-Output "Before: "
-        Write-Host ($importResponse | Format-List | Out-String) 
-        Write-Output "Solution Import Status $($importResponse.status)"
-        Start-Sleep -Seconds 15
-        Write-Output "After : "
-        Write-Host ($importResponse | Format-List | Out-String) 
-        Write-Output "Solution Import Status $($importResponse.status)"        
+        $importResponse = Invoke-RestMethod @PostParameters        
+        Write-Host ($importResponse | Format-List | Out-String)              
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
     }
     catch {            
