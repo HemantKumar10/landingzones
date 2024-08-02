@@ -1002,7 +1002,7 @@ function New-InstallCoESolutions {
    
     try {
         $importResponse = Invoke-RestMethod @PostParameters -StatusCodeVariable 'statusCode'     
-        Write-Output $importResponse               
+        Write-Output " $($importResponse.statusCode)"               
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
     }
     catch {            
