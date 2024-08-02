@@ -998,6 +998,8 @@ function New-InstallCoESolutions {
         "ContentType" = "application/json"
         "Body"        = $postBody | ConvertTo-json -Depth 100
     }  
+
+    <#
     try {
         $importResponse = Invoke-RestMethod @PostParameters        
         Write-Host ($importResponse | Format-List | Out-String)              
@@ -1005,7 +1007,27 @@ function New-InstallCoESolutions {
     }
     catch {            
         Write-Error "Installation of CoE solution $($SolutionName) failed`r`n$_"               
-    }          
+    }  
+    #>
+    
+
+
+   
+     
+        $solutionRequest = @{
+            Path        = $PostEnvironment
+            Method      = 'Post'
+            RequestBody = ($postBody | ConvertTo-Json -Depth 100)
+        }
+        try {
+            $res = Invoke-PowerOpsRequest @solutionRequest
+            Write-Host ($res | Format-List | Out-String)  
+            Write-Output "Sucess new method"
+        }
+        catch {
+            Write-Warning "Failed new method`r`n$_"
+        }
+    
 }
 
 #End CoE Solutions
