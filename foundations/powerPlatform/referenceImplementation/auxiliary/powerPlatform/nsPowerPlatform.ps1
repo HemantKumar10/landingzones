@@ -937,14 +937,14 @@ function New-InstallCoESolutions {
     $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
 
     $coeSolutions = @{
-        baseUri                         = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
-        CreatorKitCore                  = 'CreatorKitCore.zip'
-        CreatorKitReferencesCanvas      = 'CreatorKitReferencesCanvas.zip'
-        CreatorKitReferencesMDA         = 'CreatorKitReferencesMDA.zip'
-        CenterofExcellenceCoreComponents = 'CenterofExcellenceCoreComponents.zip'
-        CenterofExcellenceAuditComponents ='CenterofExcellenceAuditComponents.zip'
-        CenterofExcellenceInnovationBacklog ='CenterofExcellenceInnovationBacklog.zip'
-        CenterofExcellenceNurtureComponents ='CenterofExcellenceNurtureComponents.zip'
+        baseUri                             = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
+        CreatorKitCore                      = 'CreatorKitCore.zip'
+        CreatorKitReferencesCanvas          = 'CreatorKitReferencesCanvas.zip'
+        CreatorKitReferencesMDA             = 'CreatorKitReferencesMDA.zip'
+        CenterofExcellenceCoreComponents    = 'CenterofExcellenceCoreComponents.zip'
+        CenterofExcellenceAuditComponents   = 'CenterofExcellenceAuditComponents.zip'
+        CenterofExcellenceInnovationBacklog = 'CenterofExcellenceInnovationBacklog.zip'
+        CenterofExcellenceNurtureComponents = 'CenterofExcellenceNurtureComponents.zip'
 
     }
 
@@ -964,7 +964,7 @@ function New-InstallCoESolutions {
         #$byte_array = [System.Text.Encoding]::UTF8.GetBytes($coeSolutionContent.Content)
         $base64 = [System.Convert]::ToBase64String($coeSolutionContent.Content)
         Write-Output "Proccessing CoE Solution $($templateSolution)"
-          #Write-Output "Byte Array $($coeSolutionContent.Content)"
+        #Write-Output "Byte Array $($coeSolutionContent.Content)"
     }
     catch {
         throw "Failed to get CoE Solution $templateSolution from $($coeSolutions['baseUri'])"
@@ -978,10 +978,10 @@ function New-InstallCoESolutions {
     $randomGUID = New-Guid
     Write-Output "Random $($randomGUID)"
     $PostBody = @{
-        "CustomizationFile" = $base64
-        "PublishWorkflows" = $true
+        "CustomizationFile"                = $base64
+        "PublishWorkflows"                 = $true
         "OverwriteUnmanagedCustomizations" = $true
-        "ImportJobId" = "$($randomGUID)"
+        "ImportJobId"                      = "$($randomGUID)"
     }
 
     
@@ -999,9 +999,13 @@ function New-InstallCoESolutions {
         "Body"        = $postBody | ConvertTo-json -Depth 100
     }  
     try {
-        $importResponse =  Invoke-RestMethod @PostParameters  
+        $importResponse = Invoke-RestMethod @PostParameters  
+        Write-Output "Before: "
+        Write-Host ($importResponse | Format-List | Out-String) 
         Write-Output "Solution Import Status $($importResponse.status)"
         Start-Sleep -Seconds 15
+        Write-Output "After : "
+        Write-Host ($importResponse | Format-List | Out-String) 
         Write-Output "Solution Import Status $($importResponse.status)"        
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
     }
@@ -1292,10 +1296,10 @@ if ($PPCitizen -in "yes") {
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
                  
-                 #CreatorKitCore
-                 New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                 Start-Sleep -Seconds 20
-                 <# New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                #CreatorKitCore
+                New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                Start-Sleep -Seconds 20
+                <# New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                  Start-Sleep -Seconds 20
                  New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                  Start-Sleep -Seconds 30
