@@ -55,7 +55,8 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
-Update-Module Az -Force
+Get-InstalledModule -Name Az* | Update-Module -Force
+
 
 
 #Starts here: Defining Custom EnvTiers
@@ -903,7 +904,7 @@ function InstallCoESolutions {
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
     
-    $soutionHistoryAttempt = 0
+    <#$soutionHistoryAttempt = 0
     do {
         $soutionHistoryAttempt++      
         $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL    
@@ -915,7 +916,7 @@ function InstallCoESolutions {
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
+    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)#>
 
     New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitCore"  
@@ -924,15 +925,15 @@ function InstallCoESolutions {
     do {
         $soutionHistoryAttempt++      
         $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL   
-        Write-Host ($outputSolutionHistory | Format-List | Out-String)      
+        Write-Host $outputSolutionHistory    
         Write-Output "Inprogress solution count $($inprogressSolutions.value.count)"               
-        if ($inprogressSolutions.value.count -gt 0 ) {                 
+        if ($inprogressSolutions.value.count -gt 0) {                 
             Start-Sleep -Seconds 20
         }
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
+    } until (($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
     New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitReferencesMDA"    
 
@@ -1027,7 +1028,7 @@ function Get-SolutionHistory {
 
     $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
-    $filter = '$filter=msdyn_status eq 0'
+    $filter = '$filter=msdyn_status eq 1'
     $getSolutionHistory = "$($EnvironmentURL)/api/data/v9.0/msdyn_solutionhistories?$($filter)" 
 
     # Declare Rest headers
