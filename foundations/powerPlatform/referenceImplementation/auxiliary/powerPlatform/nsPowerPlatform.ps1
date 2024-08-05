@@ -266,7 +266,9 @@ function New-CreateSecurityGroup {
                 
     $Value = ''
     # Code Begins
-    # Get token to authenticate to Power Platform                       
+    # Get token to authenticate to Power Platform 
+    
+    
     #$Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default").Token   
     
     $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default" -AsSecureString).Token -AsPlainText)
@@ -921,25 +923,22 @@ function InstallCoESolutions {
     New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitCore"  
 
-    $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL   
-    Write-Host ($outputSolutionHistory | Format-List | Out-String)   
-    Write-Output "Inprogress solution count $($inprogressSolutions.value.Count)" 
+    
 
- <#   $soutionHistoryAttempt = 0
+    $soutionHistoryAttempt = 0
     do {
         $soutionHistoryAttempt++      
-        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL   
-        Write-Host $outputSolutionHistory    
-        Write-Output "Inprogress solution count $($inprogressSolutions.value.count)"               
-        if ($inprogressSolutions.value.count -gt 0) {                 
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL 
+        Write-Output "Inprogress solution count $($inprogressSolutions.value.Count)"               
+        if ($inprogressSolutions.value.Count -gt 0) {                 
             Start-Sleep -Seconds 20
         }
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until (($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
+    } until (($inprogressSolutions.value.Count -eq 0) -or $soutionHistoryAttempt -eq 20)
     New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CreatorKitReferencesMDA"  #>  
+    Write-Output "Installed CreatorKitReferencesMDA"  
 
    
     <#
@@ -1032,7 +1031,7 @@ function Get-SolutionHistory {
 
     $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
-    $filter = '$filter=msdyn_status eq 1'
+    $filter = '$filter=msdyn_status eq 0'
     $getSolutionHistory = "$($EnvironmentURL)/api/data/v9.0/msdyn_solutionhistories?$($filter)" 
 
     # Declare Rest headers
