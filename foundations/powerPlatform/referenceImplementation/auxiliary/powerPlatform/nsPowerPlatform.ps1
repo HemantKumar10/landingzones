@@ -937,23 +937,24 @@ function InstallCoESolutions {
     New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitReferencesMDA"  
 
-   
-    <#
-   
     $soutionHistoryAttempt = 0
     do {
         $soutionHistoryAttempt++      
         $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL      
-        Write-Output "Inprogress solution count $($inprogressSolutions.value.count)"               
-        if ($inprogressSolutions.value.count -gt 0 ) {                 
+        Write-Output "Inprogress solution count $($inprogressSolutions.value.Count)"         
+        if ($inprogressSolutions.value.Count -gt 0) {                   
             Start-Sleep -Seconds 20
         }
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
+    } until (($inprogressSolutions.value.Count -eq 0) -or $soutionHistoryAttempt -eq 20)
     New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitReferencesCanvas"    
+
+   
+    <# 
+   
 
     $soutionHistoryAttempt = 0
     do {
