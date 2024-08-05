@@ -55,9 +55,6 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
-Get-InstalledModule -Name Az* | Update-Module -Force
-
-
 
 #Starts here: Defining Custom EnvTiers
 $envTiers = @()
