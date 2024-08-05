@@ -921,7 +921,11 @@ function InstallCoESolutions {
     New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitCore"  
 
-    $soutionHistoryAttempt = 0
+    $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL   
+    Write-Host ($outputSolutionHistory | Format-List | Out-String)   
+    Write-Output "Inprogress solution count $($inprogressSolutions.value.Count)" 
+
+ <#   $soutionHistoryAttempt = 0
     do {
         $soutionHistoryAttempt++      
         $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL   
@@ -935,7 +939,7 @@ function InstallCoESolutions {
         }
     } until (($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
     New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CreatorKitReferencesMDA"    
+    Write-Output "Installed CreatorKitReferencesMDA"  #>  
 
    
     <#
