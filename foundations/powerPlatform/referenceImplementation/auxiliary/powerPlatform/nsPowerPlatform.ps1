@@ -261,38 +261,7 @@ function New-CreateSecurityGroup {
         securityEnabled = $true
         mailNickname    = $SecurityGroupNickName
     }
-
-    <# $devSecurityGroup = @{
-            description="Security Group used for Power Platform - Development environment"
-            displayName="entra_powerplatform_development"
-            mailEnabled=$false
-            securityEnabled=$true
-            mailNickname="PowerPlatformDevelopmentGroup"
-           }
-        
-          $testSecurityGroup = @{
-            description="Security Group used for Power Platform - Test environment"
-             displayName="entra_powerplatform_test"
-            mailEnabled=$false
-             securityEnabled=$true
-             mailNickname="PowerPlatformTestGroup"
-            }
-        
-            $productionSecurityGroup = @{
-            description="Security Group used for Power Platform - Production environment"
-             displayName="entra_powerplatform_production"
-             mailEnabled=$false
-             securityEnabled=$true
-             mailNickname="PowerPlatformProductionGroup"
-            }
-        
-            $adminSecurityGroup = @{
-             description="Security Group used for Power Platform - Admin environment"
-             displayName="entra_powerplatform_admin"
-             mailEnabled=$false
-             securityEnabled=$true
-             mailNickname="PowerPlatformAdminGroup"
-            }#>
+   
                 
     $Value = ''
     # Code Begins
@@ -307,22 +276,7 @@ function New-CreateSecurityGroup {
         "Content-Type"  = "application/json"
         "Authorization" = "Bearer $($Token)"
     }
-    # Declaring the HTTP Post request
-    <# $PostBody = @{             
-            }
-            if ($EnvironmentType -eq "dev") {          
-                $PostBody = $devSecurityGroup   
-            }
-           elseif ($EnvironmentType -eq "test") {          
-                $PostBody = $testSecurityGroup   
-            }
-            elseif ($EnvironmentType -eq "prod") {          
-                $PostBody = $productionSecurityGroup   
-            }
-            elseif ($EnvironmentType -eq "admin") {          
-                $PostBody = $adminSecurityGroup   
-            }   
-            #>
+    # Declaring the HTTP Post request  
             
 
     $PostBody = $createSecurityGroup   
@@ -926,6 +880,149 @@ function New-DLPAssignmentFromEnv {
 
 
 #Install CoE Solutions
+
+function InstallCoESolutions {
+    param (
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
+    ) 
+    
+    $soutionHistoryAttempt = 0
+    do {
+        $soutionHistoryAttempt++
+        Write-Output "Admin attempt: $($adminEnvAttempts)"   
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL                   
+        if ($inprogressSolutions.value -gt 0 ) {                 
+            Start-Sleep -Seconds 20
+        }
+        else {
+            Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
+        }
+    } until ( ($inprogressSolutions.value -eq 0) -or $soutionHistoryAttempt -eq 20)
+    New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
+
+    $soutionHistoryAttempt = 0
+    do {
+        $soutionHistoryAttempt++
+        Write-Output "Admin attempt: $($adminEnvAttempts)"   
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL                   
+        if ($inprogressSolutions.value -gt 0 ) {                 
+            Start-Sleep -Seconds 20
+        }
+        else {
+            Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
+        }
+    } until ( ($inprogressSolutions.value -eq 0) -or $soutionHistoryAttempt -eq 20)
+    New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL    
+
+    
+    $soutionHistoryAttempt = 0
+    do {
+        $soutionHistoryAttempt++
+        Write-Output "Admin attempt: $($adminEnvAttempts)"   
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL                   
+        if ($inprogressSolutions.value -gt 0 ) {                 
+            Start-Sleep -Seconds 20
+        }
+        else {
+            Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
+        }
+    } until ( ($inprogressSolutions.value -eq 0) -or $soutionHistoryAttempt -eq 20)
+    New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $EnvironmentURL   
+
+    $soutionHistoryAttempt = 0
+    do {
+        $soutionHistoryAttempt++
+        Write-Output "Admin attempt: $($adminEnvAttempts)"   
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL                   
+        if ($inprogressSolutions.value -gt 0 ) {                 
+            Start-Sleep -Seconds 20
+        }
+        else {
+            Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
+        }
+    } until ( ($inprogressSolutions.value -eq 0) -or $soutionHistoryAttempt -eq 20)
+    New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $EnvironmentURL  
+
+    $soutionHistoryAttempt = 0
+    do {
+        $soutionHistoryAttempt++
+        Write-Output "Admin attempt: $($adminEnvAttempts)"   
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL                   
+        if ($inprogressSolutions.value -gt 0 ) {                 
+            Start-Sleep -Seconds 20
+        }
+        else {
+            Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
+        }
+    } until ( ($inprogressSolutions.value -eq 0) -or $soutionHistoryAttempt -eq 20)   
+    New-InstallCoESolutions -SolutionName 'CenterofExcellenceAuditComponents' -EnvironmentURL $EnvironmentURL  
+
+    $soutionHistoryAttempt = 0
+    do {
+        $soutionHistoryAttempt++
+        Write-Output "Admin attempt: $($adminEnvAttempts)"   
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL                   
+        if ($inprogressSolutions.value -gt 0 ) {                 
+            Start-Sleep -Seconds 20
+        }
+        else {
+            Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
+        }
+    } until ( ($inprogressSolutions.value -eq 0) -or $soutionHistoryAttempt -eq 20)   
+    New-InstallCoESolutions -SolutionName 'CenterofExcellenceNurtureComponents' -EnvironmentURL $EnvironmentURL  
+
+
+    $soutionHistoryAttempt = 0
+    do {
+        $soutionHistoryAttempt++
+        Write-Output "Admin attempt: $($adminEnvAttempts)"   
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL                   
+        if ($inprogressSolutions.value -gt 0 ) {                 
+            Start-Sleep -Seconds 20
+        }
+        else {
+            Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
+        }
+    } until ( ($inprogressSolutions.value -eq 0) -or $soutionHistoryAttempt -eq 20)  
+    New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $EnvironmentURL  
+
+    
+}
+
+function Get-SolutionHistory {
+    param (      
+        [Parameter(Mandatory = $true)][string]$EnvironmentURL
+    ) 
+    # Code Begins    
+    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+    # Power Platform HTTP Post Environment Uri
+    $filter = '$filter=msdyn_status eq 0'
+    $getSolutionHistory = "$($EnvironmentURL)/api/data/v9.0/msdyn_solutionhistories?$filter" 
+
+    # Declare Rest headers
+    # Declare Rest headers
+    $Headers = @{
+        "Content-Type"  = "application/json"
+        "Authorization" = "Bearer $($Token)"
+    }
+     
+    # Declaring the HTTP Post request
+    $GetParameters = @{
+        "Uri"         = "$($getSolutionHistory)"
+        "Method"      = "GET"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+    }   
+    try {
+        $outputSolutionHistory = Invoke-RestMethod @GetParameters  
+        return $outputSolutionHistory
+       
+    }
+    catch {            
+        Write-Error "Get Solution History $($EnvironmentName) failed`r`n$_"               
+    }          
+}
+
 function New-InstallCoESolutions {
     param (      
         [Parameter(Mandatory = $true)][string]$SolutionName,
@@ -1002,8 +1099,7 @@ function New-InstallCoESolutions {
    
     try {
         Invoke-RestMethod @PostParameters
-        Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
-        New-InstallCoESolutionCreatorKitReferencesMDA -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($EnvironmentURL)
+        Write-Output "Installation of CoE solution $($SolutionName) processed successfully"       
   
     }
     catch {            
@@ -1261,13 +1357,17 @@ function New-InstallCoESolutionCenterofExcellenceCoreComponents {
 
    
     try {
-        Invoke-RestMethod @PostParameters
+        $response = Invoke-RestMethod @PostParameters
         Write-Output "Installation of CoE solution $($SolutionName) processed successfully"
     }
     catch {            
         Write-Error "Installation of CoE solution $($SolutionName) failed`r`n$_"               
     }      
 }
+
+
+
+
 #End CoE Solutions
 
 
@@ -1550,23 +1650,9 @@ if ($PPCitizen -in "yes") {
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
                  
-                #CreatorKitCore
-                New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                
-                <# New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                 Start-Sleep -Seconds 20
-                 New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                 Start-Sleep -Seconds 30
-                 New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                 Start-Sleep -Seconds 30
-                 New-InstallCoESolutions -SolutionName 'CenterofExcellenceAuditComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                 Start-Sleep -Seconds 30
-                 New-InstallCoESolutions -SolutionName 'CenterofExcellenceNurtureComponents' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                 Start-Sleep -Seconds 30
-                 New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)   #>     
                 #region Install CoE Solutions
-
-
+                InstallCoESolutions -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                #New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) 
                 #endregion
             }  
             else {
