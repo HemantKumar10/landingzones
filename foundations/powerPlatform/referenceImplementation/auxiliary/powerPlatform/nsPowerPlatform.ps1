@@ -266,7 +266,9 @@ function New-CreateSecurityGroup {
     $Value = ''
     # Code Begins
     # Get token to authenticate to Power Platform                       
-    $Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default").Token            
+    #$Token = (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default").Token   
+    
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl " https://graph.microsoft.com/.default" -AsSecureString).Token -AsPlainText)
             
     # Power Platform HTTP Post Group Uri
     $PostGroups = 'https://graph.microsoft.com/v1.0/groups'
@@ -310,7 +312,9 @@ function New-InstallPackaggeToEnvironment {
     # Code Begins
     # Get token to authenticate to Power Platform
         
-    $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
+    #$Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
+
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/" -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
     $PostEnvironment = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/applicationPackages/$($PackageName)/install?api-version=2022-03-01-preview"           
         
@@ -374,7 +378,8 @@ function New-GetApplicationInstallStatus {
         # Code Begins
         # Get token to authenticate to Power Platform
         
-        $Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
+        #$Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
+        $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/" -AsSecureString).Token -AsPlainText)
         # Power Platform HTTP Post Environment Uri
         $GetPackages = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/operations/$($OperationId)?api-version=2022-03-01-preview"    
 
@@ -515,7 +520,9 @@ function New-CreateDeploymentEnvrionmentRecord {
     # Code Begins
     # Get token to authenticate to Power Platform
         
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    #$Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
     $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"           
         
@@ -564,7 +571,8 @@ function New-CreateDeploymentPipeline {
     # Power Platform HTTP Post Environment Uri
     $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines"     
         
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    #$Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     $PostBody = @{
         "name" = "$($Name)"
     }
@@ -601,7 +609,8 @@ function New-GetDeploymentEnvrionmentRecords {
     ) 
     # Code Begins
      
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    #$Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
     $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentenvironments"   
     # Declare Rest headers
@@ -634,7 +643,9 @@ function New-GetDeploymentPipelineRecords {
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
     # Code Begins    
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+    #$Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
     $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines" 
 
@@ -676,7 +687,9 @@ function New-GetDeploymentStageRecords {
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
     # Code Begins    
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+    #$Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token  
+
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
     $GetEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages" 
 
@@ -715,7 +728,9 @@ function New-AssociateDeploymentEnvironmentWithPipeline {
     # Code Begins
     # Get token to authenticate to Power Platform
         
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    #$Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
+
     # Power Platform HTTP Post Environment Uri
     $refVar = '$ref'
     $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentpipelines($DeploymentPipelineId)/deploymentpipeline_deploymentenvironment/$refVar"           
@@ -757,7 +772,9 @@ function New-CreateDeploymentStages {
     # Code Begins
     # Get token to authenticate to Power Platform
     # Power Platform HTTP Post Environment Uri
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+    #$Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL)).Token
+
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     $PostEnvironment = "$($EnvironmentURL)/api/data/v9.0/deploymentstages"    
          
     $PostBody = @{
@@ -1002,7 +1019,9 @@ function Get-SolutionHistory {
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
     # Code Begins    
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token
+    #$Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token
+
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
     $filter = '$filter=msdyn_status eq 0'
     $getSolutionHistory = "$($EnvironmentURL)/api/data/v9.0/msdyn_solutionhistories?$filter" 
@@ -1039,7 +1058,7 @@ function New-InstallCoESolutions {
     # Code Begins
     # Get token to authenticate to Power Platform
         
-    $Token = (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     $coeSolutions = @{
         baseUri                             = 'https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/coeSolutions/'      
         CreatorKitCore                      = 'CreatorKitCore.zip'
