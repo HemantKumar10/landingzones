@@ -55,7 +55,7 @@ Install-Module -Name PowerOps -AllowPrerelease -Force
 
 #Default ALM environment tiers
 #$envTiers = 'admin','dev','test','prod'
-
+Update-Module Az -Force
 
 
 #Starts here: Defining Custom EnvTiers
@@ -906,7 +906,8 @@ function InstallCoESolutions {
     $soutionHistoryAttempt = 0
     do {
         $soutionHistoryAttempt++      
-        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL      
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL    
+        Write-Host ($outputSolutionHistory | Format-List | Out-String)   
         Write-Output "Inprogress solution count $($inprogressSolutions.value.count)"               
         if ($inprogressSolutions.value.count -gt 0 ) {                 
             Start-Sleep -Seconds 20
@@ -914,7 +915,7 @@ function InstallCoESolutions {
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count  -eq 0) -or $soutionHistoryAttempt -eq 20)
+    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
 
     New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitCore"  
@@ -922,7 +923,8 @@ function InstallCoESolutions {
     $soutionHistoryAttempt = 0
     do {
         $soutionHistoryAttempt++      
-        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL      
+        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL   
+        Write-Host ($outputSolutionHistory | Format-List | Out-String)      
         Write-Output "Inprogress solution count $($inprogressSolutions.value.count)"               
         if ($inprogressSolutions.value.count -gt 0 ) {                 
             Start-Sleep -Seconds 20
@@ -930,11 +932,13 @@ function InstallCoESolutions {
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count  -eq 0) -or $soutionHistoryAttempt -eq 20)
+    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
     New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitReferencesMDA"    
 
-    
+   
+    <#
+   
     $soutionHistoryAttempt = 0
     do {
         $soutionHistoryAttempt++      
@@ -946,7 +950,7 @@ function InstallCoESolutions {
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count  -eq 0) -or $soutionHistoryAttempt -eq 20)
+    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 20)
     New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CreatorKitReferencesCanvas"    
 
@@ -961,7 +965,7 @@ function InstallCoESolutions {
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count  -eq 0) -or $soutionHistoryAttempt -eq 25)
+    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 25)
     New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CenterofExcellenceCoreComponents"    
 
@@ -976,7 +980,7 @@ function InstallCoESolutions {
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count  -eq 0) -or $soutionHistoryAttempt -eq 30)
+    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 30)
     New-InstallCoESolutions -SolutionName 'CenterofExcellenceAuditComponents' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CenterofExcellenceAuditComponents"   
 
@@ -991,7 +995,7 @@ function InstallCoESolutions {
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count  -eq 0) -or $soutionHistoryAttempt -eq 25)
+    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 25)
     New-InstallCoESolutions -SolutionName 'CenterofExcellenceNurtureComponents' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CenterofExcellenceNurtureComponents"   
 
@@ -1007,10 +1011,10 @@ function InstallCoESolutions {
         else {
             Write-Output "Solution History attempt $($soutionHistoryAttempt)"  
         }
-    } until ( ($inprogressSolutions.value.count  -eq 0) -or $soutionHistoryAttempt -eq 25)
+    } until ( ($inprogressSolutions.value.count -eq 0) -or $soutionHistoryAttempt -eq 25)
     New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $EnvironmentURL  
     Write-Output "Installed CenterofExcellenceInnovationBacklog"  
-
+ #>
     
 }
 
@@ -1024,7 +1028,7 @@ function Get-SolutionHistory {
     $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl $($EnvironmentURL) -AsSecureString).Token -AsPlainText)
     # Power Platform HTTP Post Environment Uri
     $filter = '$filter=msdyn_status eq 0'
-    $getSolutionHistory = "$($EnvironmentURL)/api/data/v9.0/msdyn_solutionhistories?$filter" 
+    $getSolutionHistory = "$($EnvironmentURL)/api/data/v9.0/msdyn_solutionhistories?$($filter)" 
 
     # Declare Rest headers
     # Declare Rest headers
@@ -1041,7 +1045,7 @@ function Get-SolutionHistory {
         "ContentType" = "application/json"
     }   
     try {
-        $outputSolutionHistory = Invoke-RestMethod @GetParameters  
+        $outputSolutionHistory = Invoke-RestMethod @GetParameters       
         return $outputSolutionHistory
        
     }
