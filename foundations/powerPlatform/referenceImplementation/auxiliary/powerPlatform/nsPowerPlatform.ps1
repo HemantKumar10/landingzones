@@ -40,7 +40,10 @@ param (
 
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp,
+
+
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppCoEToolkit
 
     
     
@@ -902,7 +905,7 @@ function InstallCoESolutions {
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
     ) 
     
-    $soutionHistoryAttemptKitCore = 0
+    <# $soutionHistoryAttemptKitCore = 0
     do {
         $soutionHistoryAttemptKitCore++      
         $inprogressSolutionsKitCore = Get-SolutionHistory -EnvironmentURL $EnvironmentURL 
@@ -949,7 +952,7 @@ function InstallCoESolutions {
             New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $EnvironmentURL  
             Write-Output "Installed CreatorKitReferencesCanvas"
         }
-    } until (($inprogressSolutionsCoECanvas.value.Count -eq 0) -or $soutionHistoryAttemptCoECanvas -eq 20)
+    } until (($inprogressSolutionsCoECanvas.value.Count -eq 0) -or $soutionHistoryAttemptCoECanvas -eq 20)#>
 
     
     
@@ -970,7 +973,7 @@ function InstallCoESolutions {
     } until (($inprogressSolutionsCoECore.value.Count -eq 0) -or $soutionHistoryAttemptCoECore -eq 20)
  
 
-
+    <#
     $soutionHistoryAttemptCoEAuditComponents = 0
     do {
         $soutionHistoryAttemptCoEAuditComponents++      
@@ -1018,7 +1021,7 @@ function InstallCoESolutions {
             New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $EnvironmentURL  
             Write-Output "Installed CenterofExcellenceInnovationBacklog"  
         }
-    } until (($inprogressSolutionsCoEInnovation.value.Count -eq 0) -or $soutionHistoryAttemptCoEInnovation -eq 25)
+    } until (($inprogressSolutionsCoEInnovation.value.Count -eq 0) -or $soutionHistoryAttemptCoEInnovation -eq 25)#>
   
     
 }
@@ -1424,9 +1427,10 @@ if ($PPCitizen -in "yes") {
 
                  
                 #region Install CoE Solutions
-                Start-Sleep -Seconds 20
-                InstallCoESolutions -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                #New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) 
+                if ($ppCoEToolkit -eq 'true') {
+                    Start-Sleep -Seconds 20
+                    InstallCoESolutions -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                }              
                 #endregion
             }  
             else {

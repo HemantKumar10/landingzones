@@ -1489,6 +1489,36 @@
                                 "required": false
                             },
                             "visible": true
+                        },
+
+                                                
+                        {
+                            "name": "CoESection",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Power Platform Centre of Excellence (CoE) Starter Toolkit",
+                            "elements": [],
+                            "visible": true
+                        },
+                        {
+                            "name": "coeSectionText",
+                            "type": "Microsoft.Common.TextBlock",
+                            "visible": true,
+                            "options": {
+                                "text": "Install the solutions from the CoE Starter Kit that on the the Admin environments selected above.",
+                                "link": {
+                                    "label": "Center Of Excellence Toolkit",
+                                    "uri": "https://learn.microsoft.com/en-us/power-platform/guidance/coe/starter-kit"
+                                }
+                            }
+                        },
+                        {
+                            "name": "ppCoEToolkit",
+                            "type": "Microsoft.Common.CheckBox",
+                            "label": "Install Center Of Excellence Toolkit",                                                        
+                            "constraints": {
+                                "required": false
+                            },
+                            "visible": true
                         }
                     ]
                 }
@@ -1530,7 +1560,9 @@
 
                 "ppD365SalesApp": "[steps('landingZones').ppD365SalesApp]",                  
                 "ppD365CustomerServiceApp": "[steps('landingZones').ppD365CustomerServiceApp]",   
-                "ppD365FieldServiceApp": "[steps('landingZones').ppD365FieldServiceApp]"
+                "ppD365FieldServiceApp": "[steps('landingZones').ppD365FieldServiceApp]",
+                
+                "ppCoEToolkit": "[steps('landingZones').ppCoEToolkit]"
                                 
             },
             "kind": "Subscription",

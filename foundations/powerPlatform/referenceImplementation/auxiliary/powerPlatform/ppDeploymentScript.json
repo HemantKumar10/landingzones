@@ -88,8 +88,8 @@
             "metadata": {
                 "description": "Select tenant isolation setting"
             }
-        },   
-     
+        },
+
 
         "ppDefaultRenameText": {
             "type": "string",
@@ -130,7 +130,7 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
-        },       
+        },
         "ppCitizenNaming": {
             "type": "string",
             "defaultValue": "''",
@@ -181,7 +181,7 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
-        },                  
+        },
         "location": {
             "type": "string",
             "metadata": {
@@ -195,12 +195,12 @@
             }
         },
         "scriptUri": {
-            "type": "string",          
-            "defaultValue":"https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/nsPowerPlatform.ps1",
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/HemantKumar10/landingzones/main/foundations/powerPlatform/referenceImplementation/auxiliary/powerPlatform/nsPowerPlatform.ps1",
             "metadata": {
                 "description": "The uri pointing to the PowerShell script used in the deploymentScript"
             }
-        },       
+        },
         "ppCitizenLanguage": {
             "type": "string",
             "defaultValue": "",
@@ -214,36 +214,36 @@
             "metadata": {
                 "description": "Select the currency for the environments."
             }
-        },   
- "devEnvironment": {
+        },
+        "devEnvironment": {
             "type": "string",
             "defaultValue": "false",
             "metadata": {
-                "description":"Provide naming convention for the citizen dev environments."
+                "description": "Provide naming convention for the citizen dev environments."
             }
         },
 
-"testEnvironment": {
-              "type": "string",
+        "testEnvironment": {
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
-                "description":"Provide naming convention for the citizen test environments."
+                "description": "Provide naming convention for the citizen test environments."
             }
         },
         "prodEnvironment": {
-             "type": "string",
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Provide naming convention for the citizen prod environments."
             }
         },
-         "adminEnvironment": {
-              "type": "string",
+        "adminEnvironment": {
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Provide naming convention for the citizen admin environments."
             }
-        },       
+        },
         "qaEnvironment": {
             "type": "string",
             "defaultValue": "false",
@@ -252,56 +252,56 @@
             }
         },
         "uatEnvironment": {
-             "type": "string",
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Provide naming convention for the citizen uat environments."
             }
-        },        
+        },
         "stagingEnvironment": {
-             "type": "string",
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Provide naming convention for the citizen staging environments."
             }
         },
         "trainingEnvironment": {
-             "type": "string",
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Provide naming convention for the citizen training environments."
             }
         },
         "dataEnvironment": {
-              "type": "string",
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Provide naming convention for the citizen data environments."
             }
         },
-         "integrationEnvironment": {
-          "type": "string",
+        "integrationEnvironment": {
+            "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Provide naming convention for the citizen integration environments."
             }
         },
-        
-          "customEnvironments": {
+
+        "customEnvironments": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
                 "description": "Provide strings for custom citizen Environment creation."
             }
-        }  ,
-		
+        },
+
         "ppD365SalesApp": {
             "type": "string",
             "defaultValue": "false",
             "metadata": {
                 "description": "Dynamics 365 Sales Enterprise"
             }
-        },       
+        },
         "ppD365CustomerServiceApp": {
             "type": "string",
             "defaultValue": "false",
@@ -315,7 +315,14 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        }                    
+        },
+        "ppCoEToolkit": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Power Platform Centre of Excellence (CoE) Starter Toolkit"
+            }
+        }
     },
     "variables": {
         "deploymentName": "[take(concat(parameters('rgName'), '-initialize', '-', parameters('location')), 64)]"
@@ -390,7 +397,8 @@
                                                     '-customEnvironments', ' ', parameters('customEnvironments'), ' ', 
                                                      '-ppD365SalesApp', ' ',  parameters('ppD365SalesApp'), ' ', 
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
-                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '                                                                                                
+                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ',   
+                                                    '-ppCoEToolkit', ' ',  parameters('ppCoEToolkit'), ' '                                                                                             
                                                     )]",
                                 "azPowerShellVersion": "7.2",
                                 "timeout": "PT120M",

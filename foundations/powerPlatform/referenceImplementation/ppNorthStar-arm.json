@@ -38,7 +38,7 @@
             "metadata": {
                 "description": "Select tenant isolation setting"
             }
-        },        
+        },
         "ppGuestMakerSetting": {
             "type": "string",
             "allowedValues": [
@@ -93,7 +93,7 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
-        }, 
+        },
         "ppDefaultRenameText": {
             "type": "string",
             "defaultValue": "Personal",
@@ -133,7 +133,7 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
-        },           
+        },
         "ppCitizenNaming": {
             "type": "string",
             "defaultValue": "",
@@ -184,14 +184,14 @@
             "metadata": {
                 "description": "Select to enable/disable this setting."
             }
-        },                      
+        },
         "location": {
             "type": "string",
             "defaultValue": "[deployment().location]",
             "metadata": {
                 "description": "Provide the Azure location for the deployments"
             }
-        },                     
+        },
         "ppCitizenLanguage": {
             "type": "string",
             "defaultValue": "",
@@ -205,20 +205,20 @@
             "metadata": {
                 "description": "Select the currency for the environments."
             }
-        }, 
+        },
 
-         "devEnvironment": {
+        "devEnvironment": {
             "type": "bool",
             "defaultValue": "",
             "metadata": {
-                "description":"Provide naming convention for the citizen dev environments."
+                "description": "Provide naming convention for the citizen dev environments."
             }
         },
-          "testEnvironment": {
+        "testEnvironment": {
             "type": "bool",
             "defaultValue": "",
             "metadata": {
-                "description":"Provide naming convention for the citizen test environments."
+                "description": "Provide naming convention for the citizen test environments."
             }
         },
         "prodEnvironment": {
@@ -229,13 +229,13 @@
             }
         },
 
-           "adminEnvironment": {
+        "adminEnvironment": {
             "type": "bool",
             "defaultValue": "",
             "metadata": {
                 "description": "Provide naming convention for the citizen admin environments."
             }
-        },       
+        },
         "qaEnvironment": {
             "type": "bool",
             "defaultValue": "",
@@ -250,7 +250,7 @@
                 "description": "Provide naming convention for the citizen uat environments."
             }
         },
-        
+
         "stagingEnvironment": {
             "type": "bool",
             "defaultValue": "",
@@ -273,7 +273,7 @@
                 "description": "Provide naming convention for the citizen data environments."
             }
         },
-         "integrationEnvironment": {
+        "integrationEnvironment": {
             "type": "bool",
             "defaultValue": "",
             "metadata": {
@@ -282,7 +282,7 @@
         },
 
 
-          "customEnvironments": {
+        "customEnvironments": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
@@ -296,7 +296,7 @@
             "metadata": {
                 "description": "Dynamics 365 Sales Enterprise"
             }
-        },       
+        },
         "ppD365CustomerServiceApp": {
             "type": "bool",
             "defaultValue": "",
@@ -310,17 +310,24 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        }                         
+        },
+        "ppCoEToolkit": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Power Platform Centre of Excellence (CoE) Starter Toolkit"
+            }
+        }
     },
     "variables": {
-        "deploymentUris": {           
+        "deploymentUris": {
             "northStarTemplateUri": "[uri(deployment().properties.templateLink.uri, 'auxiliary/powerPlatform/ppDeploymentScript.json')]"
         },
-        "deploymentNamePrefix": "[concat(replace(tenant().displayName, ' ', ''), '-')]",        
-        "deploymentNames": {           
+        "deploymentNamePrefix": "[concat(replace(tenant().displayName, ' ', ''), '-')]",
+        "deploymentNames": {
             "northStarDeploymentName": "[take(concat(variables('deploymentNamePrefix'), 'ANS-Setup'), 64)]"
         },
-        "resourceNamePrefix": "ANS",       
+        "resourceNamePrefix": "ANS",
         "emptyString": "''"
     },
     "resources": [
@@ -357,10 +364,10 @@
                     },
                     "ppTenantIsolationSetting": {
                         "value": "[parameters('ppTenantIsolationSetting')]"
-                    },                                                                                        
+                    },
                     "ppEnvCapacitySetting": {
                         "value": "[parameters('ppEnvCapacitySetting')]"
-                    },                    
+                    },
                     "ppDefaultRenameText": {
                         "value": "[if(empty(parameters('ppDefaultRenameText')), variables('emptyString'), parameters('ppDefaultRenameText'))]"
                     },
@@ -372,76 +379,79 @@
                     },
                     "ppDefaultManagedSharing": {
                         "value": "[parameters('ppDefaultManagedSharing')]"
-                    },                               
+                    },
                     "ppCitizenNaming": {
                         "value": "[if(empty(parameters('ppCitizenNaming')), variables('emptyString'), parameters('ppCitizenNaming'))]"
                     },
                     "ppCitizenRegion": {
                         "value": "[parameters('ppCitizenRegion')]"
-                    },                   
+                    },
                     "ppCitizenDlp": {
                         "value": "[parameters('ppCitizenDlp')]"
                     },
                     "ppCitizenManagedEnv": {
                         "value": "[parameters('ppCitizenManagedEnv')]"
-                    },                    
+                    },
                     "location": {
                         "value": "[parameters('location')]"
                     },
                     "rgName": {
                         "value": "[concat(variables('resourceNamePrefix'), '-setup-', parameters('location'))]"
-                    },                                                      
+                    },
                     "ppCitizenLanguage": {
                         "value": "[if(empty(parameters('ppCitizenLanguage')), variables('emptyString'), parameters('ppCitizenLanguage'))]"
                     },
                     "ppCitizenCurrency": {
                         "value": "[if(empty(parameters('ppCitizenCurrency')), variables('emptyString'), parameters('ppCitizenCurrency'))]"
-                    }, 
-                     "devEnvironment": {
+                    },
+                    "devEnvironment": {
                         "value": "[if(parameters('devEnvironment'), 'True', 'False')]"
-                    },   
-                        	"testEnvironment": {
+                    },
+                    "testEnvironment": {
                         "value": "[if(parameters('testEnvironment'), 'True', 'False')]"
                     },
-                     "prodEnvironment": {
+                    "prodEnvironment": {
                         "value": "[if(parameters('prodEnvironment'), 'True', 'False')]"
                     },
-                     "adminEnvironment": {
+                    "adminEnvironment": {
                         "value": "[if(parameters('adminEnvironment'), 'True', 'False')]"
                     },
-                     "qaEnvironment": {
+                    "qaEnvironment": {
                         "value": "[if(parameters('qaEnvironment'), 'True', 'False')]"
                     },
-                     "uatEnvironment": {
+                    "uatEnvironment": {
                         "value": "[if(parameters('uatEnvironment'), 'True', 'False')]"
                     },
-                     "stagingEnvironment": {
+                    "stagingEnvironment": {
                         "value": "[if(parameters('stagingEnvironment'), 'True', 'False')]"
                     },
-                     "trainingEnvironment": {
+                    "trainingEnvironment": {
                         "value": "[if(parameters('trainingEnvironment'), 'True', 'False')]"
                     },
-                     "dataEnvironment": {
+                    "dataEnvironment": {
                         "value": "[if(parameters('dataEnvironment'), 'True', 'False')]"
                     },
-                     "integrationEnvironment": {
+                    "integrationEnvironment": {
                         "value": "[if(parameters('integrationEnvironment'), 'True', 'False')]"
                     },
-                      "customEnvironments": {
+                    "customEnvironments": {
                         "value": "[if(empty(parameters('customEnvironments')), variables('emptyString'), parameters('customEnvironments'))]"
-                    } ,             
+                    },
                     "ppD365SalesApp": {
                         "value": "[if(parameters('ppD365SalesApp'), 'True', 'False')]"
-                    },                   
+                    },
                     "ppD365CustomerServiceApp": {
                         "value": "[if(parameters('ppD365CustomerServiceApp'), 'True', 'False')]"
                     },
                     "ppD365FieldServiceApp": {
                         "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
-                    }                                 
+                    },
+                    "ppCoEToolkit": {
+                        "value": "[if(parameters('ppCoEToolkit'), 'True', 'False')]"
+                    }
                 }
             }
-        }                         
+        }
     ],
     "outputs": {}
 }
