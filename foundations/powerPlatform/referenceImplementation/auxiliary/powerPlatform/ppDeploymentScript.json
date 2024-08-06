@@ -401,7 +401,7 @@
                                                     '-ppCoEToolkit', ' ',  parameters('ppCoEToolkit'), ' '                                                                                             
                                                     )]",
                                 "azPowerShellVersion": "7.2",
-                                "timeout": "PT120M",
+                                "timeout": "PT240M",
                                 "cleanupPreference": "Always",
                                 "retentionInterval": "P1D"
                             }
