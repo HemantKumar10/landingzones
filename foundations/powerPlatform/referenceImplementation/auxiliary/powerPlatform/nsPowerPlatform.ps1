@@ -955,7 +955,21 @@ function InstallCoESolutions {
     } until (($inprogressSolutionsCoECanvas.value.Count -eq 0) -or $soutionHistoryAttemptCoECanvas -eq 20)#>
 
     
-    
+    $soutionHistoryAttemptKitCore = 0
+    do {
+        $soutionHistoryAttemptKitCore++      
+        $inprogressSolutionsKitCore = Get-SolutionHistory -EnvironmentURL $EnvironmentURL 
+        Write-Output "Inprogress solution count $($inprogressSolutionsKitCore.value.Count)"               
+        if ($inprogressSolutionsKitCore.value.Count -gt 0) {                 
+            Start-Sleep -Seconds 20
+        }
+        else {
+            Write-Output "Solution History attempt Kit Core $($soutionHistoryAttemptKitCore)"  
+            New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
+            Write-Output "Installed CreatorKitCore"   
+        }
+    } until (($inprogressSolutionsKitCore.value.Count -eq 0) -or $soutionHistoryAttemptKitCore -eq 20)
+
 
     $soutionHistoryAttemptCoECore = 0
     do {
