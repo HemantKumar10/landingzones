@@ -912,11 +912,12 @@ function InstallCoESolutions {
         }
         else {
             Write-Output "Solution History attempt Kit Core $($soutionHistoryAttemptKitCore)"  
+            New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
+            Write-Output "Installed CreatorKitCore"   
         }
     } until (($inprogressSolutionsKitCore.value.Count -eq 0) -or $soutionHistoryAttemptKitCore -eq 20)
 
-    New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CreatorKitCore"      
+      
 
     $soutionHistoryAttempt = 0
     do {
@@ -928,10 +929,11 @@ function InstallCoESolutions {
         }
         else {
             Write-Output "Solution History attempt MDA$($soutionHistoryAttempt)"  
+            New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL  
+            Write-Output "Installed CreatorKitReferencesMDA"  
         }
     } until (($inprogressSolutions.value.Count -eq 0) -or $soutionHistoryAttempt -eq 20)
-    New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CreatorKitReferencesMDA"  
+
 
 
     $soutionHistoryAttemptCoECanvas = 0
@@ -944,10 +946,11 @@ function InstallCoESolutions {
         }
         else {
             Write-Output "Solution History attempt Canvas $($soutionHistoryAttemptCoECanvas)"  
+            New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $EnvironmentURL  
+            Write-Output "Installed CreatorKitReferencesCanvas"
         }
     } until (($inprogressSolutionsCoECanvas.value.Count -eq 0) -or $soutionHistoryAttemptCoECanvas -eq 20)
-    New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CreatorKitReferencesCanvas"
+
     
     
 
@@ -961,10 +964,11 @@ function InstallCoESolutions {
         }
         else {
             Write-Output "Solution History attempt Core Components$($soutionHistoryAttemptCoECore)"  
+            New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $EnvironmentURL  
+            Write-Output "Installed CenterofExcellenceCoreComponents"   
         }
     } until (($inprogressSolutionsCoECore.value.Count -eq 0) -or $soutionHistoryAttemptCoECore -eq 20)
-    New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CenterofExcellenceCoreComponents"    
+ 
 
 
     $soutionHistoryAttemptCoEAuditComponents = 0
@@ -977,10 +981,11 @@ function InstallCoESolutions {
         }
         else {
             Write-Output "Solution History attempt Core Components$($soutionHistoryAttemptCoEAuditComponents)"  
+            New-InstallCoESolutions -SolutionName 'CenterofExcellenceAuditComponents' -EnvironmentURL $EnvironmentURL  
+            Write-Output "Installed CenterofExcellenceAuditComponents"  
         }
     } until (($inprogressSolutionsCoEAudit.value.Count -eq 0) -or $soutionHistoryAttemptCoEAuditComponents -eq 25)
-    New-InstallCoESolutions -SolutionName 'CenterofExcellenceAuditComponents' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CenterofExcellenceAuditComponents"  
+
 
 
     $soutionHistoryAttemptCoENurture = 0
@@ -993,10 +998,11 @@ function InstallCoESolutions {
         }
         else {
             Write-Output "Solution History attempt Core Components$($soutionHistoryAttemptCoENurture)"  
+            New-InstallCoESolutions -SolutionName 'CenterofExcellenceNurtureComponents' -EnvironmentURL $EnvironmentURL  
+            Write-Output "Installed CenterofExcellenceNurtureComponents" 
         }
     } until (($inprogressSolutionsCoENuture.value.Count -eq 0) -or $soutionHistoryAttemptCoENurture -eq 25)
-    New-InstallCoESolutions -SolutionName 'CenterofExcellenceNurtureComponents' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CenterofExcellenceNurtureComponents" 
+    
 
 
     $soutionHistoryAttemptCoEInnovation = 0
@@ -1009,10 +1015,11 @@ function InstallCoESolutions {
         }
         else {
             Write-Output "Solution History attempt Core Components$($soutionHistoryAttemptCoEInnovation)"  
+            New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $EnvironmentURL  
+            Write-Output "Installed CenterofExcellenceInnovationBacklog"  
         }
     } until (($inprogressSolutionsCoEInnovation.value.Count -eq 0) -or $soutionHistoryAttemptCoEInnovation -eq 25)
-    New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $EnvironmentURL  
-    Write-Output "Installed CenterofExcellenceInnovationBacklog"  
+  
     
 }
 
@@ -1111,8 +1118,23 @@ function New-InstallCoESolutions {
         "Body"        = $postBody | ConvertTo-json -Depth 100
     }   
     try {
-        Invoke-RestMethod @PostParameters
-        Write-Output "Installation of CoE solution $($SolutionName) processed successfully"       
+
+        $getSolutionHistoryAttempt = 0
+        do {
+            $getSolutionHistoryAttempt++      
+            $processingSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL 
+            Write-Output "Inner: Inprogress solution count $($processingSolutions.value.Count)"               
+            if ($processingSolutions.value.Count -gt 0) {   
+                Write-Output "In progress solution name $($processingSolutions.value[0].msdyn_name)"               
+                Start-Sleep -Seconds 20
+            }
+            else {
+                Write-Output "Inner: Solution History attempt $($getSolutionHistoryAttempt)"  
+                Invoke-RestMethod @PostParameters
+                Write-Output "Installation of CoE solution $($SolutionName) processed successfully"  
+                
+            }
+        } until (($processingSolutions.value.Count -eq 0) -or $getSolutionHistoryAttempt -eq 25)
   
     }
     catch {            
