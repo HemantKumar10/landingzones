@@ -317,7 +317,7 @@
             }
         },
         "ppCoEToolkit": {
-            "type": "bool",
+            "type": "string",
             "defaultValue": "",
             "metadata": {
                 "description": "Power Platform Centre of Excellence (CoE) Starter Toolkit"
