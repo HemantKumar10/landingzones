@@ -443,7 +443,8 @@ function New-GetApplicationInstallStatus {
         try {
             $packageSTatus = Invoke-RestMethod @GetParameters 
             if ($packageSTatus.status -ne 'Succeeded' -or $packageSTatus.status -ne 'Canceled' -or $packageSTatus.status -ne 'Failed') {   
-                Write-Output "Getting Applocation Status $($packageSTatus.status) - attempt $getApplicationAttempt"                   
+                Write-Output "Getting Applocation Status $($packageSTatus.status) - attempt $getApplicationAttempt"    
+                Write-Host ($packageSTatus | Format-List | Out-String)               
                 Start-Sleep -Seconds 15
             } 
             if ($packageSTatus.status -eq 'Succeeded') {            
@@ -1422,10 +1423,12 @@ if ($PPCitizen -in "yes") {
                If ($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes") {                
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 } #>
-                If ($envCreationHt.Name -eq $Global:envAdminDevName -and $PPCitizenDlp -eq "Yes") {                
+                If ($envCreationHt.Name -eq $Global:envAdminDevName -and $PPCitizenDlp -eq "Yes") {   
+                    Write-Output "Admin Dev DLP $($envCreationHt.Name)"              
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 }
-                If ($envCreationHt.Name -eq $Global:envAdminProdName -and $PPCitizenDlp -eq "Yes") {                
+                If ($envCreationHt.Name -eq $Global:envAdminProdName -and $PPCitizenDlp -eq "Yes") {     
+                    Write-Output "Admin Prod DLP $($envCreationHt.Name)"           
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 }
                 if ($envCreationHt.Name -ne $Global:envAdminDevName -and $envCreationHt.Name -ne $Global:envAdminProdName) {
