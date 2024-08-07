@@ -420,7 +420,11 @@ function New-GetApplicationInstallStatus {
         #$Token = (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/").Token
         $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/" -AsSecureString).Token -AsPlainText)
         # Power Platform HTTP Post Environment Uri
-        $GetPackages = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/operations/$($OperationId)?api-version=2022-03-01-preview"    
+        $GetPackages = "https://api.powerplatform.com/appmanagement/environments/$($EnvironmentId)/operations/$($OperationId)?api-version=2022-03-01-preview"  
+        
+        
+
+        Write-Output "Package URL $($GetPackages)"  
 
         # Declare Rest headers      
 
@@ -438,7 +442,8 @@ function New-GetApplicationInstallStatus {
         }   
         try {
             $packageSTatus = Invoke-RestMethod @GetParameters 
-            if ($packageSTatus.status -ne 'Succeeded' -or $packageSTatus.status -ne 'Canceled' -or $packageSTatus.status -ne 'Failed') {                      
+            if ($packageSTatus.status -ne 'Succeeded' -or $packageSTatus.status -ne 'Canceled' -or $packageSTatus.status -ne 'Failed') {   
+                Write-Output "Getting Applocation Status $($packageSTatus.status) - attempt $getApplicationAttempt"                   
                 Start-Sleep -Seconds 15
             } 
             if ($packageSTatus.status -eq 'Succeeded') {            
