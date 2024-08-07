@@ -445,7 +445,7 @@ function New-GetApplicationInstallStatus {
             if ($packageSTatus.status -ne 'Succeeded' -or $packageSTatus.status -ne 'Canceled' -or $packageSTatus.status -ne 'Failed') {   
                 Write-Output "Getting Applocation Status $($packageSTatus.status) - attempt $getApplicationAttempt"    
                 Write-Host ($packageSTatus | Format-List | Out-String)               
-                Start-Sleep -Seconds 15
+                Start-Sleep -Seconds 20
             } 
             if ($packageSTatus.status -eq 'Succeeded') {            
                 Start-Sleep -Seconds 5
@@ -551,7 +551,7 @@ function New-GetApplicationInstallStatus {
             Write-Error "Failed gettting package status`r`n$_"               
         } 
 
-    } until ($packageSTatus.status -eq 'Succeeded' -or $packageSTatus.status -eq 'Canceled' -or $packageSTatus.status -eq 'Failed' -or $getApplicationAttempt -eq 20)
+    } until ($packageSTatus.status -eq 'Succeeded' -or $packageSTatus.status -eq 'Canceled' -or $packageSTatus.status -eq 'Failed' -or $getApplicationAttempt -eq 25)
 }
 
 #Create a Deployment Environment Record
@@ -1341,6 +1341,7 @@ if ($PPCitizen -in "yes") {
 
     #Collect Non Admin Environments#
     $landzingZoneEnvs = @()
+    $landzingZoneAdminEnvs = @()
     #Ends#
     foreach ($environment in $environmentsToCreate) {             
         try {
@@ -1424,12 +1425,14 @@ if ($PPCitizen -in "yes") {
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 } #>
                 If ($envCreationHt.Name -eq $Global:envAdminDevName -and $PPCitizenDlp -eq "Yes") {   
-                    Write-Output "Admin Dev DLP $($envCreationHt.Name)"              
-                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
+                    Write-Output "Admin Dev DLP $($envCreationHt.Name)" 
+                    $landzingZoneAdminEnvs += $envCreationHt.Name 
+                    #New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 }
                 If ($envCreationHt.Name -eq $Global:envAdminProdName -and $PPCitizenDlp -eq "Yes") {     
                     Write-Output "Admin Prod DLP $($envCreationHt.Name)"           
-                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
+                    $landzingZoneAdminEnvs += $envCreationHt.Name  
+                    #New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 }
                 if ($envCreationHt.Name -ne $Global:envAdminDevName -and $envCreationHt.Name -ne $Global:envAdminProdName) {
                     $landzingZoneEnvs += $envCreationHt.Name 
@@ -1449,6 +1452,9 @@ if ($PPCitizen -in "yes") {
         }
     }
     if ($PPCitizenDlp -eq "Yes") {  
+        If ($landzingZoneAdminEnvs.Count -gt 0) {  
+            New-DLPAssignmentFromEnv -Environments $landzingZoneAdminEnvs -EnvironmentDLP 'adminEnv'  
+        }
         if (($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
             New-DLPAssignmentFromEnv -Environments $landzingZoneEnvs -EnvironmentDLP 'defaultTenantDlpPolicyD365'  
         }
