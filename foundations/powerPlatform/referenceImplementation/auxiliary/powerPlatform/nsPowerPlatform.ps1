@@ -174,7 +174,8 @@ function New-EnvironmentCreationObject {
                 $securityGroupId = $createdSecurityGroup                
                 $envSku = 'Production'
                 $envDescription = 'Environment used for administration purposes'     
-                $Global:envAdminDevName = "{0}-{1}" -f $environmentName, $envTier                   
+                $Global:envAdminDevName = "{0}-{1}" -f $environmentName, $envTier   
+                $Global:envAdminName = "{0}-{1}" -f $environmentName, $envTier                   
             }
 
             if ( $envTier -eq 'admin-prod' -and $adminProdEnvironment -eq 'true' ) {
@@ -182,7 +183,8 @@ function New-EnvironmentCreationObject {
                 $securityGroupId = $createdSecurityGroup                
                 $envSku = 'Production'
                 $envDescription = 'Environment used for administration purposes'     
-                $Global:envAdminProdName = "{0}-{1}" -f $environmentName, $envTier                   
+                $Global:envAdminProdName = "{0}-{1}" -f $environmentName, $envTier  
+                $Global:envAdminName = "{0}-{1}" -f $environmentName, $envTier                    
             }
 
             #Adding conditions for new environment types
