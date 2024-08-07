@@ -79,10 +79,10 @@ if ($adminEnvironment -eq 'true'  ) {
 #>
 
 if ($adminDevEnvironment -eq 'true'  ) {          
-    $envTiers += 'admin'   
+    $envTiers += 'admin-dev'   
 }
 if ($adminProdEnvironment -eq 'true'  ) {          
-    $envTiers += 'admin'   
+    $envTiers += 'admin-prod'   
 }
 if ($qaEnvironment -eq 'true'  ) {          
     $envTiers += 'qa'   
@@ -1505,7 +1505,7 @@ if ($PPCitizen -in "yes") {
                     Start-Sleep -Seconds 20
                 }
                 else {
-                    Write-Output "Admin Id: $($getAdminDevEnvironment.name) attempt $($adminDevEnvAttempts)"  
+                    Write-Output "Admin Dev Id: $($getAdminDevEnvironment.name) attempt $($adminDevEnvAttempts)"  
                 }
             } until ( ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminDevEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminDevEnvAttempts -eq 20)
                   
@@ -1535,7 +1535,7 @@ if ($PPCitizen -in "yes") {
     #Starts : Admin Prod Envrionmet
     If ($PPCitizenAlm -eq 'Yes' -and $adminProdEnvironment -eq 'true') {
         try {                
-            Write-Output "Admin Prod: $envAdminYeProdName"  
+            Write-Output "Admin Prod: $envAdminProdName"  
             $adminProdEnvAttempts = 0
             do {
                 $adminProdEnvAttempts++
@@ -1547,7 +1547,7 @@ if ($PPCitizen -in "yes") {
                     Start-Sleep -Seconds 20
                 }
                 else {
-                    Write-Output "Admin Id: $($getAdminProdEnvironment.name) attempt $($adminProdEnvAttempts)"  
+                    Write-Output "Admin Prod Id: $($getAdminProdEnvironment.name) attempt $($adminProdEnvAttempts)"  
                 }
             } until ( ($null -ne $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminProdEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminProdEnvAttempts -eq 20)
                   
