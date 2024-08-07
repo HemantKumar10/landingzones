@@ -169,7 +169,7 @@ function New-EnvironmentCreationObject {
             #>
             
 
-            if ( $envTier -eq 'admin' -and $adminDevEnvironment -eq 'true' ) {
+            if ( $envTier -eq 'admin-dev' -and $adminDevEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Admin Dev' -SecurityGroupName "entra_powerplatform_admin" -SecurityGroupNickName "PowerPlatformAdminGroup" 
                 $securityGroupId = $createdSecurityGroup                
                 $envSku = 'Production'
@@ -177,7 +177,7 @@ function New-EnvironmentCreationObject {
                 $Global:envAdminDevName = "{0}-{1}" -f $environmentName, $envTier                   
             }
 
-            if ( $envTier -eq 'admin' -and $adminProdEnvironment -eq 'true' ) {
+            if ( $envTier -eq 'admin-prod' -and $adminProdEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Admin Prod' -SecurityGroupName "entra_powerplatform_admin" -SecurityGroupNickName "PowerPlatformAdminGroup" 
                 $securityGroupId = $createdSecurityGroup                
                 $envSku = 'Production'
