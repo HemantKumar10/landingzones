@@ -1493,7 +1493,7 @@ if ($PPCitizen -in "yes") {
     #Starts : Admin Dev Envrionmet
     If ($PPCitizenAlm -eq 'Yes' -and $adminDevEnvironment -eq 'true' -and $adminProdEnvironment -ne 'true') {
         try {                
-            Write-Output "Admin dev: $envAdminDevName"  
+            Write-Output "Admin dev: $Global:envAdminDevName"  
             $adminDevEnvAttempts = 0
             do {
                 $adminDevEnvAttempts++
@@ -1507,7 +1507,7 @@ if ($PPCitizen -in "yes") {
                 else {
                     Write-Output "Admin Dev Id: $($getAdminDevEnvironment.name) attempt $($adminDevEnvAttempts)"  
                 }
-            } until ( ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminDevEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminDevEnvAttempts -eq 20)
+            } until ( ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminDevEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminDevEnvAttempts -eq 25)
                   
             if ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminDevEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
@@ -1535,7 +1535,7 @@ if ($PPCitizen -in "yes") {
     #Starts : Admin Prod Envrionmet
     If ($PPCitizenAlm -eq 'Yes' -and $adminProdEnvironment -eq 'true') {
         try {                
-            Write-Output "Admin Prod: $envAdminProdName"  
+            Write-Output "Admin Prod: $Global:envAdminProdName"  
             $adminProdEnvAttempts = 0
             do {
                 $adminProdEnvAttempts++
@@ -1549,7 +1549,7 @@ if ($PPCitizen -in "yes") {
                 else {
                     Write-Output "Admin Prod Id: $($getAdminProdEnvironment.name) attempt $($adminProdEnvAttempts)"  
                 }
-            } until ( ($null -ne $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminProdEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminProdEnvAttempts -eq 20)
+            } until ( ($null -ne $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminProdEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminProdEnvAttempts -eq 25)
                   
             if ($null -ne $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminProdEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
