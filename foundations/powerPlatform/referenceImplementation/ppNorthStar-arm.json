@@ -228,14 +228,23 @@
                 "description": "Provide naming convention for the citizen prod environments."
             }
         },
-
-        "adminEnvironment": {
+        "adminDevEnvironment": {
             "type": "bool",
             "defaultValue": "",
             "metadata": {
-                "description": "Provide naming convention for the citizen admin environments."
+                "description": "Provide naming convention for the citizen admin dev environments."
             }
         },
+
+        "adminProdEnvironment": {
+            "type": "bool",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide naming convention for the citizen admin prod environments."
+            }
+        },
+
+
         "qaEnvironment": {
             "type": "bool",
             "defaultValue": "",
@@ -412,10 +421,15 @@
                     },
                     "prodEnvironment": {
                         "value": "[if(parameters('prodEnvironment'), 'True', 'False')]"
+                    },                  
+                    "adminDevEnvironment": {
+                        "value": "[if(parameters('adminDevEnvironment'), 'True', 'False')]"
                     },
-                    "adminEnvironment": {
-                        "value": "[if(parameters('adminEnvironment'), 'True', 'False')]"
+                    "adminProdEnvironment": {
+                        "value": "[if(parameters('adminProdEnvironment'), 'True', 'False')]"
                     },
+
+
                     "qaEnvironment": {
                         "value": "[if(parameters('qaEnvironment'), 'True', 'False')]"
                     },

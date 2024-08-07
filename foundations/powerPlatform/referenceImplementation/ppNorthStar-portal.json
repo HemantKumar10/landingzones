@@ -1303,16 +1303,28 @@
                             "visible": true
                         },  
 
+
                         {
-                            "name": "adminEnvironment",
+                            "name": "adminDevEnvironment",
                             "type": "Microsoft.Common.CheckBox",
                             "defaultValue": true,
-                            "label": "Admin Environment (admin)",   
+                            "label": "Development Admin Environment (admin-dev)",   
                             "constraints": {
                                 "required": false
                             },
                             "visible": true
-                        },  
+                        }, 
+
+                        {
+                            "name": "adminProdEnvironment",
+                            "type": "Microsoft.Common.CheckBox",
+                            "defaultValue": true,
+                            "label": "Production Admin Environment (admin-prod)",   
+                            "constraints": {
+                                "required": false
+                            },
+                            "visible": true
+                        },                        
 
                         {
                             "name": "qaEnvironment",
@@ -1548,8 +1560,11 @@
                 "devEnvironment": "[steps('landingZones').devEnvironment]",
 
                 "testEnvironment": "[steps('landingZones').testEnvironment]",
-                "prodEnvironment": "[steps('landingZones').prodEnvironment]",
-                "adminEnvironment": "[steps('landingZones').adminEnvironment]",
+                "prodEnvironment": "[steps('landingZones').prodEnvironment]",               
+
+                "adminDevEnvironment": "[steps('landingZones').adminDevEnvironment]",
+                "adminProdEnvironment": "[steps('landingZones').adminProdEnvironment]",              
+
                 "qaEnvironment": "[steps('landingZones').qaEnvironment]",
                 "uatEnvironment": "[steps('landingZones').uatEnvironment]",
                 "stagingEnvironment": "[steps('landingZones').stagingEnvironment]",
@@ -1561,7 +1576,7 @@
                 "ppD365SalesApp": "[steps('landingZones').ppD365SalesApp]",                  
                 "ppD365CustomerServiceApp": "[steps('landingZones').ppD365CustomerServiceApp]",   
                 "ppD365FieldServiceApp": "[steps('landingZones').ppD365FieldServiceApp]",
-                
+
                 "ppCoEToolkit": "[steps('landingZones').ppCoEToolkit]"
                                 
             },

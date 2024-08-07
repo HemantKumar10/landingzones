@@ -237,13 +237,25 @@
                 "description": "Provide naming convention for the citizen prod environments."
             }
         },
-        "adminEnvironment": {
+
+        "adminDevEnvironment": {
             "type": "string",
             "defaultValue": "false",
             "metadata": {
-                "description": "Provide naming convention for the citizen admin environments."
+                "description": "Provide naming convention for the citizen admin dev environments."
             }
         },
+
+        "adminProdEnvironment": {
+            "type": "string",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Provide naming convention for the citizen admin prod environments."
+            }
+        },
+
+
+
         "qaEnvironment": {
             "type": "string",
             "defaultValue": "false",
@@ -386,8 +398,9 @@
                                                     '-PPCitizenManagedEnv', ' ', parameters('ppCitizenManagedEnv'), ' ', 
                                                     '-devEnvironment', ' ', parameters('devEnvironment'), ' ',     
                                                     '-testEnvironment', ' ', parameters('testEnvironment'), ' ',  
-                                                    '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ',   
-                                                    '-adminEnvironment', ' ', parameters('adminEnvironment'), ' ',   
+                                                    '-prodEnvironment', ' ', parameters('prodEnvironment'), ' ', 
+                                                      '-adminDevEnvironment', ' ', parameters('adminDevEnvironment'), ' ',   
+                                                        '-adminProdEnvironment', ' ', parameters('adminProdEnvironment'), ' ',   
                                                     '-qaEnvironment', ' ', parameters('qaEnvironment'), ' ',   
                                                     '-uatEnvironment', ' ', parameters('uatEnvironment'), ' ',   
                                                     '-stagingEnvironment', ' ', parameters('stagingEnvironment'), ' ',   

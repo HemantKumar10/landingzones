@@ -29,7 +29,9 @@ param (
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$devEnvironment,    
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$testEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$prodEnvironment  ,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminEnvironment,
+    #[Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminEnvironment,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminDevEnvironment,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$adminProdEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$qaEnvironment,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$uatEnvironment ,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$stagingEnvironment,
@@ -70,7 +72,16 @@ if ($testEnvironment -eq 'true'  ) {
 if ($prodEnvironment -eq 'true'  ) {          
     $envTiers += 'prod'   
 }
+<#
 if ($adminEnvironment -eq 'true'  ) {          
+    $envTiers += 'admin'   
+}
+#>
+
+if ($adminDevEnvironment -eq 'true'  ) {          
+    $envTiers += 'admin'   
+}
+if ($adminProdEnvironment -eq 'true'  ) {          
     $envTiers += 'admin'   
 }
 if ($qaEnvironment -eq 'true'  ) {          
@@ -97,6 +108,8 @@ if ($integrationEnvironment -eq 'true'  ) {
 #Ends Here
 
 $Global:envAdminName = ''
+$Global:envAdminDevName = ''
+$Global:envAdminProdName = ''
 $Global:envTestName = ''
 $Global:envDevName = ''
 $Global:envProdName = ''
@@ -145,12 +158,31 @@ function New-EnvironmentCreationObject {
                 $envDescription = 'Environment used for production purposes' 
                              
             }
+            <#
             if ( $envTier -eq 'admin' -and $adminEnvironment -eq 'true' ) {
                 $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Admin' -SecurityGroupName "entra_powerplatform_admin" -SecurityGroupNickName "PowerPlatformAdminGroup" 
                 $securityGroupId = $createdSecurityGroup                
                 $envSku = 'Production'
                 $envDescription = 'Environment used for administration purposes'     
                 $Global:envAdminName = "{0}-{1}" -f $environmentName, $envTier                   
+            }
+            #>
+            
+
+            if ( $envTier -eq 'admin' -and $adminDevEnvironment -eq 'true' ) {
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Admin' -SecurityGroupName "entra_powerplatform_admin" -SecurityGroupNickName "PowerPlatformAdminGroup" 
+                $securityGroupId = $createdSecurityGroup                
+                $envSku = 'Production'
+                $envDescription = 'Environment used for administration purposes'     
+                $Global:envAdminDevName = "{0}-{1}" -f $environmentName, $envTier                   
+            }
+
+            if ( $envTier -eq 'admin' -and $adminProdEnvironment -eq 'true' ) {
+                $createdSecurityGroup = New-CreateSecurityGroup -EnvironmentName 'Admin' -SecurityGroupName "entra_powerplatform_admin" -SecurityGroupNickName "PowerPlatformAdminGroup" 
+                $securityGroupId = $createdSecurityGroup                
+                $envSku = 'Production'
+                $envDescription = 'Environment used for administration purposes'     
+                $Global:envAdminProdName = "{0}-{1}" -f $environmentName, $envTier                   
             }
 
             #Adding conditions for new environment types
@@ -341,7 +373,9 @@ function New-InstallPackaggeToEnvironment {
         if ($devEnvironment -eq 'true' -and 
             $testEnvironment -eq 'true' -and 
             $prodEnvironment -eq 'true' -and 
-            $adminEnvironment -eq 'true' -and
+            ($adminDevEnvironment -eq 'true' -or
+            $adminProdEnvironment -eq 'true') -and
+            #$adminEnvironment -eq 'true' -and
             $envTiers.contains('qa') -eq $false -and
             $envTiers.contains('uat') -eq $false -and
             $envTiers.contains('staging') -eq $false -and
@@ -1336,13 +1370,13 @@ if ($PPCitizen -in "yes") {
             
             # Form the request body to create new Environments in Power Platform           
             $templates = @()
-            if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
+            if ($ppD365SalesApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminDevName -and $envCreationHt.Name -ne $Global:envAdminProdName ) {          
                 $templates += 'D365_Sales'   
             }
-            if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) {          
+            if ($ppD365CustomerServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminDevName -and $envCreationHt.Name -ne $Global:envAdminProdName ) {          
                 $templates += 'D365_CustomerService'   
             }
-            if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminName ) { 
+            if ($ppD365FieldServiceApp -eq 'true' -and $envCreationHt.Name -ne $Global:envAdminDevName -and $envCreationHt.Name -ne $Global:envAdminProdName ) { 
                 $templates += 'D365_FieldService'   
             }           
             
@@ -1377,20 +1411,19 @@ if ($PPCitizen -in "yes") {
                 $response = Invoke-RestMethod @PostParameters   
                 Write-Output "Create Environment: $($envCreationHt.Name) Completed" 
                 #Code to apply Admin DLP Policy for Admin Env#
-                If ($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes") {                
+               <#
+               If ($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes") {                
+                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
+                } #>
+                If ($envCreationHt.Name -eq $Global:envAdminDevName -and $PPCitizenDlp -eq "Yes") {                
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 }
-                if ($envCreationHt.Name -ne $Global:envAdminName ) {
+                If ($envCreationHt.Name -eq $Global:envAdminProdName -and $PPCitizenDlp -eq "Yes") {                
+                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
+                }
+                if ($envCreationHt.Name -ne $Global:envAdminDevName -and $envCreationHt.Name -ne $Global:envAdminProdName) {
                     $landzingZoneEnvs += $envCreationHt.Name 
-                }
-                <#
-                  if ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName -and ($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
-                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'defaultTenantDlpPolicyD365'  
-                }
-                elseif ($PPCitizenDlp -eq "Yes" -and $envCreationHt.Name -ne $Global:envAdminName ) {
-                    New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'  
-                }
-                #>
+                }             
               
                 
                 #Write-Host ($response | Format-List | Out-String)                            
@@ -1417,7 +1450,7 @@ if ($PPCitizen -in "yes") {
 
     #region Install Power Platform Pipeline App in Admin Envrionemnt        
     Start-Sleep -Seconds 10         
-    
+    <#
     If ($PPCitizenAlm -eq 'Yes' -and $adminEnvironment -eq 'true') {
         try {                
             Write-Output "Admin: $envAdminName"  
@@ -1455,7 +1488,92 @@ if ($PPCitizen -in "yes") {
         catch {
             Write-Warning "Error installing App`r`n$_"
         }
-    }     
+    }  #> 
+    
+    #Starts : Admin Dev Envrionmet
+    If ($PPCitizenAlm -eq 'Yes' -and $adminDevEnvironment -eq 'true' -and $adminProdEnvironment -ne 'true') {
+        try {                
+            Write-Output "Admin dev: $envAdminDevName"  
+            $adminDevEnvAttempts = 0
+            do {
+                $adminDevEnvAttempts++
+                Write-Output "Admin dev attempt: $($adminDevEnvAttempts)"   
+                $getAdminDevEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminDevName }                    
+                if ($null -eq $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
+                    $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '' -or 
+                    $getAdminDevEnvironment.properties.provisioningState -ne 'Succeeded' ) {                 
+                    Start-Sleep -Seconds 20
+                }
+                else {
+                    Write-Output "Admin Id: $($getAdminDevEnvironment.name) attempt $($adminDevEnvAttempts)"  
+                }
+            } until ( ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminDevEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminDevEnvAttempts -eq 20)
+                  
+            if ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
+                New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminDevEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+
+                 
+                #region Install CoE Solutions
+                if ($ppCoEToolkit -eq 'true') {
+                    Start-Sleep -Seconds 20
+                    InstallCoESolutions -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                }              
+                #endregion
+            }  
+            else {
+                Write-Output "Admin Dev Environment is not ready or URL is empty"   
+            } 
+                    
+        }
+        catch {
+            Write-Warning "Error installing App`r`n$_"
+        }
+    }  
+    #Ends here
+    
+    
+    #Starts : Admin Prod Envrionmet
+    If ($PPCitizenAlm -eq 'Yes' -and $adminProdEnvironment -eq 'true') {
+        try {                
+            Write-Output "Admin Prod: $envAdminYeProdName"  
+            $adminProdEnvAttempts = 0
+            do {
+                $adminProdEnvAttempts++
+                Write-Output "Admin Prod attempt: $($adminProdEnvAttempts)"   
+                $getAdminProdEnvironment = Get-PowerOpsEnvironment | Where-Object { $_.Properties.displayName -eq $Global:envAdminProdName }                    
+                if ($null -eq $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -or 
+                    $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -eq '' -or 
+                    $getAdminProdEnvironment.properties.provisioningState -ne 'Succeeded' ) {                 
+                    Start-Sleep -Seconds 20
+                }
+                else {
+                    Write-Output "Admin Id: $($getAdminProdEnvironment.name) attempt $($adminProdEnvAttempts)"  
+                }
+            } until ( ($null -ne $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminProdEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminProdEnvAttempts -eq 20)
+                  
+            if ($null -ne $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
+                New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminProdEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+
+                 
+                #region Install CoE Solutions
+                if ($ppCoEToolkit -eq 'true') {
+                    Start-Sleep -Seconds 20
+                    InstallCoESolutions -EnvironmentURL $($getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                }              
+                #endregion
+            }  
+            else {
+                Write-Output "Admin Environment is not ready or URL is empty"   
+            } 
+                    
+        }
+        catch {
+            Write-Warning "Error installing App`r`n$_"
+        }
+    }  
+    #Ends here
+
+
     #endregion Install Power Platform Pipeline App in Admin Envrionemnt   
    
 }
