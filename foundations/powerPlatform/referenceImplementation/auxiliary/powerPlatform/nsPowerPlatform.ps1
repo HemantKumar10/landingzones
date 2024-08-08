@@ -1532,7 +1532,7 @@ if ($PPCitizen -in "yes") {
                 #region Install CoE Solutions
                 if ($ppCoEToolkit -eq 'true') {
                     Start-Sleep -Seconds 20
-                    #InstallCoESolutions -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                    InstallCoESolutions -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                 }              
                 #endregion
             }  
@@ -1574,7 +1574,7 @@ if ($PPCitizen -in "yes") {
                 #region Install CoE Solutions
                 if ($ppCoEToolkit -eq 'true') {
                     Start-Sleep -Seconds 20
-                    #InstallCoESolutions -EnvironmentURL $($getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
+                    InstallCoESolutions -EnvironmentURL $($getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
                 }              
                 #endregion
             }  
