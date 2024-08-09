@@ -1455,10 +1455,10 @@ if ($PPCitizen -in "yes") {
         If ($landzingZoneAdminEnvs.Count -gt 0) {  
             New-DLPAssignmentFromEnv -Environments $landzingZoneAdminEnvs -EnvironmentDLP 'adminEnv'  
         }
-        if (($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
+        if ($landzingZoneEnvs.Count -gt 0 -and ($ppD365SalesApp -eq 'true' -or $ppD365CustomerServiceApp -eq 'true' -or $ppD365FieldServiceApp -eq 'true' )) {
             New-DLPAssignmentFromEnv -Environments $landzingZoneEnvs -EnvironmentDLP 'defaultTenantDlpPolicyD365'  
         }
-        else {
+        elseif ($landzingZoneEnvs.Count -gt 0) {
             New-DLPAssignmentFromEnv -Environments $landzingZoneEnvs -EnvironmentDLP 'defaultTenantDlpPolicyPowerApps'
         }       
        
