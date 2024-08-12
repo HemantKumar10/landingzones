@@ -1257,27 +1257,6 @@
                             "visible": true
                         },
 
-                        {
-                            "name": "ppTest",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Test Summary",
-                            "defaultValue": "No",
-                            "toolTip": "Managed Environments is a suite of capabilities that allows admins to manage Power Platform at scale with more control, less effort, and more insights",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Yes (recommended)",
-                                        "value": "yes"
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": "no"
-                                    }
-                                ],
-                                "required": true
-                            },
-                            "visible": true
-                        },
 
                         {
                             "name": "predefinedEnvText",
