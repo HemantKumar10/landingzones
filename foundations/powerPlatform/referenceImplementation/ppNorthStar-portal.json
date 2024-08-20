@@ -1222,7 +1222,6 @@
                             },
                             "visible": true
                         },
-
                         {
                             "name": "ppCitizenManagedText",
                             "type": "Microsoft.Common.TextBlock",
@@ -1256,8 +1255,6 @@
                             },
                             "visible": true
                         },
-
-
                         {
                             "name": "predefinedEnvText",
                             "type": "Microsoft.Common.TextBlock",
@@ -1269,8 +1266,7 @@
                                     "uri": "https://learn.microsoft.com/en-us/power-platform/admin/environments-overview"
                                 }
                             }
-                        },   
-
+                        }, 
                         {
                             "name": "devEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1280,8 +1276,7 @@
                                 "required": false
                             },
                             "visible": true
-                        },           
-                        
+                        }, 
                         {
                             "name": "testEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1291,8 +1286,7 @@
                                 "required": false
                             },
                             "visible": true
-                        },   
-                        
+                        },
                         {
                             "name": "prodEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1302,9 +1296,7 @@
                                 "required": false
                             },
                             "visible": true
-                        },  
-
-
+                        },
                         {
                             "name": "adminDevEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1315,7 +1307,6 @@
                             },
                             "visible": true
                         }, 
-
                         {
                             "name": "adminProdEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1325,8 +1316,7 @@
                                 "required": false
                             },
                             "visible": true
-                        },                        
-
+                        },  
                         {
                             "name": "qaEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1337,7 +1327,6 @@
                             },
                             "visible": true
                         },  
-
                         {
                             "name": "uatEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1347,8 +1336,7 @@
                                 "required": false
                             },
                             "visible": true
-                        },  
-
+                        }, 
                         {
                             "name": "stagingEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1358,8 +1346,7 @@
                                 "required": false
                             },
                             "visible": true
-                        },  
-
+                        }, 
                         {
                             "name": "trainingEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1370,7 +1357,6 @@
                             },
                             "visible": true
                         },  
-
                         {
                             "name": "dataEnvironment",
                             "type": "Microsoft.Common.CheckBox",
@@ -1504,8 +1490,7 @@
                             "visible": true
                         }   
                     ]
-                }
-               
+                }               
             ]
         },
         "outputs": {
@@ -1539,11 +1524,9 @@
                 "dataEnvironment": "[steps('landingZones').dataEnvironment]",
                 "integrationEnvironment": "[steps('landingZones').integrationEnvironment]",
                 "customEnvironments": "[replace(replace(replace(replace(replace(string(steps('landingZones').customEnvironments), '{', ''), '}', ''), '\"', ''), '[', ''), ']', '')]",
-
                 "ppD365SalesApp": "[steps('landingZones').ppD365SalesApp]",                  
                 "ppD365CustomerServiceApp": "[steps('landingZones').ppD365CustomerServiceApp]",   
-                "ppD365FieldServiceApp": "[steps('landingZones').ppD365FieldServiceApp]"
-    
+                "ppD365FieldServiceApp": "[steps('landingZones').ppD365FieldServiceApp]"   
                                 
             },
             "kind": "Subscription",
