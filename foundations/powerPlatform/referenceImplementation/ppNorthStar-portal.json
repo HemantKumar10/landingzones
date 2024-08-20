@@ -1502,16 +1502,7 @@
                                 "required": false
                             },
                             "visible": true
-                        },
-
-                                                
-                        {
-                            "name": "CoESection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Power Platform Centre of Excellence (CoE) Starter Toolkit",
-                            "elements": [],
-                            "visible": true
-                        }
+                        }                    
                       
                     ]
                 }
