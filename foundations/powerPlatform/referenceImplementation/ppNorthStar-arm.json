@@ -319,14 +319,8 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        },
-        "ppCoEToolkit": {
-            "type": "bool",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Power Platform Centre of Excellence (CoE) Starter Toolkit"
-            }
         }
+       
     },
     "variables": {
         "deploymentUris": {
@@ -459,9 +453,6 @@
                     },
                     "ppD365FieldServiceApp": {
                         "value": "[if(parameters('ppD365FieldServiceApp'), 'True', 'False')]"
-                    },
-                    "ppCoEToolkit": {
-                        "value": "[if(parameters('ppCoEToolkit'), 'True', 'False')]"
                     }
                 }
             }

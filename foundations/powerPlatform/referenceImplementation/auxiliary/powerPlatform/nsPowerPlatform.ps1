@@ -42,10 +42,10 @@ param (
 
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365SalesApp,
     [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365CustomerServiceApp,
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp,
+    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppD365FieldServiceApp
 
 
-    [Parameter(Mandatory = $false)][string][AllowEmptyString()][AllowNull()]$ppCoEToolkit
+   
 
     
     
@@ -938,150 +938,6 @@ function New-DLPAssignmentFromEnv {
         Write-Warning "Created Default $EnvironmentDLP DLP Policy`r`n$_"
     }
 }
-
-
-
-#Install CoE Solutions - Starts here
-function InstallCoESolutions {
-    param (
-        [Parameter(Mandatory = $true)][string]$EnvironmentURL
-    ) 
-    
-    <# $soutionHistoryAttemptKitCore = 0
-    do {
-        $soutionHistoryAttemptKitCore++      
-        $inprogressSolutionsKitCore = Get-SolutionHistory -EnvironmentURL $EnvironmentURL 
-        Write-Output "Inprogress solution count $($inprogressSolutionsKitCore.value.Count)"               
-        if ($inprogressSolutionsKitCore.value.Count -gt 0) {                 
-            Start-Sleep -Seconds 20
-        }
-        else {
-            Write-Output "Solution History attempt Kit Core $($soutionHistoryAttemptKitCore)"  
-            New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
-            Write-Output "Installed CreatorKitCore"   
-        }
-    } until (($inprogressSolutionsKitCore.value.Count -eq 0) -or $soutionHistoryAttemptKitCore -eq 20)
-
-      
-
-    $soutionHistoryAttempt = 0
-    do {
-        $soutionHistoryAttempt++      
-        $inprogressSolutions = Get-SolutionHistory -EnvironmentURL $EnvironmentURL 
-        Write-Output "Inprogress solution count $($inprogressSolutions.value.Count)"               
-        if ($inprogressSolutions.value.Count -gt 0) {                 
-            Start-Sleep -Seconds 20
-        }
-        else {
-            Write-Output "Solution History attempt MDA$($soutionHistoryAttempt)"  
-            New-InstallCoESolutions -SolutionName 'CreatorKitReferencesMDA' -EnvironmentURL $EnvironmentURL  
-            Write-Output "Installed CreatorKitReferencesMDA"  
-        }
-    } until (($inprogressSolutions.value.Count -eq 0) -or $soutionHistoryAttempt -eq 20)
-
-
-
-    $soutionHistoryAttemptCoECanvas = 0
-    do {
-        $soutionHistoryAttemptCoECanvas++      
-        $inprogressSolutionsCoECanvas = Get-SolutionHistory -EnvironmentURL $EnvironmentURL      
-        Write-Output "Inprogress solution count $($inprogressSolutionsCoECanvas.value.Count)"               
-        if ($inprogressSolutionsCoECanvas.value.Count -gt 0) {                 
-            Start-Sleep -Seconds 20
-        }
-        else {
-            Write-Output "Solution History attempt Canvas $($soutionHistoryAttemptCoECanvas)"  
-            New-InstallCoESolutions -SolutionName 'CreatorKitReferencesCanvas' -EnvironmentURL $EnvironmentURL  
-            Write-Output "Installed CreatorKitReferencesCanvas"
-        }
-    } until (($inprogressSolutionsCoECanvas.value.Count -eq 0) -or $soutionHistoryAttemptCoECanvas -eq 20)#>
-
-    
-    $soutionHistoryAttemptKitCore = 0
-    do {
-        $soutionHistoryAttemptKitCore++      
-        $inprogressSolutionsKitCore = Get-SolutionHistory -EnvironmentURL $EnvironmentURL 
-        Write-Output "Inprogress solution count $($inprogressSolutionsKitCore.value.Count)"               
-        if ($inprogressSolutionsKitCore.value.Count -gt 0) {                 
-            Start-Sleep -Seconds 20
-        }
-        else {
-            Write-Output "Solution History attempt Kit Core $($soutionHistoryAttemptKitCore)"  
-            New-InstallCoESolutions -SolutionName 'CreatorKitCore' -EnvironmentURL $EnvironmentURL  
-            Write-Output "Installed CreatorKitCore"   
-        }
-    } until (($inprogressSolutionsKitCore.value.Count -eq 0) -or $soutionHistoryAttemptKitCore -eq 20)
-
-
-    $soutionHistoryAttemptCoECore = 0
-    do {
-        $soutionHistoryAttemptCoECore++      
-        $inprogressSolutionsCoECore = Get-SolutionHistory -EnvironmentURL $EnvironmentURL      
-        Write-Output "Inprogress solution count $($inprogressSolutionsCoECore.value.Count)"               
-        if ($inprogressSolutionsCoECore.value.Count -gt 0) {                 
-            Start-Sleep -Seconds 20
-        }
-        else {
-            Write-Output "Solution History attempt Core Components$($soutionHistoryAttemptCoECore)"  
-            New-InstallCoESolutions -SolutionName 'CenterofExcellenceCoreComponents' -EnvironmentURL $EnvironmentURL  
-            Write-Output "Installed CenterofExcellenceCoreComponents"   
-        }
-    } until (($inprogressSolutionsCoECore.value.Count -eq 0) -or $soutionHistoryAttemptCoECore -eq 20)
- 
-
-    <#
-    $soutionHistoryAttemptCoEAuditComponents = 0
-    do {
-        $soutionHistoryAttemptCoEAuditComponents++      
-        $inprogressSolutionsCoEAudit = Get-SolutionHistory -EnvironmentURL $EnvironmentURL      
-        Write-Output "Inprogress solution count $($inprogressSolutionsCoEAudit.value.Count)"               
-        if ($inprogressSolutionsCoEAudit.value.Count -gt 0) {                 
-            Start-Sleep -Seconds 20
-        }
-        else {
-            Write-Output "Solution History attempt Core Components$($soutionHistoryAttemptCoEAuditComponents)"  
-            New-InstallCoESolutions -SolutionName 'CenterofExcellenceAuditComponents' -EnvironmentURL $EnvironmentURL  
-            Write-Output "Installed CenterofExcellenceAuditComponents"  
-        }
-    } until (($inprogressSolutionsCoEAudit.value.Count -eq 0) -or $soutionHistoryAttemptCoEAuditComponents -eq 25)
-
-
-
-    $soutionHistoryAttemptCoENurture = 0
-    do {
-        $soutionHistoryAttemptCoENurture++      
-        $inprogressSolutionsCoENuture = Get-SolutionHistory -EnvironmentURL $EnvironmentURL      
-        Write-Output "Inprogress solution count $($inprogressSolutionsCoENuture.value.Count)"               
-        if ($inprogressSolutionsCoENuture.value.Count -gt 0) {                 
-            Start-Sleep -Seconds 20
-        }
-        else {
-            Write-Output "Solution History attempt Core Components$($soutionHistoryAttemptCoENurture)"  
-            New-InstallCoESolutions -SolutionName 'CenterofExcellenceNurtureComponents' -EnvironmentURL $EnvironmentURL  
-            Write-Output "Installed CenterofExcellenceNurtureComponents" 
-        }
-    } until (($inprogressSolutionsCoENuture.value.Count -eq 0) -or $soutionHistoryAttemptCoENurture -eq 25)
-    
-
-
-    $soutionHistoryAttemptCoEInnovation = 0
-    do {
-        $soutionHistoryAttemptCoEInnovation++      
-        $inprogressSolutionsCoEInnovation = Get-SolutionHistory -EnvironmentURL $EnvironmentURL      
-        Write-Output "Inprogress solution count $($inprogressSolutionsCoEInnovation.value.Count)"               
-        if ($inprogressSolutionsCoEInnovation.value.Count -gt 0) {                 
-            Start-Sleep -Seconds 20
-        }
-        else {
-            Write-Output "Solution History attempt Core Components$($soutionHistoryAttemptCoEInnovation)"  
-            New-InstallCoESolutions -SolutionName 'CenterofExcellenceInnovationBacklog' -EnvironmentURL $EnvironmentURL  
-            Write-Output "Installed CenterofExcellenceInnovationBacklog"  
-        }
-    } until (($inprogressSolutionsCoEInnovation.value.Count -eq 0) -or $soutionHistoryAttemptCoEInnovation -eq 25)#>
-  
-    
-}
-
 function Get-SolutionHistory {
     param (      
         [Parameter(Mandatory = $true)][string]$EnvironmentURL
@@ -1489,12 +1345,7 @@ if ($PPCitizen -in "yes") {
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
                  
-                #region Install CoE Solutions
-                if ($ppCoEToolkit -eq 'true') {
-                    Start-Sleep -Seconds 20
-                    InstallCoESolutions -EnvironmentURL $($getAdminEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                }              
-                #endregion
+              
             }  
             else {
                 Write-Output "Admin Environment is not ready or URL is empty"   
@@ -1528,13 +1379,6 @@ if ($PPCitizen -in "yes") {
             if ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminDevEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
-                 
-                #region Install CoE Solutions
-                if ($ppCoEToolkit -eq 'true') {
-                    Start-Sleep -Seconds 20
-                    InstallCoESolutions -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                }              
-                #endregion
             }  
             else {
                 Write-Output "Admin Dev Environment is not ready or URL is empty"   
@@ -1569,14 +1413,7 @@ if ($PPCitizen -in "yes") {
                   
             if ($null -ne $getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminProdEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-
-                 
-                #region Install CoE Solutions
-                if ($ppCoEToolkit -eq 'true') {
-                    Start-Sleep -Seconds 20
-                    InstallCoESolutions -EnvironmentURL $($getAdminProdEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
-                }              
-                #endregion
+              
             }  
             else {
                 Write-Output "Admin Environment is not ready or URL is empty"   

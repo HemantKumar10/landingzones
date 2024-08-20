@@ -327,14 +327,8 @@
             "metadata": {
                 "description": "Dynamics 365 Field Service"
             }
-        },
-        "ppCoEToolkit": {
-            "type": "string",
-            "defaultValue": "false",
-            "metadata": {
-                "description": "Power Platform Centre of Excellence (CoE) Starter Toolkit"
-            }
         }
+        
     },
     "variables": {
         "deploymentName": "[take(concat(parameters('rgName'), '-initialize', '-', parameters('location')), 64)]"
@@ -410,8 +404,8 @@
                                                     '-customEnvironments', ' ', parameters('customEnvironments'), ' ', 
                                                      '-ppD365SalesApp', ' ',  parameters('ppD365SalesApp'), ' ', 
                                                     '-ppD365CustomerServiceApp', ' ', parameters('ppD365CustomerServiceApp'), ' ',
-                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' ',   
-                                                    '-ppCoEToolkit', ' ',  parameters('ppCoEToolkit'), ' '                                                                                             
+                                                    '-ppD365FieldServiceApp', ' ', parameters('ppD365FieldServiceApp'), ' '
+                                                                                                                                            
                                                     )]",
                                 "azPowerShellVersion": "7.2",
                                 "timeout": "PT240M",
