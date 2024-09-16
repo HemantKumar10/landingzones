@@ -1252,7 +1252,7 @@ if ($PPCitizen -in "yes") {
                         "baseLanguage"    = "$($envCreationHt.LanguageName)"
                         "domainName"      = "$($envCreationHt.Name)"
                         "templates"       = $templates  
-                        "securityGroupId" = "$($environment.envRbac)"
+                        "securityGroupId" = "93d150d3-0a68-4205-91e5-5857d299f867"#"$($environment.envRbac)"
                     }                    
                     "databaseType"              = "CommonDataService"
                     "displayName"               = "$($envCreationHt.Name)"
