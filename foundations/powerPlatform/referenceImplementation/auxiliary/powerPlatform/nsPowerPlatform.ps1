@@ -985,6 +985,8 @@ function ElevateUsers {
 
     $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/" -AsSecureString).Token -AsPlainText)
 
+    Write-Output $Token 
+
     $Headers = @{
         Authorization  = "Bearer $($Token)"
         'Content-Type' = "application/json"
