@@ -1322,8 +1322,7 @@ if ($PPCitizen -in "yes") {
             
            
         
-            try {               
-                ElevateUsers -EnvironmentId '32b75549-322f-eb82-abe7-ee8d84f891ac'
+            try { 
                 $response = Invoke-RestMethod @PostParameters   
                 Write-Output "Create Environment: $($envCreationHt.Name) Completed" 
                 #Code to apply Admin DLP Policy for Admin Env#
@@ -1429,8 +1428,6 @@ if ($PPCitizen -in "yes") {
             } until ( ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminDevEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminDevEnvAttempts -eq 25)
                   
             if ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
-                //ElevateUsers -EnvironmentId $($getAdminDevEnvironment.name)
-             
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminDevEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
             }  
