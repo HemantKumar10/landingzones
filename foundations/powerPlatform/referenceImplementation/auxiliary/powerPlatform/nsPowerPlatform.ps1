@@ -974,6 +974,47 @@ function Get-SolutionHistory {
     }          
 }
 
+
+function ElevateUsers {
+    param (  
+        [Parameter(Mandatory = $true)][string]$EnvironmentId
+    )   
+
+    Import-Module MSAL.PS
+
+    # Authenticate
+    #$AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'
+
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/.default" -AsSecureString).Token -AsPlainText)
+
+    $Headers = @{
+        Authorization  = "Bearer $($Token)"
+        'Content-Type' = "application/json"
+    }
+    $uri = "https://api.powerplatform.com/usermanagement/environments/$EnvironmentId/user/applyAdminRole?api-version=2022-03-01-preview";
+    try {
+         Write-Output "Elevate Users Started"
+        $postRequestResponse = Invoke-RestMethod -Method Post -Headers $Headers -Uri $uri 
+        Write-Output "Elevate Users Successfull"
+    }    
+    catch { 
+   
+        # Dig into the exception to get the Response details.    
+        Write-Host "Response CorrelationId:" $_.Exception.Response.Headers["x-ms-correlation-id"]    
+        Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__     
+        Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription    
+        $result = $_.Exception.Response.GetResponseStream()    
+        $reader = New-Object System.IO.StreamReader($result)    
+        $reader.BaseStream.Position = 0    
+        $reader.DiscardBufferedData()    
+        $responseBody = $reader.ReadToEnd();    
+        Write-Host $responseBody    
+    }    
+    $output = $postRequestResponse | ConvertTo-Json -Depth 2   
+    Write-Output "Elevate Users Output" 
+    Write-Host $output    
+}
+
 function New-InstallCoESolutions {
     param (      
         [Parameter(Mandatory = $true)][string]$SolutionName,
@@ -1276,7 +1317,7 @@ if ($PPCitizen -in "yes") {
                 $response = Invoke-RestMethod @PostParameters   
                 Write-Output "Create Environment: $($envCreationHt.Name) Completed" 
                 #Code to apply Admin DLP Policy for Admin Env#
-               <#
+                <#
                If ($envCreationHt.Name -eq $Global:envAdminName -and $PPCitizenDlp -eq "Yes") {                
                     New-DLPAssignmentFromEnv -Environments $envCreationHt.Name -EnvironmentDLP 'adminEnv'               
                 } #>
@@ -1294,6 +1335,7 @@ if ($PPCitizen -in "yes") {
                     $landzingZoneEnvs += $envCreationHt.Name 
                 }             
               
+
                 
                 #Write-Host ($response | Format-List | Out-String)                            
             }
@@ -1377,6 +1419,7 @@ if ($PPCitizen -in "yes") {
             } until ( ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminDevEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminDevEnvAttempts -eq 25)
                   
             if ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
+                ElevateUsers -EnvironmentId $($getAdminDevEnvironment.name)
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminDevEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
             }  
