@@ -988,16 +988,15 @@ function ElevateUsers {
     $Headers = @{
         Authorization  = "Bearer $($Token)"
         'Content-Type' = "application/json"
-    }
-  
-
-    $uri = "https://api.powerplatform.com/usermanagement/environments/$EnvironmentId/user/applyAdminRole?api-version=2022-03-01-preview";
-
-    $PostParameters = @{  
-        "Method"  = "Post"
-        "Headers" = $Headers  
-        "Uri"     = "$($uri)"  
     }  
+    $uri = "https://api.powerplatform.com/usermanagement/environments/$($EnvironmentId)/user/applyAdminRole?api-version=2022-03-01-preview";   
+    Write-Output $uri   
+    $PostParameters = @{
+        "Uri"         = "$($uri)" 
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+    }
     try {
         Write-Output "Elevate Users Started"        
         #$postRequestResponse = Invoke-RestMethod -Method Post -Headers $Headers -Uri $uri 
