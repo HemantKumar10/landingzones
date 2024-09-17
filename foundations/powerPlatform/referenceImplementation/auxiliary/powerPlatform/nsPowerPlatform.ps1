@@ -978,9 +978,7 @@ function Get-SolutionHistory {
 function ElevateUsers {
     param (  
         [Parameter(Mandatory = $true)][string]$EnvironmentId
-    )   
-
-    Import-Module MSAL.PS
+    ) 
 
     # Authenticate
     #$AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'
@@ -991,14 +989,27 @@ function ElevateUsers {
         Authorization  = "Bearer $($Token)"
         'Content-Type' = "application/json"
     }
+
+
+  
+
     $uri = "https://api.powerplatform.com/usermanagement/environments/$EnvironmentId/user/applyAdminRole?api-version=2022-03-01-preview";
+
+    $PostParameters = @{
+        "Uri"         = "$($uri)"
+        "Method"      = "Post"
+        "Headers"     = $headers
+        "ContentType" = "application/json"
+        "Body"        = $postBody | ConvertTo-json -Depth 100
+    }  
     try {
          Write-Output "Elevate Users Started"
-        $postRequestResponse = Invoke-RestMethod -Method Post -Headers $Headers -Uri $uri 
+        #$postRequestResponse = Invoke-RestMethod -Method Post -Headers $Headers -Uri $uri 
+
+        $postRequestResponse = Invoke-RestMethod $PostParameters
         Write-Output "Elevate Users Successfull"
     }    
-    catch { 
-   
+    catch {    
         # Dig into the exception to get the Response details.    
         Write-Host "Response CorrelationId:" $_.Exception.Response.Headers["x-ms-correlation-id"]    
         Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__     
