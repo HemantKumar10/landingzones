@@ -998,20 +998,19 @@ function ElevateUsers {
     $PostParameters = @{
         "Uri"         = "$($uri)"
         "Method"      = "Post"
-        "Headers"     = $headers
-        "ContentType" = "application/json"
-        "Body"        = $postBody | ConvertTo-json -Depth 100
+        "Headers"     = $Headers
+        "ContentType" = "application/json"       
     }  
     try {
-         Write-Output "Elevate Users Started"
+        Write-Output "Elevate Users Started"        
         #$postRequestResponse = Invoke-RestMethod -Method Post -Headers $Headers -Uri $uri 
-
-        $postRequestResponse = Invoke-RestMethod $PostParameters
+        $postRequestResponse = Invoke-RestMethod @PostParameters
         Write-Output "Elevate Users Successfull"
     }    
     catch {    
         # Dig into the exception to get the Response details.    
-        Write-Host "Response CorrelationId:" $_.Exception.Response.Headers["x-ms-correlation-id"]    
+        <#
+      Write-Host "Response CorrelationId:" $_.Exception.Response.Headers["x-ms-correlation-id"]    
         Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__     
         Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription    
         $result = $_.Exception.Response.GetResponseStream()    
@@ -1019,7 +1018,8 @@ function ElevateUsers {
         $reader.BaseStream.Position = 0    
         $reader.DiscardBufferedData()    
         $responseBody = $reader.ReadToEnd();    
-        Write-Host $responseBody    
+        Write-Host $responseBody   
+      #>  
     }    
     $output = $postRequestResponse | ConvertTo-Json -Depth 2   
     Write-Output "Elevate Users Output" 
