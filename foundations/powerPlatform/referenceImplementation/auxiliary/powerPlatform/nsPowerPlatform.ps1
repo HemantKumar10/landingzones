@@ -983,23 +983,20 @@ function ElevateUsers {
     # Authenticate
     #$AuthResult = Get-MsalToken -ClientId '49676daf-ff23-4aac-adcc-55472d4e2ce0' -Scope 'https://api.powerplatform.com/.default'
 
-    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/.default" -AsSecureString).Token -AsPlainText)
+    $Token = (ConvertFrom-SecureString (Get-AzAccessToken -ResourceUrl "https://api.powerplatform.com/" -AsSecureString).Token -AsPlainText)
 
     $Headers = @{
         Authorization  = "Bearer $($Token)"
         'Content-Type' = "application/json"
     }
-
-
   
 
     $uri = "https://api.powerplatform.com/usermanagement/environments/$EnvironmentId/user/applyAdminRole?api-version=2022-03-01-preview";
 
-    $PostParameters = @{
-        "Uri"         = "$($uri)"
-        "Method"      = "Post"
-        "Headers"     = $Headers
-        "ContentType" = "application/json"       
+    $PostParameters = @{  
+        "Method"  = "Post"
+        "Headers" = $Headers  
+        "Uri"     = "$($uri)"  
     }  
     try {
         Write-Output "Elevate Users Started"        
@@ -1009,8 +1006,8 @@ function ElevateUsers {
     }    
     catch {    
         # Dig into the exception to get the Response details.    
-        <#
-      Write-Host "Response CorrelationId:" $_.Exception.Response.Headers["x-ms-correlation-id"]    
+       
+        Write-Host "Response CorrelationId:" $_.Exception.Response.Headers["x-ms-correlation-id"]    
         Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__     
         Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription    
         $result = $_.Exception.Response.GetResponseStream()    
@@ -1019,7 +1016,7 @@ function ElevateUsers {
         $reader.DiscardBufferedData()    
         $responseBody = $reader.ReadToEnd();    
         Write-Host $responseBody   
-      #>  
+      
     }    
     $output = $postRequestResponse | ConvertTo-Json -Depth 2   
     Write-Output "Elevate Users Output" 
@@ -1324,7 +1321,8 @@ if ($PPCitizen -in "yes") {
             
            
         
-            try {
+            try {               
+                ElevateUsers -EnvironmentId '3911e189-bea3-ee97-bc99-c495dc757ea9'
                 $response = Invoke-RestMethod @PostParameters   
                 Write-Output "Create Environment: $($envCreationHt.Name) Completed" 
                 #Code to apply Admin DLP Policy for Admin Env#
@@ -1430,7 +1428,8 @@ if ($PPCitizen -in "yes") {
             } until ( ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl -and $getAdminDevEnvironment.properties.provisioningState -eq 'Succeeded' ) -or $adminDevEnvAttempts -eq 25)
                   
             if ($null -ne $getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl) {
-                ElevateUsers -EnvironmentId $($getAdminDevEnvironment.name)
+                //ElevateUsers -EnvironmentId $($getAdminDevEnvironment.name)
+             
                 New-InstallPackaggeToEnvironment -EnvironmentId $($getAdminDevEnvironment.name) -PackageName 'msdyn_AppDeploymentAnchor' -EnvironmentURL $($getAdminDevEnvironment.properties.linkedEnvironmentMetadata.instanceApiUrl)
 
             }  
