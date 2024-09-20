@@ -1323,6 +1323,8 @@ if ($PPCitizen -in "yes") {
            
         
             try { 
+                ElevateUsers -EnvironmentId '7c05bbcf-ffa9-eff6-84ee-a8563f462aab'
+
                 $response = Invoke-RestMethod @PostParameters   
                 Write-Output "Create Environment: $($envCreationHt.Name) Completed" 
                 #Code to apply Admin DLP Policy for Admin Env#
